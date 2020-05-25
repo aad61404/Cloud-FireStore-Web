@@ -16,3 +16,7 @@ commit 01 . 寫入firestore
 commit 02 . load firestore data
 
 到影片 09:50 https://youtu.be/2Vf1D-rUMwE?t=590
+
+
+關聯github 
+https://github.com/aad61404/aad61404-blog/blob/master/aad-hexo/source/_posts/firestore-web/01.md
