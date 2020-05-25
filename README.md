@@ -12,3 +12,7 @@ https://firebase.google.com/docs/firestore/quickstart#web_5
 
 commit 01 . 寫入firestore
 到影片 8:28  https://youtu.be/2Vf1D-rUMwE?t=508
+
+commit 02 . load firestore data
+
+到影片 09:50 https://youtu.be/2Vf1D-rUMwE?t=590

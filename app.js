@@ -16,9 +16,10 @@
 
     // const docRef = firestore.collection("samples").doc("sandwitchData").collection("condiments").doc("relish").collection("opinions").doc("...");
     const docRef = firestore.collection("samples").doc("sandwitchData");
-    const ouputHeader = document.querySelector("#hotDogOutPut");
+    const outputHeader = document.querySelector("#hotDogOutPut");
     const inputTextField = document.querySelector("#latestHotDogStatus");
     const saveButton = document.querySelector("#saveButton");
+    const loadButton = document.querySelector("#loadButton");
 
     saveButton.addEventListener("click", function () {
         const textToSave = inputTextField.value;
@@ -31,3 +32,29 @@
             console.log('Got an err', err)
         })
     })
+
+    loadButton.addEventListener("click", function(){
+        docRef.get().then(function(doc){
+            if (doc && doc.exists) {
+                console.log('doc:', doc)
+                const myData = doc.data();
+                console.log('myData:', myData)
+                outputHeader.innerText = "Hot dog status: " + myData.hotDogStatus;
+            }
+        }).catch(function(err) {
+            console.log("Got an err", err);
+        })
+    })
+
+    getRealtimeUpdates = function() {
+        docRef.onSnapshot(function(doc) {
+            // 跟上面一樣
+            if (doc && doc.exists) {
+                console.log('doc:', doc)
+                const myData = doc.data();
+                console.log('myData:', myData)
+                outputHeader.innerText = "Hot dog status: " + myData.hotDogStatus;
+            }
+        })
+    }
+    getRealtimeUpdates()
