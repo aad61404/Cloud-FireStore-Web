@@ -79,16 +79,16 @@
             console.log("Got an err", err);
         })
     })
-    const docRefHot = firestore.collection("samples").where('hotDogStatus', '==', 'qqqqq');
-    getRealtimeUpdates = function() {
-        docRefHot.onSnapshot(function(doc) {
-            // 跟上面一樣
-                console.log('doc:', doc)
-                const myData = doc.data();
-                console.log('myData:', myData)
-                outputHeader.innerText = "Hot dog status: " + myData.hotDogStatus;
-            
-        })
-    }
 
-    getRealtimeUpdates()
+    // getRealtimeUpdates = function() {
+    //     docRef.onSnapshot(function(doc) {
+    //         // 跟上面一樣
+    //         if (doc && doc.exists) {
+    //             console.log('doc:', doc)
+    //             const myData = doc.data();
+    //             console.log('myData:', myData)
+    //             outputHeader.innerText = "Hot dog status: " + myData.hotDogStatus;
+    //         }
+    //     })
+    // }
+    // getRealtimeUpdates()
