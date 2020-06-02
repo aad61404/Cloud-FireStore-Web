@@ -2,7 +2,9 @@
 
 
 <!-- 關聯至aad61404-blog firestore-web 2020-05-25 -->
-
+# 新參考成功案例 ： （終於 成功了 真爽）
+FCM 檔案為新的(能run)  沒加是舊的 
+https://www.itwonders-web.com/blog/push-notification-using-firebase-demo-tutorial
 
 https://www.youtube.com/watch?time_continue=308&v=2Vf1D-rUMwE&feature=emb_logo
 
@@ -20,3 +22,5 @@ commit 02 . load firestore data
 
 關聯github 
 https://github.com/aad61404/aad61404-blog/blob/master/aad-hexo/source/_posts/firestore-web/01.md
+
+
