@@ -14,19 +14,6 @@
     // var firebase = Window.firebase;
     firebase.initializeApp(firebaseConfig);
 
-    const messaging = firebase.messaging();
-    messaging.requestPermission()
-    .then(function() {
-        console.log('Have permission');
-        return messaging.getToken();
-    })
-    .then(function(token) {
-        console.log('token: ', token);
-    })
-    .catch(function(err) {
-        console.log('err', err);
-    })
-
     // const docRef = firestore.collection("samples").doc("sandwitchData").collection("condiments").doc("relish").collection("opinions").doc("...");
     var firestore = firebase.firestore();
     const docRef = firestore.collection("samples").doc("sandwitchData");
@@ -34,26 +21,6 @@
     const inputTextField = document.querySelector("#latestHotDogStatus");
     const saveButton = document.querySelector("#saveButton");
     const loadButton = document.querySelector("#loadButton");
-
-
-    // const messaging = firebase.messaging();
-
-    // messaging.getToken().then((currentToken) => {
-    //     if (currentToken) {
-    //       sendTokenToServer(currentToken);
-    //       updateUIForPushEnabled(currentToken);
-    //     } else {
-    //       // Show permission request.
-    //       console.log('No Instance ID token available. Request permission to generate one.');
-    //       // Show permission UI.
-    //       updateUIForPushPermissionRequired();
-    //       setTokenSentToServer(false);
-    //     }
-    //   }).catch((err) => {
-    //     console.log('An error occurred while retrieving token. ', err);
-    //     showToken('Error retrieving Instance ID token. ', err);
-    //     setTokenSentToServer(false);
-    //   });
 
     saveButton.addEventListener("click", function () {
         const textToSave = inputTextField.value;
@@ -79,16 +46,15 @@
             console.log("Got an err", err);
         })
     })
-    const docRefHot = firestore.collection("samples").where('hotDogStatus', '==', 'qqqqq');
     getRealtimeUpdates = function() {
-        docRefHot.onSnapshot(function(doc) {
+        docRef.onSnapshot(function(doc) {
             // 跟上面一樣
+            if (doc && doc.exists) {
                 console.log('doc:', doc)
                 const myData = doc.data();
                 console.log('myData:', myData)
                 outputHeader.innerText = "Hot dog status: " + myData.hotDogStatus;
-            
+            }
         })
     }
-
     getRealtimeUpdates()

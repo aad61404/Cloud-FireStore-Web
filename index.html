@@ -32,9 +32,19 @@
         <li></li>
         <li></li>
     </ul>
+    <p id="token" style="word-break: break-all;"></p>
     <script src="./app.js"></script>
     <script src="./messaging.js"></script>
-
+    <script>
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        .then(function(registration) {
+            console.log('Registration successful, scope is:', registration.scope);
+        }).catch(function(err) {
+            console.log('Service worker registration failed, error:', err);
+        });
+        }
+    </script>
     <!-- <script src="/__/firebase/7.14.5/firebase-app.js"></script>
 
     <script src="/__/firebase/7.14.5/firebase-analytics.js"></script>

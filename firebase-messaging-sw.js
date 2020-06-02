@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js')
-importScripts('https://www.gstatic.com/firebasejs/7.14.5/firebase-messaging.js')
+importScripts('https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.14.5/firebase-messaging.js');
 
 var firebaseConfig = {
     apiKey: "AIzaSyA5AdaG4X4sxWhSkvCiJFDWeItMjxBIrAY",
@@ -13,4 +13,9 @@ var firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
+// messaging.usePublicVapidKey("BO3g3Sef0M1VHCvpmQ5CDzvh856ZDeXcN4dhRAUcbXUnlsv4Ws7jwcW4d7Zwr1jrHsb9vR6tNg39XE-I5uyUhhQ");
+// messaging.onMessage((payload) => {
+//     console.log('Message received. ', payload);
+// });

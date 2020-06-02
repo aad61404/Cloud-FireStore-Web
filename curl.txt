@@ -1,0 +1,8 @@
+curl -X POST -H "Authorization: key=AAAASkwJ7tA:APA91bGzn9qgNUD2i6ggsEoQai9No-mfPxcP7MHTtRoGthWCoKEqYPrUlsKqX1w8e0OrBIPUpHxiy8P-7pr_nEXdREL50RqFtZ8r2YN7xRVQ-l7KVkKxLq6aN9cq0nuHPMVX4NeIAVnG" --header "Content-Type: application/json" -d '{
+    "to": "czdujbh-6cBtsyFDEyYIPi:APA91bFYxcsUL8vUE4Xv1ReVHIb_icGyG-pl90PmmDcDWfxxqknJSwT9VFMvogQaQinn70lZc1aTC4WbQTmegfMmXjIp-h51vNkoPAEVKI7z_sykXDEzIEqLTezpzQPKQDYHg9Jp-fdT",
+    "notification": {
+      "title": "Hello",
+      "body": "Body Work",
+      "icon": "/favicon.ico"
+    }
+  }' https://fcm.googleapis.com/fcm/send
