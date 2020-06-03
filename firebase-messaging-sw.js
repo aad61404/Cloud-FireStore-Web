@@ -1,13 +1,30 @@
 importScripts('https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.2.1/firebase-messaging.js');
 // For an optimal experience using Cloud Messaging, also add the Firebase SDK for Analytics. 
-importScripts('https://www.gstatic.com/firebasejs/7.2.1/firebase-analytics.js');
 
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
 firebase.initializeApp({
-  'messagingSenderId': '319103299280'
+  apiKey: "AIzaSyA5AdaG4X4sxWhSkvCiJFDWeItMjxBIrAY",
+  authDomain: "cloud-firestore-18cc4.firebaseapp.com",
+  databaseURL: "https://cloud-firestore-18cc4.firebaseio.com",
+  projectId: "cloud-firestore-18cc4",
+  storageBucket: "cloud-firestore-18cc4.appspot.com",
+  messagingSenderId: "319103299280",
+  appId: "1:319103299280:web:3d630273a7c359573938d5",
+  measurementId: "G-G9R3S9WQV6"
 });
+
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
+
+var payload = {
+  notification: {
+      title: "A new user has been added!",
+      body: "Click to see"
+  }
+};
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.

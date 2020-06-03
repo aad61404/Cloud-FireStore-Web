@@ -15,10 +15,10 @@
     <!-- For an optimal experience using Cloud Messaging, also add the Firebase SDK for Analytics. -->
     <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-analytics.js"></script>
     <script>
-        MsgElem = document.getElementById("msg");
-        TokenElem = document.getElementById("token");
-        NotisElem = document.getElementById("notis");
-        ErrElem = document.getElementById("err");
+        MsgElem = document.getElementById("msg")
+        TokenElem = document.getElementById("token")
+        NotisElem = document.getElementById("notis")
+        ErrElem = document.getElementById("err")
         // Initialize Firebase
         // TODO: Replace with your project's customized code snippet
         var config = {
@@ -39,7 +39,7 @@
             .then(function () {
                 MsgElem.innerHTML = "Notification permission granted." 
                 console.log("Notification permission granted.");
-                
+
                 // get the token in the form of promise
                 return messaging.getToken()
             })
@@ -53,15 +53,10 @@
 
         messaging.onMessage(function(payload) {
             console.log("Message received. ", payload);
-            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
-            //kenng - foreground notifications
-            const {title, ...options} = payload.notification;
-            navigator.serviceWorker.ready.then(registration => {
-                registration.showNotification(title, options);
-            });
+            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
         });
     </script>
 
-    </body>
+    <body>
 
 </html>
