@@ -1,15 +1,14 @@
 # Cloud-FireStore-Web
 
 ## 使用前請先讀我
-這邊有三部分的資源  請選擇你需要的觀看
+此處有三個專案 請選擇你需要的觀看
 
 * [Firebase Cloud Messaging (FCM)](##FCM)
 * [Firestore 範例 friendlyeats-web](#範例2friendlyeats-web)
 * [firestore collection && doc 介紹](#firestore__collection__doc__介紹)
 
 <br />
-<br />
-<br />
+
 -----------------------------------------
 
 ## FCM
@@ -19,9 +18,9 @@
     |
     |_____  firebase                           --- firebase init || deploy 後產出
     |
-    |_____  firebase-push-notification-demo-master (上面文章提供的github下載下來)
+    |_____  firebase-push-notification-demo-master (網路文章下載，來源附在參考資料)
     |
-    |_____  friendlyeats-web                   --- (官方提供的範例 https://codelabs.developers.google.com/codelabs/firestore-web/#0)
+    |_____  friendlyeats-web                   --- (官方提供的範例，來源附在範例二的參考資料 )
     |
     |_____  functions                          --- (cloud functions)
     |
@@ -72,6 +71,7 @@ FCM 會搜尋專案的 firebase-messaging-sw.js
 <br />
 <br />
 <br />
+-----------------------------------------
 
 # 範例2friendlyeats-web
 ## 來源 ：
@@ -88,6 +88,8 @@ firebase serve
 <br /><br />
 <br />
 <br />
+-----------------------------------------
+
 
 # firestore__collection__doc__介紹
 
