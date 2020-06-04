@@ -1,13 +1,24 @@
 # Cloud-FireStore-Web
 
 ## 使用前請先讀我
-此處有兩個專案 ＋ 一個介紹 請選擇你需要的觀看
+此處有兩個專案 ＋ 一個介紹 
+沒收到 gmail 邀請再跟我說一下
+取得 firestore 資料庫操作權限 
+以後若需要測試 可以參考一下 希望能幫上忙
 
 * [Firebase Cloud Messaging (FCM)](##FCM)
-* [Firestore 範例 friendlyeats-web](#範例2friendlyeats-web)
+* [範例2 friendlyeats-web](#範例2friendlyeats-web)
 * [firestore collection && doc 介紹](#firestore__collection__doc__介紹)
-
 <br />
+
+----------------------------------------
+## 補充
+#### 根目錄是 Firebase Cloud Messaging (FCM)
+#### 範例2 
+        修改或啟動 需要在資料夾 friendlyeats-web 裡
+####  Curl-test sh
+        FCM send POST 資料在
+        firebase-push-notification-demo-master/curl-test.sh
 
 -----------------------------------------
 
