@@ -19,17 +19,6 @@ firebase.initializeApp({
 // messages.
 const messaging = firebase.messaging();
 
-var payload = {
-  notification: {
-      title: "A new user has been added!",
-      body: "Click to see"
-  }
-};
-
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
-const messaging = firebase.messaging();
-
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here

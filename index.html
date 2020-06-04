@@ -54,6 +54,7 @@
         messaging.onMessage(function(payload) {
             console.log("Message received. ", payload);
             NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
+            new Notification('hi');
         });
     </script>
 
