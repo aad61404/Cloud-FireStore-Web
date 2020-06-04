@@ -1,7 +1,7 @@
 # Cloud-FireStore-Web
 
 ## 使用前請先讀我
-此處有三個專案 請選擇你需要的觀看
+此處有兩個專案 ＋ 一個介紹 請選擇你需要的觀看
 
 * [Firebase Cloud Messaging (FCM)](##FCM)
 * [Firestore 範例 friendlyeats-web](#範例2friendlyeats-web)
