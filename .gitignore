@@ -1,2 +1,14 @@
 # .firebaserc
 # /node_modules/
+/node_modules
+npm0-debug.log
+yarn-error.log
+selenium-debug.log
+error.log*.
+info.log*.
+/dist
+/public
+/log
+/screenshots
+# *.css
+# *.css.map

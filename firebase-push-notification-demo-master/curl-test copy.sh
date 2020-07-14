@@ -7,5 +7,5 @@ curl -X POST -H "Authorization: key=AAAASkwJ7tA:APA91bGzn9qgNUD2i6ggsEoQai9No-mf
         "icon": "/itwonders-web-logo.png",
     }
   },
-  "to": "cHMTFKiM_lVyD1rElh9YBc:APA91bGmwwtHUKUwOYNtCbfk-CtDFmB5Pkklk6P58nTA0-nWifh6SOUKihbPVmhZG_7Q9hKqq_2-OMnwdr4oQQ17oz43wv9BF59Lre0cHtZJ35I_yBGWmIx6x8j5x1Kbtzch9rAx39bu"
+  "to": "czdujbh-6cBtsyFDEyYIPi:APA91bHwcaAioe7VSwzDHJ5VD2VH7ntbkLrNWjZr9qDEdK9YZRWwR0Og2PN1rAp8tTZT8Qk4hrGRNaAVlGjXpfZizS-xwHKJGdCf2mrWqMrOX_rsDaTo92iKVvUJgW7D0sY4HuDvOO8c"
 }' https://fcm.googleapis.com/fcm/send

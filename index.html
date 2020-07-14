@@ -5,20 +5,19 @@
         margin-bottom: 15px;
     }
 </style>
+
 <body>
-    <div id="token"></div>
-    <div id="msg"></div>
-    <div id="notis"></div>
-    <div id="err"></div>
-    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-messaging.js"></script>
-    <!-- For an optimal experience using Cloud Messaging, also add the Firebase SDK for Analytics. -->
-    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-analytics.js"></script>
+    <div>hello</div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-firestore.js"></script>
+
+
     <script>
-        MsgElem = document.getElementById("msg")
-        TokenElem = document.getElementById("token")
-        NotisElem = document.getElementById("notis")
-        ErrElem = document.getElementById("err")
+        const firebase = require("firebase");
+        // Required for side-effects
+        require("firebase/firestore");
+
         // Initialize Firebase
         // TODO: Replace with your project's customized code snippet
         var config = {
@@ -33,29 +32,29 @@
         };
         firebase.initializeApp(config);
 
-        const messaging = firebase.messaging();
-        messaging
-            .requestPermission()
-            .then(function () {
-                MsgElem.innerHTML = "Notification permission granted." 
-                console.log("Notification permission granted.");
+        // const messaging = firebase.messaging();
+        // messaging
+        //     .requestPermission()
+        //     .then(function () {
+        //         MsgElem.innerHTML = "Notification permission granted." 
+        //         console.log("Notification permission granted.");
 
-                // get the token in the form of promise
-                return messaging.getToken()
-            })
-            .then(function(token) {
-                TokenElem.innerHTML = "token is : " + token
-            })
-            .catch(function (err) {
-                ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
-                console.log("Unable to get permission to notify.", err);
-            });
+        //         // get the token in the form of promise
+        //         return messaging.getToken()
+        //     })
+        //     .then(function(token) {
+        //         TokenElem.innerHTML = "token is : " + token
+        //     })
+        //     .catch(function (err) {
+        //         ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+        //         console.log("Unable to get permission to notify.", err);
+        //     });
 
-        messaging.onMessage(function(payload) {
-            console.log("Message received. ", payload);
-            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
-            new Notification('hi');
-        });
+        // messaging.onMessage(function(payload) {
+        //     console.log("Message received. ", payload);
+        //     NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
+        //     new Notification('hi');
+        // });
     </script>
 
     <body>
