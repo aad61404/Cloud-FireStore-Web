@@ -1,5 +1,10 @@
 # Cloud-FireStore-Web
 
+2020/07/15
+login dashboard
+
+
+2020/05/04
 ## 使用前請先讀我
 此處有兩個專案 ＋ 一個介紹 
 沒收到 gmail 邀請再跟我說一下
