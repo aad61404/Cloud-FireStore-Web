@@ -20,7 +20,8 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+  <!-- Custom styles for this template -->
+  <link href="signin.css" rel="stylesheet">
   <title>Hello, world!</title>
 
   <style>
@@ -71,31 +72,51 @@
 
 <body>
 
-  <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px; ">
-    <div class="toast" data-delay="3000" style="position: absolute; top: 15px; right: 20px; min-width: 250px;">
-      <div class="alert-danger" style="padding: .75rem;">
-        <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMidYMid slice" role="img" focusable="false">
-          <rect width="100%" height="100%" fill="#ff0000"></rect>
-        </svg>
-        <strong class="mr-auto">Login Error</strong>
-        <small></small>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="toast-body alert-danger" id="toastWord">
 
-      </div>
+  <!-- form  -->
+    <div class="form-signin">
+      <img class="mb-4" src="./itwonders-web-logo.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <!-- <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div> -->
+      <button class="btn btn-lg btn-primary btn-block" type="button" id="SignIn">Sign in</button>
+     
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
     </div>
+
+    <div style="position: absolute; width: 128px; height: 40px; top: 100px; left: 20px;">
+         <a class="btn btn-info" onclick="showToast('hello')">show message</a>
+    </div>
+
+  <!-- toast notification -->
+  <div class="toast" data-delay="3000" style="position: absolute; top: 15px; right: 20px; min-width: 250px;">
+    <div class="alert-danger" style="padding: .75rem;">
+      <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice" role="img" focusable="false">
+        <rect width="100%" height="100%" fill="#ff0000"></rect>
+      </svg>
+      <strong class="mr-auto">Login Error</strong>
+      <small></small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body alert-danger" id="toastWord">
+
+    </div>
+    
   </div>
-  </div>
 
-
-
-  <h1>Hello, world!</h1>
+  <!-- <h1>Hello, world!</h1> -->
   <!-- Info message -->
-  <a class="btn btn-info" onclick="showToast('hello')">Info message</a>
+  <!-- -->
 
 
 
@@ -111,6 +132,8 @@
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
 
+   <!-- Custom js for this template -->
+    <script src="./main.js"></script>
 
   <script>
 
@@ -136,43 +159,6 @@
     // });
   </script>
 
-
-  <script>
-
-
-    // 同時間只會跑一次 動畫
-    let toastShow = false;
-
-    function showToast(word) {
-      document.getElementById('toastWord').innerHTML = word;
-      if (toastShow == false) {
-        toastShow = true;
-        $('.toast').toast('show');
-        $('.toast').addClass('animate__fadeInRight');
-
-        setTimeout(() => {
-          $('.toast').addClass('animate__fadeOutRight');
-        }, 2500);
-        setTimeout(() => {
-          $('.toast').removeClass('animate__fadeInRight');
-          $('.toast').removeClass('animate__fadeOutRight');
-          $('.toast').removeClass('show');
-          toastShow = false;
-        }, 3000);
-
-      }
-
-    }
-
-    //  
-    if (window.localStorage.getItem('storageName') !== null) {
-      let storageName = window.localStorage.getItem('storageName');
-      showToast(storageName);
-      console.log('storageName ', storageName);
-      window.localStorage.clear();
-    }
-
-  </script>
 </body>
 
 </html>
