@@ -1,82 +1,58 @@
-    /***  動畫 start    ****/ 
-
-    // 同時間只會跑一次 動畫
-    let toastShow = false;
-
-    function showToast(word) {
-      document.getElementById('toastWord').innerHTML = word;
-      if (toastShow == false) {
-        toastShow = true;
-        $('.toast').toast('show');
-        $('.toast').addClass('animate__fadeInRight');
-
-        setTimeout(() => {
-          $('.toast').addClass('animate__fadeOutRight');
-        }, 2500);
-        setTimeout(() => {
-          $('.toast').removeClass('animate__fadeInRight');
-          $('.toast').removeClass('animate__fadeOutRight');
-          $('.toast').removeClass('show');
-          toastShow = false;
-        }, 3000);
-      }
-
-    }
-    /***  動畫 end    ****/     
-    
-
     /***  firestore start    ****/   
     document.addEventListener('DOMContentLoaded', function () {
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   
     // 若不是登入狀態 回到首頁
-    if (window.localStorage.getItem('storageName') !== null) {
-      let storageName = window.localStorage.getItem('storageName');
-      showToast(storageName);
+    if (window.localStorage.getItem('authStorage') !== null) {
+      let authStorage = window.localStorage.getItem('authStorage');
+      if(authStorage == `Sign out!`) {
+        showToast(authStorage, true);
+      } else {
+        showToast(authStorage, false);
+      }
       window.localStorage.clear();
     }
-
-
+    /***  ----------------- ***/
+    /***  addEventtListener ***/
+    /***  ----------------- ***/
+    document.getElementById('inputPassword').addEventListener("keydown", keyDownTextField, false);
     document.getElementById('SignIn').addEventListener("click", function () {
-        login();
+        signIn();
     });
-  
-  
-    function login() {
+
+    /***  ----------------- ***/
+    /***  Function          ***/
+    /***  ----------------- ***/
+
+    function keyDownTextField(e) {
+      var keyCode = e.keyCode;
+        if(keyCode==13) {
+          signIn()
+        }
+      }
+
+    function signIn() {
         var inputEmail = document.getElementById('inputEmail').value;
         var inputPassword = document.getElementById('inputPassword').value;
-        firebaseAuthLogin(inputEmail, inputPassword);
+        firebaseAuthSignIn(inputEmail, inputPassword);
     }
 
-    function firebaseAuthLogin(act, pwd) {
-
+    function firebaseAuthSignIn(act, pwd) {
         console.log('act:', act)
         console.log('pwd:', pwd)
         firebase.auth().signInWithEmailAndPassword(act, pwd).then(function (res) {
             console.log('res:', res)
             var user = firebase.auth().currentUser;
             if (user != null) {
-            window.location = 'dashboard.html';
-            // user.providerData.forEach(function (profile) {
-            //   console.log("Sign-in provider: " + profile.providerId);
-            //   console.log("  Provider-specific UID: " + profile.uid);
-            //   console.log("  Name: " + profile.displayName);
-            //   console.log("  Email: " + profile.email);
-            //   console.log("  Photo URL: " + profile.photoURL);
-            // });
+              window.location = 'dashboard.html';
             } else {
-            console.error('user is null');
+              showToast('user is null', false)
             }
-        console.log('Success login');
         }).catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // console.log('error:', error)
-        // console.error('errorCode', errorCode);
-        // console.error('errorMessage', errorMessage);
-        showToast(  errorCode +'<br />'+errorMessage)
-        // …
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          showToast(errorCode +'<br />'+errorMessage, false)
         });
     }
 
@@ -95,8 +71,8 @@
         var providerData = user.providerData;
         // ...
         } else {
-        // User is signed out.
-        // ...
+          // User is signed out.
+          // ...
         }
     });
 
@@ -104,18 +80,18 @@
     //   console.log('Success singOut');
     //   // Sign-out successful.
     // }).catch(function(error) {
-    //   console.log('failed logout');
+    //   console.log('failed signOut');
     //   console.log('err', error);
     //   // An error happened.
     // });
 
 
+  });   /***  firestore end    ****/ 
 
-
-
+    // card Test  
     // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-    var db = firebase.firestore();
-    var cardData;
+    // var db = firebase.firestore();
+    // var cardData;
 
     // function createTextArea(json) {
     //   var textArea = document.createElement("TEXTAREA");
@@ -138,4 +114,3 @@
     //   cardData = items;
     //   createTextArea(cardData);
     // })
-    });
