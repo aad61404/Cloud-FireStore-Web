@@ -38,29 +38,56 @@
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <!-- <link href="signin.css" rel="stylesheet"> -->
-    <link href="dashboard.css" rel="stylesheet">
+    <link href="bankSelect.css" rel="stylesheet">
     <link href="fadeIn.css" rel="stylesheet">
     <style>
         body {
             overflow-x: hidden;
         }
-
-        
     </style>
     <style type="text/css">
-    .thead .row {
-        background-color: cornflowerblue;
-        color: white;
+        .cornflowerblue {
+            background-color: cornflowerblue;
+            color: #fff;
+        }
 
-    }
-    .tbody {
-        margin-right: -15px;
-        margin-left: -0px;
-    }
+        .bank-table {
+            margin-left: 1rem;
+        }
 
-    tr:nth-child(odd) .col-md-1 {background: rgb(255 215 185);};
+        .tbody {
+            margin-right: -15px;
+            margin-left: -0px;
+        }
 
-</style>
+        tr:nth-child(odd) .col-md-1 {
+            background: rgb(255 215 185);
+        }
+
+        .thead .tr {
+            min-height: 65px;
+            border-bottom: 5px solid #ffffff;
+        }
+        .thead .tr .col-md-2 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            max-width: 150px;
+        }
+        .thead .tr .col-md-9 {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 15px;
+            background: bisque;
+            border-radius: 3px;
+        }
+
+        .thead .tr .readonly {
+            background: darkgray;
+        }
+        
+    </style>
 </head>
 
 <body>
@@ -125,39 +152,52 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 
+
                 <h1 class="h2">Dashboard</h1>
- 
-                <div id="bank-table" class="css-table">
-                    <div class="thead">
-                        <div class="row">
-                            <div class="col-md-1">id</div>
-                            <div class="col-md-1">name</div>
-                            <div class="col-md-1">分期</div>
-                            <div class="col-md-1">icon</div>
-                            <div class="col-md-1">刷卡滿額禮</div>
-                            <div class="col-md-1">卡友優惠專案</div>
-                            <div class="col-md-1">注意事項</div>
-                            <div class="col-md-1">活動時間</div>
-                            <div class="col-md-1">活動詳情</div>
-                            <div class="col-md-1">紅利折扣</div>
-                            <div class="col-md-1">詳細說明</div>
-                            <div class="col-md-1">編輯</div>
-                        </div>
-                    </div>
-                    <div class="tbody row" id="tbody">
-                        <!-- <div class="tr">
-                            <div class="td">內容1-1</div>
-                            <div class="td">內容1-2</div>
-                        </div>
-                        <div class="tr">
-                            <div class="td">內容2-1</div>
-                            <div class="td">內容2-2</div>
-                        </div>
-                        <div class="tr">
-                            <div class="td">內容3-1</div>
-                            <div class="td">內容3-2</div>
-                        </div> -->
-                    </div>
+
+  
+                <div class="row">
+                    <select id="custom-select" class="custom-select custom-select-lg col-md-3 m-3">
+                    <option selected>Open this select menu</option>
+                        <option value="esun">玉山銀行</option>
+                        <option value="dbs">星展銀行</option>
+                        <option value="bot">臺灣銀行</option>
+                        <option value="cathaybk">國泰世華</option>
+                        <option value="chb">彰化銀行</option>
+                        <option value="chinatrust">中國信託</option>
+                        <option value="citi">花旗銀行</option>
+                        <option value="feib">遠東銀行</option>
+                        <option value="firstbank">第一銀行</option>
+                        <option value="fubon">台北富邦銀行</option>
+                        <option value="hncb">華南銀行</option>
+                        <option value="hsbc">滙豐銀行</option>
+                        <option value="jihsun">日盛銀行</option>
+                        <option value="kgibank">凱基銀行</option>
+                        <option value="landbank">土地銀行</option>
+                        <option value="mega">兆豐銀行</option>
+                        <option value="scsb">上海銀行</option>
+                        <option value="sinopac">永豐銀行</option>
+                        <option value="skfh">新光銀行</option>
+                        <option value="taishinbank">台新銀行</option>
+                        <option value="tbb">臺灣企銀</option>
+                        <option value="tcb">合作金庫</option>
+                        <option value="tcbank">大眾銀行</option>
+                        <option value="ubot">聯邦銀行</option>
+                        <option value="yuanta">元大銀行</option>
+                        <option value="sun">陽信銀行</option>
+                        <option value="aeoncard">永旺信用卡</option>
+                        <option value="ame">美國運通</option>
+                        <option value="rakuten">樂天信用卡</option>
+                        <option value="entie">安泰銀行</option>
+                    </select>
+                    <button  id="select-btn" type="button" onclick ="inquiry()" class="btn btn-info col-md-1 m-3">查詢</button>
+                    <button  id="edit-btn" type="button" onclick="editData()" class="btn btn-info col-md-1 m-3">修改</button>
+                    <button  id="confirm-btn" type="button" onclick="confirmData()" class="btn btn-info col-md-1 m-3">確認</button>
+                </div>
+
+
+                <div id="bank-table" class="bank-table">
+
                 </div>
 
             </main>
@@ -204,7 +244,7 @@
 
     <!-- Custom js for this template -->
     <script src="./toast.js"></script>
-    <script src="./dashboard.js"></script>
+    <script src="./bankSelect.js"></script>
 </body>
 
 </html>

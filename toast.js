@@ -11,6 +11,13 @@
         $('.toast div:nth-child(2)').removeClass("alert-danger");
         $('.toast div:nth-child(2)').addClass("alert-success");
         $('.toast div svg rect').css({ fill: "lightgreen" });
+      } else {
+
+        $('.toast div').addClass("alert-danger");
+        $('.toast div').removeClass("alert-success");
+        $('.toast div:nth-child(2)').addClass("alert-danger");
+        $('.toast div:nth-child(2)').removeClass("alert-success");
+        $('.toast div svg rect').css({ fill: "#ff0000" });
       }
       if (toastShow == false) {
         toastShow = true;
