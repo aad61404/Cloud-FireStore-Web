@@ -97,18 +97,40 @@ function confirmData() {
         var allTextarea = document.querySelectorAll("textarea");
         var dataBa = {
             // 有更新了 請重新檢查
-            id: allTextarea[0].value,
-            name: allTextarea[1].value,
-            分期: allTextarea[2].value,
-            icon: allTextarea[3].value,
-            活動詳情: allTextarea[4].value,
-            刷卡滿額禮: JSON.parse(allTextarea[5].value),
-            活動時間: JSON.parse(allTextarea[6].value),
-            卡友優惠專案: JSON.parse(allTextarea[7].value),
-            紅利折扣: allTextarea[8].value,
-            詳細說明: JSON.parse(allTextarea[9].value),
+            id: document.getElementById('id').value,
+            name: document.getElementById('name').value,
+            plans: plansCount(),
+            isShow: true,
+            // imgUrl: 'https://www.settour.com.tw/info/card/public/img/bank-logo/bank-icon-rakuten.png',
+            // link: 'https://www.settour.com.tw/info/card/rakutenbk/',
+            gift: {
+                isShow: checkGiftIsShow(),
+                texts:  checkGiftTextsValue(),
+                begDt: document.getElementById('begDt').value,
+                endDt: document.getElementById('endDt').value,
+                注意事項: document.getElementById('notices').value,
+                領取條件: document.getElementById('requisitions').value,
+            },
+            promo: {
+                isShow: checkPromoIsShow(),
+                project: checkPromoProjectValue()
+            },
+            discount: {
+                isShow: checkDiscountIsShow(),
+                content: {
+                  point: document.getElementById('point').value,
+                  yen: document.getElementById('yen').value,
+                  bi: document.getElementById('bi').value,
+                  limit: document.getElementById('limit').value,
+                },
+                詳細說明: {
+                  text: [],
+                  注意事項: []
+                }
+            }
         };
-        sendEditing(dataBa);
+        console.log('dataBa:', dataBa)
+        // sendEditing(dataBa);
     }
 
 }

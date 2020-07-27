@@ -44,7 +44,7 @@
             console.log('res:', res)
             var user = firebase.auth().currentUser;
             if (user != null) {
-              window.location = 'dashboard.html';
+              window.location = 'bankSelect.html';
             } else {
               showToast('user is null', false)
             }
