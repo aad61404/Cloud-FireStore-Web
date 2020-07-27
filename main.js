@@ -42,7 +42,7 @@ function sendInquiry(param) {
             dataBox = doc.data();
             console.log('doc.data():', doc.data())
             drawTable();
-            setAllValue()
+            setAllValue();
         } else {
             // doc.data() will be undefined in this case
             showToast("No such document!", false)
