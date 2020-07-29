@@ -1,13 +1,20 @@
-body {
-    font-size: .875rem;
+  body {
+    overflow-x: hidden;
   }
-  
-  .feather {
-    width: 16px;
-    height: 16px;
-    vertical-align: text-bottom;
+
+
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    user-select: none;
   }
-  
+
+  @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+      }
+  }
+
   /*
    * Sidebar
    */
@@ -102,3 +109,130 @@ body {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
   }
   
+  .feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
+  .form-required {
+    margin-left: 5px;
+    color: red;
+}
+
+  .bank-table {
+      margin-left: 1rem;
+  }
+
+  .cornflowerblue {
+    background-color: cornflowerblue;
+    color: #fff;
+  }
+
+  .tbody {
+      margin-right: -15px;
+      margin-left: -0px;
+  }
+
+  tr:nth-child(odd) .col-md-1 {
+      background: rgb(255 215 185);
+  }
+
+  .thead .tr {
+      min-height: 65px;
+      border-bottom: 5px solid #ffffff;
+      flex-wrap: nowrap;
+      margin-bottom: 5px;
+  }
+  .thead .tr .col-md-2 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      max-width: 150px;
+      margin-right: 15px;
+  }
+  .thead .tr .col-md-9 {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 15px;
+      /* background: bisque; */
+      border-radius: 3px;
+  }
+  .thead .tr .col-md-9 , .thead .tr .col-md-10  , .thead .tr .col-md-11 , .thead .tr .col-md-12 {
+      list-style: none;
+      padding: 10px 15px;
+      color: #000000;
+      font-weight: 600;
+      border: 2px solid #025f70;
+      border-radius: 5px;
+  }
+
+  .thead .tr .readonly {
+      background: darkgray;
+  }
+  
+
+  /* -------------------------------- */
+
+.done {
+    background: #51DF70 !important;
+    color: #00891E;
+}
+
+.delete {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.initial {
+    display: initial;
+}
+
+.addSection {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+#giftContainer,
+#promoContainer {
+    padding-top: 60px;
+    width: 100%;
+}
+
+.remove {
+    position: absolute;
+    right: 45px;
+    width: 35px;
+    border-radius: 10px;
+}
+
+.gift,
+.promo {
+    margin-bottom: 20px;
+}
+
+.gift h5 {
+    margin-bottom: 15px;
+}
+.detail {
+    margin-bottom: 15px;
+}
+#detailed .btn-danger , #detailedNotice .btn-danger , #promoContainer .btn-danger {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    right: 15px;
+    border-radius: 10px;
+}

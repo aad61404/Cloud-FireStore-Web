@@ -1,155 +1,245 @@
-var box = { 
-    刷卡滿額禮: {
-    '0': [
-      '單筆滿NT6,000(含)以上',
-      '享6%現金回饋，累計上限NT$600',
-      '限量3000名',
-    ],
-    '1': [
-      '累積消費每滿NT$666',
-      '「累積旅遊消費全額刷卡金回饋」抽獎機會乙次',
-      '最高回饋刷卡金NT$66,666，共十名',
-    ],
-  }
-};
+function setValue() {
+    const Box = {
+        gift: {
+            texts:  checkGiftTextsValue(),
+        },
+        promo: {
+            project: checkPromoProjectValue()
+        },
+        discount: {
+            detail: {
+              texts: detailCount(),
+              announces: announceCount()
+            }
+        }
+    };
+    console.log('Box:', Box)
 
-var btn = document.getElementById('btn');
-btn.addEventListener('click', function () {
-    var section = document.createElement('section');
-    section.setAttribute('id', 1);
-    document.getElementById('wrapper').appendChild(section); //apendvame tuka kum bodito
+}
+
+// render div 刷卡滿額禮
+var newProject = document.getElementById("newProject");
+
+newProject.addEventListener('click', function() {
+
+    var createGift = document.createElement('div');
+    createGift.classList.add("gift");
+    createGift.innerHTML = `
+            <h5>優惠 </h5>
+            <div class="row">
+                <label class="col-md-2">消費條件</label>
+                <input class="col-md-9" type="text">
+            </div>
+            <div class="row">
+                <label class="col-md-2">贈送</label>
+                <input class="col-md-9" type="text">
+            </div>
+            <div class="row">
+                <label class="col-md-2">備註</label>
+                <input class="col-md-9" type="text">
+            </div>
+    `;
     
-    var h3 = document.createElement('h3');
-    h3.innerText = document.getElementById('sectionText').value;
-    section.appendChild(h3);
-    var input = document.createElement('INPUT');
-    input.setAttribute('type', 'text')
-    section.appendChild(input);
-    var btn = document.createElement('button');
-    btn.innerText = 'New List Item'
     var deleteBtn = document.createElement('button');
+    deleteBtn.setAttribute('class', 'remove btn-danger');
     deleteBtn.innerText = "X";
     deleteBtn.addEventListener('click', function() {
-        section.remove();
+        createGift.remove();
     })
+    createGift.prepend(deleteBtn);
+    document.getElementById('giftWrapper').appendChild(createGift);
 
-    var ul = document.createElement('ul');
-    ul.setAttribute('class', 'listItem');
-    ul.setAttribute('class', 'show');
-    var hidden = document.createElement('button');
-    hidden.innerText = "hide/show";
-    hidden.addEventListener('click', function() {
-        if(ul.classList.contains('show')) {
-            input.classList.remove('initial');
-            input.classList.add('hidden');
-            btn.classList.remove('inline-block');
-            btn.classList.add('hidden');
-            ul.classList.remove('show');
-            ul.classList.add('hidden');
-        } else {
-            input.classList.remove('hidden');
-            input.classList.add('initial');
-            btn.classList.remove('hidden');
-            btn.classList.add('inline-block');
-            ul.classList.remove('hidden');
-            ul.classList.add('show');
-        }
-    })
-
-    h3.appendChild(deleteBtn);
-    h3.appendChild(hidden);
-    section.appendChild(btn);
-
-
-    btn.addEventListener('click', function () {
-        var itemText = document.createElement('INPUT');
-        itemText.setAttribute('type', 'text');
-        itemText.setAttribute('id', 'text');
-        itemText.setAttribute('value', this.previousElementSibling.value);
-        ul.appendChild(itemText);
-        var li = document.createElement('li');
-        var itemDelete = document.createElement('button');
-        itemDelete.innerText = 'X';
-        itemDelete.addEventListener('click', function() {
-            li.remove();  
-        })
-        li.appendChild(itemText);
-        li.appendChild(itemDelete);
-        ul.appendChild(li);
-
-        input.parentNode.insertBefore(ul, input);
-    }, false);
 })
 
 
+// render div 卡友優惠專案
+var newPromo = document.getElementById("newPromo");
 
-// 
-// 
-// 
-// 
-// 
-// 
-var enterButton = document.getElementById("enter");
-var input = document.getElementById("userInput");
-var ul = document.querySelector("ul");
-var item = document.getElementsByTagName("li");
+newPromo.addEventListener('click', function() {
 
-function inputLength(){
-	return input.value.length;
-} 
+    var createPromoCard = document.createElement('div');
+    createPromoCard.classList.add("promo");
+    createPromoCard.innerHTML = `
+        <label class="col-md-3">專案名稱</label><input type="text" class="col-md-9">
+        <label class="col-md-3">專案連結</label><input type="text" class="col-md-9">
+    `;
+    
+    var deleteBtn = document.createElement('button');
+    deleteBtn.setAttribute('class', 'remove btn-danger');
+    deleteBtn.innerText = "X";
+    deleteBtn.addEventListener('click', function() {
+        createPromoCard.remove();
+    })
+    createPromoCard.prepend(deleteBtn);
+    document.getElementById('promoContainer').appendChild(createPromoCard);
 
-function listLength(){
-	return item.length;
+})
+
+
+// render div 詳細說明
+
+function setDetailed() {
+   const detailed =  document.getElementById('detailed');
+   const detailLength = dataBox.discount.detail.texts.length;
+   const addBtn = document.createElement('button')
+   
+   detailed.innerHTML = '';
+
+   addBtn.setAttribute("class","btn btn-success d-block");
+   addBtn.innerText = '+';
+   addBtn.onclick = function () {
+       let addInput = document.createElement('input');
+       let addDelBtn = document.createElement('button');
+       
+       addInput.setAttribute("type", "text");
+       addInput.setAttribute("class", "detail col-md-10");
+
+       addDelBtn.setAttribute('class', 'btn btn-danger');
+       addDelBtn.innerText = "X";
+       addDelBtn.addEventListener('click', function() {
+           this.previousSibling.remove();
+           this.remove();
+       })
+
+       detailed.append(addInput,addDelBtn);
+   }
+   detailed.prepend(addBtn)
+
+    // render Input and X
+   for (let i = 0; i < detailLength; i++) {
+        let detailTemplate = document.createElement('input');
+        detailTemplate.setAttribute("type", "text");
+        detailTemplate.classList.add('detail');
+        detailTemplate.classList.add('col-md-10');
+        detailTemplate.value = dataBox.discount.detail.texts[i]
+
+        let detailDelBtn = document.createElement('button');
+        detailDelBtn.setAttribute('class', 'btn btn-danger');
+        detailDelBtn.innerText = "X";
+        detailDelBtn.addEventListener('click', function() {
+            detailTemplate.remove()
+            detailDelBtn.remove();
+        })
+
+        detailed.appendChild(detailTemplate);
+        detailed.appendChild(detailDelBtn);
+   }
+
 }
 
-function createListElement() {
-	var li = document.createElement("li"); // creates an element "li"
-	li.appendChild(document.createTextNode(input.value)); //makes text from input field the li text
-	ul.appendChild(li); //adds li to ul
-	input.value = ""; //Reset text input field
+setDetailed()
 
 
-	//START STRIKETHROUGH
-	// because it's in the function, it only adds it for new items
-	function crossOut() {
-		li.classList.toggle("done");
-	}
+// render div 注意事項
+function setDetailedNotice() {
+    const detailedNotice = document.getElementById('detailedNotice');
+    const noticeLength = dataBox.discount.detail.announces.length;
+    const addBtn = document.createElement('button');
 
-	li.addEventListener("click",crossOut);
-	//END STRIKETHROUGH
+    detailedNotice.innerHTML = '';  
 
+    addBtn.setAttribute("class","btn btn-success d-block");
+    addBtn.innerText = '+';
+    addBtn.onclick = function () {
+        let addInput = document.createElement('input');
+        let addDelBtn = document.createElement('button');
+        
+        addInput.setAttribute("type", "text");
+        addInput.setAttribute("class", "detail col-md-10");
 
-	// START ADD DELETE BUTTON
-	var dBtn = document.createElement("button");
-	dBtn.appendChild(document.createTextNode("X"));
-	li.appendChild(dBtn);
-	dBtn.addEventListener("click", deleteListItem);
-	// END ADD DELETE BUTTON
+        addDelBtn.setAttribute('class', 'btn btn-danger');
+        addDelBtn.innerText = "X";
+        addDelBtn.addEventListener('click', function() {
+            this.previousSibling.remove();
+            this.remove();
+        })
+ 
+        detailedNotice.append(addInput,addDelBtn);
 
+    }
+    detailedNotice.prepend(addBtn)
 
-	//ADD CLASS DELETE (DISPLAY: NONE)
-	function deleteListItem(){
-		li.classList.add("delete")
-	}
-	//END ADD CLASS DELETE
+    // 表單 Input X
+    for (let i = 0; i <noticeLength; i++) {
+        let announceTemplate = document.createElement('input');
+        announceTemplate.setAttribute("type", "text");
+        announceTemplate.classList.add('detail');
+        announceTemplate.classList.add('col-md-10');
+        announceTemplate.value = dataBox.discount.detail.announces[i];
+
+        let detailDelBtn = document.createElement('button');
+        detailDelBtn.setAttribute('class', 'btn-danger');
+        detailDelBtn.innerText = "X";
+        detailDelBtn.addEventListener('click', function() {
+            announceTemplate.remove()
+            detailDelBtn.remove();
+        })
+
+        detailedNotice.appendChild(announceTemplate);      
+        detailedNotice.appendChild(detailDelBtn);      
+    }
+
 }
 
-
-function addListAfterClick(){
-	if (inputLength() > 0) { //makes sure that an empty input field doesn't create a li
-		createListElement();
-	}
-}
-
-function addListAfterKeypress(event) {
-	if (inputLength() > 0 && event.which ===13) { //this now looks to see if you hit "enter"/"return"
-		//the 13 is the enter key's keycode, this could also be display by event.keyCode === 13
-		createListElement();
-	} 
-}
+setDetailedNotice()
 
 
-enterButton.addEventListener("click",addListAfterClick);
+// 刷卡滿額禮  送出
+function checkGiftTextsValue() {
+    var giftTextsBox = [];
+    var allGifts=  document.querySelectorAll('#giftWrapper [class*="gift"]');
+ 
+    for (let i = 0; i < allGifts.length; i++) {
+        var giftInputsValue = allGifts[i].querySelectorAll('input')
+        var emptyObject = {};
+        emptyObject.condition =giftInputsValue[0].value // 條件
+        emptyObject.receive =giftInputsValue[1].value   // 贈送
+        emptyObject.remark =giftInputsValue[2].value    // 備註
+        if(giftInputsValue[0].value == "" || giftInputsValue[1].value == "") { 
+             showToast("刷卡滿額禮 有欄位未填", false);
+             return;
+         }
+        giftTextsBox.push(emptyObject);
+    }
+    return giftTextsBox;
+ }
 
-input.addEventListener("keypress", addListAfterKeypress);
 
+ // 卡友優惠專案  送出
+function checkPromoProjectValue() {
+    var promoBox = [];
+    var allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
+ 
+    for (let i = 0; i < allPromos.length; i++) {
+        var promoInputsValue = allPromos[i].querySelectorAll('input');
+        var emptyObject = {};
+        emptyObject.專案名稱 =promoInputsValue[0].value
+        emptyObject.專案連結 =promoInputsValue[1].value
+        if(promoInputsValue[0].value == "" || promoInputsValue[1].value == "") { 
+            showToast("卡友優惠專案 有欄位未填", false);
+            return;
+        }
+        promoBox.push(emptyObject);
+    }
+    return promoBox;
+ }
+
+ // 詳細說明  送出
+ function detailCount() {
+     var detailBox = [];
+     var detailInputs = document.querySelectorAll("#detailed input");
+     detailInputs.forEach(function(item) {
+        detailBox.push(item.value);
+     })
+     return detailBox;
+ }
+
+  // 詳細說明 - 注意事項  送出
+ function announceCount() {
+     var announceBox = [];
+     var announceInputs = document.querySelectorAll("#detailedNotice input");
+     announceInputs.forEach(function(item) {
+        announceBox.push(item.value);
+     })
+     return announceBox;
+ }

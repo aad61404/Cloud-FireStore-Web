@@ -3,7 +3,6 @@
  * @param databox 暫存資料變數(顯示、修改、送出)
  * @param readonly 閱讀模式(true : 不能修改, false : 可以修改)
  * 
- *  
  * */ 
 
 var dataBox = [];
@@ -11,20 +10,15 @@ var readonly = true;
 var tbody = document.getElementById('tbody');
 
 // 前面須引入 toast.js
-// document.getElementById('select-btn').addEventListener("click", function() {
-//     inquiry();
-// })
 document.getElementById('signOut').addEventListener("click", function() {
     signOut();
 })
 
 // 查詢按鈕 function
 function inquiry() {
-    // console.log( 'select-value : ' ,$('#custom-select')[0].value);
     var selectValue = document.getElementById("custom-select").value
     sendInquiry(selectValue);
-    clearTable();
- 
+    
 }
 
 function clearTable() {
@@ -39,29 +33,18 @@ function sendInquiry(param) {
 
     docRef.get().then(function(doc) {
         if (doc.exists) {
+            clearTable();
             dataBox = doc.data();
-            console.log('doc.data():', doc.data())
             drawTable();
             setAllValue();
+
         } else {
-            // doc.data() will be undefined in this case
             showToast("No such document!", false)
         }
     }).catch(function(error) {
         // showToast(error, false)
         console.log("Error getting document:", error);
     });
-}
-
-// 送出修改
-function sendEditing(param) {
-    var selectValue = document.getElementById("custom-select").value;
-    console.log('selectValue:', selectValue)
-    console.log('param:', param)
-    // firebase.firestore().collection("card").doc(selectValue).set(param).then(function() {
-    //     console.log("Document successfully written!");
-    //     console.log('param:', param)
-    // });
 }
 
 function editData() {
@@ -85,32 +68,29 @@ function editData() {
 
 
 function confirmData() {
-    if (readonly == true) {
-        showToast("閱讀模式不能修改資料", false);
-        alert("閱讀模式不能修改資料");
-        return ;
-    } else {
-        showToast("修改資料已送出", true);
-        // alert("修改資料已送出");
+    // if (readonly == true) {
+    //     showToast("閱讀模式不能修改資料", false);
+    //     alert("閱讀模式不能修改資料");
+    //     return ;
+    // } else {
+        showToast("請看console", true);
         console.log('dataBox',dataBox);
-        // alert(dataBox);
-        var allTextarea = document.querySelectorAll("textarea");
         var dataBa = {
-            // 有更新了 請重新檢查
             id: document.getElementById('id').value,
+            isShow: checkBankIsShow(),
             name: document.getElementById('name').value,
+            iconUrl: document.getElementById('iconUrl').value,
+            logoUrl: document.getElementById('logoUrl').value,
             plans: plansCount(),
-            isShow: true,
-            // imgUrl: 'https://www.settour.com.tw/info/card/public/img/bank-logo/bank-icon-rakuten.png',
-            // link: 'https://www.settour.com.tw/info/card/rakutenbk/',
             gift: {
                 isShow: checkGiftIsShow(),
                 texts:  checkGiftTextsValue(),
                 begDt: document.getElementById('begDt').value,
                 endDt: document.getElementById('endDt').value,
-                注意事項: document.getElementById('notices').value,
-                領取條件: document.getElementById('requisitions').value,
+                announce: document.getElementById('announce').value,
+                qualify: document.getElementById('qualify').value,
             },
+
             promo: {
                 isShow: checkPromoIsShow(),
                 project: checkPromoProjectValue()
@@ -119,19 +99,39 @@ function confirmData() {
                 isShow: checkDiscountIsShow(),
                 content: {
                   point: document.getElementById('point').value,
-                  yen: document.getElementById('yen').value,
-                  bi: document.getElementById('bi').value,
-                  limit: document.getElementById('limit').value,
+                  back: document.getElementById('back').value,
+                  upper: document.getElementById('upper').value,
+                  lower: document.getElementById('lower').value,
                 },
-                詳細說明: {
-                  text: [],
-                  注意事項: []
+                detail: {
+                  announces: announceCount(),
+                  texts: detailCount()
                 }
             }
         };
-        console.log('dataBa:', dataBa)
-        // sendEditing(dataBa);
-    }
+        console.log('dataBa:', dataBa);
+        const ID = document.getElementById('id').value;
+        // ID: mega
+
+        // var sfDocRef = db.collection("card").doc(ID);
+
+        // return db.runTransaction(function(transaction) {
+        //     // This code may get re-run multiple times if there are conflicts.
+        //     return transaction.get(sfDocRef).then(function(sfDoc) {
+        //         if (!sfDoc.exists) {
+        //             throw "Document does not exist!";
+        //         }
+        //         console.log('sfDocRef:', sfDocRef)
+        //         console.log('sfDoc:', sfDoc.data())
+        //         sfDocRef.set(dataBa).then(function() {
+        //             console.log("Document successfully written!");
+        //         });
+        //     });
+        // }).then(function() {
+        //     console.log("Transaction successfully committed!");
+        // }).catch(function(error) {
+        //     console.log("Transaction failed: ", error);
+        // });
 
 }
 
@@ -140,12 +140,7 @@ function signOut() {
     detect = true;
     firebase.auth().signOut().then(function() {
         localStorage.setItem("authStorage", `Sign out !`);
-        console.error('Log out');
-        // window.location = "/";
-        // var user = firebase.auth().currentUser;
-        // console.log(user)
-      })
-    // alert("hello");
+    })
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -162,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Provider-specific UID: " + profile.uid);
                 showToast('Success signIn', true);
             });
-            // console.log('userInfo', userInfo);
         } else {
             // No user is signed in
             if (detect == false) {
@@ -178,7 +172,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+// bankSelect 載入後 將bank資料載入
+function bankListInquiry() {
+    var db = firebase.firestore();
+    db.collection("bankList").get().then(function(querySnapshot) {
+        var bankBox = [];
+        querySnapshot.forEach(function(doc) {
+            bankBox.push(doc.data());
+        });
+         createBankSelect(bankBox[0]);
+    });
+}
 
+function createBankSelect(obj) {
+    var customSelect = document.getElementById('custom-select');
+    Object.keys(obj).sort().forEach(function(item) {
+        var option = document.createElement("option");
+        option.value = item;
+        option.text  = obj[item];
+        customSelect.appendChild(option);
+    })
+}
+bankListInquiry()
 
 /**
  

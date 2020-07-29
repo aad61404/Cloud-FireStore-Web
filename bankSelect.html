@@ -46,82 +46,6 @@
     <link href="bankSelect.css" rel="stylesheet">
     <link href="fadeIn.css" rel="stylesheet">
 
-        <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
-
-    <style type="text/css">
-        body {
-            overflow-x: hidden;
-        }
-        .cornflowerblue {
-            background-color: cornflowerblue;
-            color: #fff;
-        }
-
-        .bank-table {
-            margin-left: 1rem;
-        }
-
-        .tbody {
-            margin-right: -15px;
-            margin-left: -0px;
-        }
-
-        tr:nth-child(odd) .col-md-1 {
-            background: rgb(255 215 185);
-        }
-
-        .thead .tr {
-            min-height: 65px;
-            border-bottom: 5px solid #ffffff;
-        }
-        .thead .tr .col-md-2 {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-            max-width: 150px;
-        }
-        .thead .tr .col-md-9 {
-            display: inline-flex;
-            align-items: center;
-            margin-left: 15px;
-            /* background: bisque; */
-            border-radius: 3px;
-        }
-        .thead .tr .col-md-9 , .thead .tr .col-md-12{
-            list-style: none;
-            padding: 10px 20px;
-            color: #000000;
-            font-weight: 600;
-            border: 2px solid #025f70;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .thead .tr .readonly {
-            background: darkgray;
-        }
-        
-        .form-required {
-            margin-left: 5px;
-            color: red;
-        }
-    </style>
 </head>
 
 <body>
@@ -140,12 +64,6 @@
         </ul>
     </nav>
 
-
-
-    <!-- ------------------ -->
-    <!-- ------------------ -->
-    <!-- ------------------ -->
-    <!-- ------------------ -->
 
     <div class="container-fluid">
         <div class="row">
@@ -184,53 +102,21 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 p-4">
 
                 <h1 class="h2">Dashboard</h1>
 
-  
                 <div class="row">
                     <select id="custom-select" class="custom-select custom-select-lg col-md-3 m-3">
                     <option selected>Open this select menu</option>
-                        <option value="esun">玉山銀行</option>
-                        <option value="dbs">星展銀行</option>
-                        <option value="bot">臺灣銀行</option>
-                        <option value="cathaybk">國泰世華</option>
-                        <option value="chb">彰化銀行</option>
-                        <option value="chinatrust">中國信託</option>
-                        <option value="citi">花旗銀行</option>
-                        <option value="feib">遠東銀行</option>
-                        <option value="firstbank">第一銀行</option>
-                        <option value="fubon">台北富邦銀行</option>
-                        <option value="hncb">華南銀行</option>
-                        <option value="hsbc">滙豐銀行</option>
-                        <option value="jihsun">日盛銀行</option>
-                        <option value="kgibank">凱基銀行</option>
-                        <option value="landbank">土地銀行</option>
-                        <option value="mega">兆豐銀行</option>
-                        <option value="scsb">上海銀行</option>
-                        <option value="sinopac">永豐銀行</option>
-                        <option value="skfh">新光銀行</option>
-                        <option value="taishinbank">台新銀行</option>
-                        <option value="tbb">臺灣企銀</option>
-                        <option value="tcb">合作金庫</option>
-                        <option value="tcbank">大眾銀行</option>
-                        <option value="ubot">聯邦銀行</option>
-                        <option value="yuanta">元大銀行</option>
-                        <option value="sun">陽信銀行</option>
-                        <option value="aeoncard">永旺信用卡</option>
-                        <option value="ame">美國運通</option>
-                        <option value="rakuten">樂天信用卡</option>
-                        <option value="entie">安泰銀行</option>
                     </select>
-                    <button  id="select-btn" type="button" onclick ="inquiry()" class="btn btn-info col-md-1 m-3">查詢</button>
-                    <button  id="edit-btn" type="button" onclick="editData()" class="btn btn-info col-md-1 m-3">修改</button>
+
+                    <button  id="select-btn" type="button" onclick ="inquiry()" class="btn btn-info col-md-1 m-3 mr-5">查詢</button>
+                    <!-- <button  id="edit-btn" type="button" onclick="editData()" class="btn btn-info col-md-1 m-3">修改</button> -->
                     <button  id="confirm-btn" type="button" onclick="confirmData()" class="btn btn-info col-md-1 m-3">確認</button>
-                    <button  id="confirm-btn" type="button" onclick="drawList()" class="btn btn-info col-md-1 m-3">繪製</button>
                 </div>
 
-
+                <!-- render table -->
                 <div id="bank-table" class="bank-table">
 
                 </div>
@@ -238,14 +124,6 @@
             </main>
         </div>
     </div>
-
-
-
-    <script>
-
-    </script>
-
-
 
 
     <!-- toast notification -->
@@ -279,9 +157,9 @@
 
     <!-- Custom js for this template -->
     <script src="./toast.js"></script>
-    <!-- Custom js for this template -->
-    <script src="main.js"></script>
-    <script src="ManageRender.js"></script>
+    <script src="./main.js"></script>
+    <script src="./ManageRender.js"></script>
+    <script src="./autoAdd.js"></script>
 </body>
 
 </html>
