@@ -116,8 +116,8 @@ function Gift_Input_Button() {
     createGift.classList.add("gift");
     createGift.innerHTML = GiftTemplate;
     
-    deleteBtn.setAttribute('class', 'remove btn-danger');
-    deleteBtn.innerText = "X";
+    deleteBtn.setAttribute('class', 'remove btn btn-danger');
+    deleteBtn.innerText = "ㄧ";
     deleteBtn.addEventListener('click', function() {
         createGift.remove();
     })
@@ -208,7 +208,7 @@ function Promo_Input_Button() {
     createPromoCard.innerHTML = PromoTemplate;
     
     deleteBtn.setAttribute('class', 'remove btn-danger');
-    deleteBtn.innerText = "X";
+    deleteBtn.innerText = "ㄧ";
     deleteBtn.addEventListener('click', function() {
         createPromoCard.remove();
     })
@@ -297,7 +297,7 @@ function setDetailed() {
     detailed.innerHTML = '';
  
     addBtn.setAttribute("class","btn btn-success d-block mb-3");
-    addBtn.innerText = '+';
+    addBtn.innerText = '＋';
     addBtn.onclick = function () {
         let addInput = document.createElement('input');
         let addDelBtn = document.createElement('button');
@@ -306,7 +306,7 @@ function setDetailed() {
         addInput.setAttribute("class", "detail col-md-11");
  
         addDelBtn.setAttribute('class', 'btn btn-danger');
-        addDelBtn.innerText = "X";
+        addDelBtn.innerText = "ㄧ";
         addDelBtn.addEventListener('click', function() {
             this.previousSibling.remove();
             this.remove();
@@ -326,7 +326,7 @@ function setDetailed() {
  
          let detailDelBtn = document.createElement('button');
          detailDelBtn.setAttribute('class', 'btn btn-danger');
-         detailDelBtn.innerText = "X";
+         detailDelBtn.innerText = "一";
          detailDelBtn.addEventListener('click', function() {
              detailTemplate.remove()
              detailDelBtn.remove();
@@ -347,7 +347,7 @@ function setDetailedNotice() {
     detailedNotice.innerHTML = '';  
 
     addBtn.setAttribute("class","btn btn-success d-block mb-3");
-    addBtn.innerText = '+';
+    addBtn.innerText = '＋';
     addBtn.onclick = function () {
         let addInput = document.createElement('input');
         let addDelBtn = document.createElement('button');
@@ -356,7 +356,7 @@ function setDetailedNotice() {
         addInput.setAttribute("class", "detail col-md-11");
 
         addDelBtn.setAttribute('class', 'btn btn-danger');
-        addDelBtn.innerText = "X";
+        addDelBtn.innerText = "ㄧ";
         addDelBtn.addEventListener('click', function() {
             this.previousSibling.remove();
             this.remove();
@@ -375,8 +375,8 @@ function setDetailedNotice() {
         announceTemplate.value = dataBox.discount.detail.announces[i];
 
         let detailDelBtn = document.createElement('button');
-        detailDelBtn.setAttribute('class', 'btn-danger');
-        detailDelBtn.innerText = "X";
+        detailDelBtn.setAttribute('class', 'btn btn-danger');
+        detailDelBtn.innerText = "一";
         detailDelBtn.addEventListener('click', function() {
             announceTemplate.remove()
             detailDelBtn.remove();
@@ -522,7 +522,7 @@ function drawTable() {
                 <div class="col-md-2 cornflowerblue">專案</div>
                 <div class="col-md-10">
                     <div class="addSection">
-                        <button id="newProject" class="btn btn-info">新增專案</button>
+                        <button id="newProject" class="btn btn-info">新增專案 ＋</button>
                     </div>
 
                     <div id="giftContainer"></div>
@@ -569,7 +569,7 @@ function drawTable() {
                 <div class="col-md-2 cornflowerblue">卡友優惠專案</div>
                 <div class="col-md-10">
                     <div class="addSection">
-                        <button id="newPromo" class="btn btn-info">新增卡友優惠專案</button>
+                        <button id="newPromo" class="btn btn-info">新增卡友優惠專案 ＋</button>
                     </div>
 
                     <div id="promoContainer"></div>
@@ -611,7 +611,7 @@ function drawTable() {
             </div>
 
             <div class="tr row">
-                <div class="col-md-2 cornflowerblue">詳細說明 - 注意事項</div>
+                <div class="col-md-2 cornflowerblue">詳細說明ㄧ注意事項</div>
                 <div class="col-md-10 d-block" id="detailedNotice">
 
                 </div>

@@ -81,6 +81,7 @@ function confirmData() {
             name: document.getElementById('name').value,
             iconUrl: document.getElementById('iconUrl').value,
             logoUrl: document.getElementById('logoUrl').value,
+            link: document.getElementById('link').value,
             plans: plansCount(),
             gift: {
                 isShow: checkGiftIsShow(),
@@ -93,7 +94,7 @@ function confirmData() {
 
             promo: {
                 isShow: checkPromoIsShow(),
-                project: checkPromoProjectValue()
+                projects: checkPromoProjectValue()
             },
             discount: {
                 isShow: checkDiscountIsShow(),
@@ -112,26 +113,26 @@ function confirmData() {
         console.log('dataBa:', dataBa);
         const ID = document.getElementById('id').value;
         // ID: mega
+        var db = firebase.firestore();
+        var sfDocRef = db.collection("card").doc(ID);
 
-        // var sfDocRef = db.collection("card").doc(ID);
-
-        // return db.runTransaction(function(transaction) {
-        //     // This code may get re-run multiple times if there are conflicts.
-        //     return transaction.get(sfDocRef).then(function(sfDoc) {
-        //         if (!sfDoc.exists) {
-        //             throw "Document does not exist!";
-        //         }
-        //         console.log('sfDocRef:', sfDocRef)
-        //         console.log('sfDoc:', sfDoc.data())
-        //         sfDocRef.set(dataBa).then(function() {
-        //             console.log("Document successfully written!");
-        //         });
-        //     });
-        // }).then(function() {
-        //     console.log("Transaction successfully committed!");
-        // }).catch(function(error) {
-        //     console.log("Transaction failed: ", error);
-        // });
+        return db.runTransaction(function(transaction) {
+            // This code may get re-run multiple times if there are conflicts.
+            return transaction.get(sfDocRef).then(function(sfDoc) {
+                if (!sfDoc.exists) {
+                    throw "Document does not exist!";
+                }
+                console.log('sfDocRef:', sfDocRef)
+                console.log('sfDoc:', sfDoc.data())
+                sfDocRef.set(dataBa).then(function() {
+                    console.log("Document successfully written!");
+                });
+            });
+        }).then(function() {
+            console.log("Transaction successfully committed!");
+        }).catch(function(error) {
+            console.log("Transaction failed: ", error);
+        });
 
 }
 
