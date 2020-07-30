@@ -73,7 +73,7 @@ function confirmData() {
     //     alert("閱讀模式不能修改資料");
     //     return ;
     // } else {
-        showToast("請看console", true);
+        showToast("已送出修改", true);
         console.log('dataBox',dataBox);
         var dataBa = {
             id: document.getElementById('id').value,
