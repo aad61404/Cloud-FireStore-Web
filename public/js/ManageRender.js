@@ -1,3 +1,14 @@
+import { showMessage } from './showMessage.js';
+
+const selectBtn = document.getElementById('select-btn')
+const confirmBtn = document.getElementById('confirm-btn')
+selectBtn.addEventListener('click', function() {
+    inquiry();
+})
+confirmBtn.addEventListener('click', function() {
+    confirmData();
+})
+  
 
 /*****************
 **  Template 樣板
@@ -178,7 +189,7 @@ function checkGiftTextsValue() {
         emptyObject.receive =giftInputsValue[1].value
         emptyObject.remark =giftInputsValue[2].value    
         if(giftInputsValue[0].value == "" || giftInputsValue[1].value == "") { 
-             showToast("刷卡滿額禮 有欄位未填", false);
+             showMessage("刷卡滿額禮 有欄位未填", false);
              return;
          }
         giftTextsBox.push(emptyObject);
@@ -258,7 +269,7 @@ function checkPromoProjectValue() {
         emptyObject.text =promoInputsValue[0].value
         emptyObject.link =promoInputsValue[1].value
         if(promoInputsValue[0].value == "" || promoInputsValue[1].value == "") { 
-            showToast("卡友優惠專案 有欄位未填", false);
+            showMessage("卡友優惠專案 有欄位未填", false);
             return;
         }
         promoBox.push(emptyObject);
@@ -394,7 +405,7 @@ function setDetailedNotice() {
     var detailInputs = document.querySelectorAll("#detailed input");
     detailInputs.forEach(function(item) {
         if(item.value == "") {
-            showToast("詳細說明 有欄位未填", false);
+            showMessage("詳細說明 有欄位未填", false);
             return ;
         }
         detailBox.push(item.value);
@@ -408,7 +419,7 @@ function announceCount() {
     var announceInputs = document.querySelectorAll("#detailedNotice input");
     announceInputs.forEach(function(item) {
         if(item.value == "") {
-            showToast("詳細說明-注意事項 有欄位未填", false);
+            showMessage("詳細說明-注意事項 有欄位未填", false);
             return ;
         }
        announceBox.push(item.value);

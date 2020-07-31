@@ -6,45 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
 
-    <!-- <script defer src="/__/firebase/7.16.0/firebase-app.js"></script>
-    <script defer src="/__/firebase/7.16.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/7.16.0/firebase-firestore.js"></script>
-    <script defer src="/__/firebase/7.16.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/7.16.0/firebase-storage.js"></script>
-    <script defer src="/__/firebase/init.js"></script> -->
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
-
-    <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyA5AdaG4X4sxWhSkvCiJFDWeItMjxBIrAY",
-        authDomain: "cloud-firestore-18cc4.firebaseapp.com",
-        databaseURL: "https://cloud-firestore-18cc4.firebaseio.com",
-        projectId: "cloud-firestore-18cc4",
-        storageBucket: "cloud-firestore-18cc4.appspot.com",
-        messagingSenderId: "319103299280",
-        appId: "1:319103299280:web:3d630273a7c359573938d5",
-        measurementId: "G-G9R3S9WQV6"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-    </script>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <!-- <link href="signin.css" rel="stylesheet"> -->
-    <link href="bankSelect.css" rel="stylesheet">
-    <link href="fadeIn.css" rel="stylesheet">
+    <link href="./public/css/dashboard.css" rel="stylesheet">
+    <link href="./public/css/fadeInAnimation.css" rel="stylesheet">
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script src="./public/js/firebaseConfig.js"></script>
 
 </head>
 
@@ -111,13 +88,13 @@
                     <option selected>Open this select menu</option>
                     </select>
 
-                    <button  id="select-btn" type="button" onclick ="inquiry()" class="btn btn-info col-md-1 m-3 mr-5">查詢</button>
-                    <!-- <button  id="edit-btn" type="button" onclick="editData()" class="btn btn-info col-md-1 m-3">修改</button> -->
-                    <button  id="confirm-btn" type="button" onclick="confirmData()" class="btn btn-info col-md-1 m-3">確認</button>
+                    <button  id="select-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5">查詢</button>
+                    <!-- <button  id="edit-btn" type="button" onclick="editRequest()" class="btn btn-info col-md-1 m-3">修改</button> -->
+                    <button  id="confirm-btn" type="button" class="btn btn-info col-md-1 m-3">確認</button>
                 </div>
 
                 <!-- render table -->
-                <div id="bank-table" class="bank-table">
+                <div id="bank-Form" class="bank-Form">
 
                 </div>
 
@@ -156,10 +133,9 @@
         crossorigin="anonymous"></script>
 
     <!-- Custom js for this template -->
-    <script src="./toast.js"></script>
-    <script src="./main.js"></script>
-    <script src="./ManageRender.js"></script>
-    <!-- <script src="./autoAdd.js"></script> -->
+    <script src="./public/js/dashboard.js" type="module"></script>
+    <!-- <script src="./public/js/main.js" type="module"></script>
+    <script src="./public/js/ManageRender.js" type="module"></script> -->
 </body>
 
 </html>

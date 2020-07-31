@@ -7,7 +7,7 @@ selenium-debug.log
 error.log*.
 info.log*.
 /dist
-/public
+
 /log
 /screenshots
 # *.css

@@ -4,6 +4,7 @@
  * @param readonly 閱讀模式(true : 不能修改, false : 可以修改)
  * 
  * */ 
+import { showMessage } from './showMessage.js';
 
 var dataBox = [];
 var readonly = true;
@@ -17,7 +18,7 @@ document.getElementById('signOut').addEventListener("click", function() {
 // 查詢按鈕 function
 function inquiry() {
     var selectValue = document.getElementById("custom-select").value
-    sendInquiry(selectValue);
+    sendSearch(selectValue);
     
 }
 
@@ -28,7 +29,7 @@ function clearTable() {
     }
 }
 // 送出查詢
-function sendInquiry(param) {
+function sendSearch(param) {
     var docRef = firebase.firestore().collection("card").doc(param);
 
     docRef.get().then(function(doc) {
@@ -39,41 +40,41 @@ function sendInquiry(param) {
             setAllValue();
 
         } else {
-            showToast("No such document!", false)
+            showMessage("No such document!", false)
         }
     }).catch(function(error) {
-        // showToast(error, false)
+        // showMessage(error, false)
         console.log("Error getting document:", error);
     });
 }
 
-function editData() {
+function editRequest() {
     var allTextarea = document.querySelectorAll("textarea");
     if(readonly == true)   {
         readonly = !readonly;
         allTextarea.forEach((item) => {
             item.classList.remove("readonly")
             item.readOnly = false;
-            showToast("您現在可以修改資料了 ! <br /> 完成後請點擊確認", true);
+            showMessage("您現在可以修改資料了 ! <br /> 完成後請點擊確認", true);
         })
     } else {
         readonly = !readonly;
         allTextarea.forEach((item) => {
             item.classList.add("readonly");
             item.readOnly = true;
-            showToast("閱讀模式不能修改資料", false);
+            showMessage("閱讀模式不能修改資料", false);
         })
     }
 }
 
 
-function confirmData() {
+function sendModify() {
     // if (readonly == true) {
-    //     showToast("閱讀模式不能修改資料", false);
+    //     showMessage("閱讀模式不能修改資料", false);
     //     alert("閱讀模式不能修改資料");
     //     return ;
     // } else {
-        showToast("已送出修改", true);
+        showMessage("已送出修改", true);
         console.log('dataBox',dataBox);
         var dataBa = {
             id: document.getElementById('id').value,
@@ -156,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var user = firebase.auth().currentUser;
             user.providerData.forEach(function (profile) {
                 console.log("Provider-specific UID: " + profile.uid);
-                showToast('Success signIn', true);
+                showMessage('Success signIn', true);
             });
         } else {
             // No user is signed in
