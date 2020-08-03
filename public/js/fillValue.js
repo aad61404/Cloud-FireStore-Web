@@ -1,71 +1,54 @@
-
+// dashboard.js (firestore && Auth && 表單外層function)
+// dataForm.js  (搜尋後 生成表單template)
+// fillValue.js (表單資料內容操作)
 
 export function fillValue(data) {
-        /***  Form   (M) ****/ 
-        let dataBox = []; // firebase.get 資料儲存區
-        dataBox = data// 資料儲存區
-        console.log('dataBox:', dataBox);
+    /***  Form   (M) ****/ 
+    let dataBox = []; // firebase.get 資料儲存區
+    dataBox = data// 資料儲存區
+    console.log('dataBox:', dataBox);
 
-
-          // 寫入表單 
-      function setAllValue() {
-        
-        initFillRadio('bankIsShow')
+    // 寫入表單 
+    function setAllValue() {
+        initFillRadio('bankIsShow') // (dataBox.isShow)
         // 一.分期
         setIdInput();
         setFanchiCheckbox(); // 分期checkbox
-    
+
         // 二.刷卡滿額禮
-        initFillRadio('gift'); // 刷卡滿額禮radio box
+        initFillRadio('gift'); // 刷卡滿額禮radio box (dataBox.gift.isShow)
         initGiftDiv(); // create div + fill value  + 監控
-    
+
         // 三.卡友優惠專案
         initFillRadio('promo');
-        clickPromoEvent();
         initPromoDiv();
-    
+
         // 四.紅利折扣
-        initFillRadio('discount');
-        // setDiscountRadio(); // 紅利折扣狀態
+        initFillRadio('discount'); // 紅利折扣狀態
         setDiscountContent(); // 紅利折扣內容
         setDetailed(); // 詳細說明
         setDetailedNotice(); // 詳細說明-注意事項
-    
     }
-
-
     setAllValue();
 
     /*****   Radio - 表格初始繪完 把資料填入Radio   *****/
     function initFillRadio(radioName) {
-
         var  isShowRadios = document.querySelectorAll(`#${radioName} input`)
 
         // 特殊處理 bankIsShow 在 dataBox.isShow
         if(radioName == "bankIsShow") {
-            if(dataBox.isShow) {
+            if(dataBox.isShow == true) {
                 isShowRadios[0].checked = true;
             } else {
                 isShowRadios[1].checked = true;
             }
         } 
-        else if (dataBox[radioName].isShow) {
+        else if (dataBox[radioName].isShow == true) {
             isShowRadios[0].checked = true;
-        } else {
+        }
+        else if (dataBox[radioName].isShow == false) {
             isShowRadios[1].checked = true;
         }
-
-        // radio true || false 寫進 databox
-        isShowRadios.forEach(function(item) {
-            item.addEventListener("click", function() {
-                var dataIsChecked =  document.querySelectorAll(`#${radioName} input:checked`);
-                if(radioName == "bankIsShow") {
-                    dataBox.isShow = dataIsChecked[0].value;
-                } else {
-                    dataBox[radioName].isShow = dataIsChecked[0].value;
-                }
-            })
-        })
     }
 
     /***  一、分期 Input  ***/
@@ -89,27 +72,10 @@ export function fillValue(data) {
                 }
             });
         });
-
-        // 把每個Input 加上 監控並回傳 dataBox
-        document.querySelectorAll('#plans input').forEach((item) => {
-            // console.log('item:', item)
-            item.addEventListener("click",function() {
-                var plansBox = [];
-                var plansChecked = $('#plans input:checked');
-            
-                for (var i = 0; i < plansChecked.length; i++) {
-                    plansBox.push(plansChecked[i].value);
-                }
-                dataBox.plans = plansBox;
-                // console.log('plansBox:', plansBox)
-            })
-        })
     }
 
 
     /**** 二、刷卡滿額禮 start ***/
-    /**** Template 樣板 ***/
-    
     function initGiftDiv() {
         const newProject = document.getElementById("newProject");
         const giftTextsLength = dataBox.gift.texts.length;
@@ -117,7 +83,7 @@ export function fillValue(data) {
         // 新增按鈕監控
         newProject.addEventListener('click', function() {
             Gift_Input_Button();
-            checkGiftTextsValue(); // 更新 dataBox
+            // checkGiftTextsValue(); // 更新 dataBox
         })
         // 根據資料長度 繪製模板(div input空得沒有值)
         for (let i = 0; i < giftTextsLength; i++) {
@@ -128,24 +94,23 @@ export function fillValue(data) {
     }
     
 
-
     // 文字欄 跟 按鈕 模板
     function Gift_Input_Button() {
         const GiftTemplate = `
-        <h5>優惠 </h5>
-        <div class="tr row">
-            <label class="col-md-2">消費條件</label>
-            <input class="col-md-9" type="text">
-        </div>
-        <div class="tr row">
-            <label class="col-md-2">贈送</label>
-            <input class="col-md-9" type="text">
-        </div>
-        <div class="tr row">
-            <label class="col-md-2">備註</label>
-            <input class="col-md-9" type="text">
-        </div>
-    `;
+            <h5>優惠 </h5>
+            <div class="tr row">
+                <label class="col-md-2">消費條件</label>
+                <input class="col-md-9" type="text">
+            </div>
+            <div class="tr row">
+                <label class="col-md-2">贈送</label>
+                <input class="col-md-9" type="text">
+            </div>
+            <div class="tr row">
+                <label class="col-md-2">備註</label>
+                <input class="col-md-9" type="text">
+            </div>
+        `;
         const createGift = document.createElement('div');
         const deleteBtn = document.createElement('button');
     
@@ -156,13 +121,11 @@ export function fillValue(data) {
         deleteBtn.innerText = "一";
         deleteBtn.addEventListener('click', function() {
             createGift.remove();
-            checkGiftTextsValue(); // 更新 dataBox
+            // checkGiftTextsValue(); // 更新 dataBox
         })
         createGift.prepend(deleteBtn);
         document.getElementById('giftContainer').appendChild(createGift);
-        // 更新 dataBox
     }
-
 
 
     function fillGiftValue() {
@@ -183,37 +146,10 @@ export function fillValue(data) {
         document.getElementById('link').value = dataBox.link;
     }
 
-    /***  Search Bar - sendSearch (C)  END ****/ 
-    /***  Search Bar  (C)  end ****/ 
-
-
-   // 送出時 檢查 (二)刷卡滿額禮所有欄位
-   function checkGiftTextsValue() {
-    const giftTextsBox = [];
-    const allGifts=  document.querySelectorAll('#giftContainer [class*="gift"]');
- 
-    for (let i = 0; i < allGifts.length; i++) {
-        const giftInputsValue = allGifts[i].querySelectorAll('input')
-        const emptyObject = {};
-        emptyObject.condition =giftInputsValue[0].value
-        emptyObject.receive =giftInputsValue[1].value
-        emptyObject.remark =giftInputsValue[2].value    
-        // if(giftInputsValue[0].value == "" || giftInputsValue[1].value == "") { 
-        //      showMessage("刷卡滿額禮 有欄位未填", false);
-        //      return;
-        //  }
-        giftTextsBox.push(emptyObject);
-    }
-    console.log('giftTextsBox:', giftTextsBox)
-    // return giftTextsBox;
- }
-
     /**** 二、刷卡滿額禮 end  ***/
 
 
-    /**********
-    三、卡友優惠專案
-    **********/
+    /**** 三、卡友優惠專案 start ****/
 
     function Promo_Input_Button() {
         const PromoTemplate = `
@@ -235,20 +171,16 @@ export function fillValue(data) {
         document.getElementById('promoContainer').appendChild(createPromoCard);
     }
 
-
-    function clickPromoEvent() {
+    function initPromoDiv() {
         const newPromo = document.getElementById("newPromo");
-
+        const promoTextsLength = dataBox.promo.projects.length;
+        
+        // 新增按鈕 
         newPromo.addEventListener('click', function() {
             Promo_Input_Button()
         })
-    }
 
-    function initPromoDiv() {
-        const newPromo = document.getElementById("newPromo");
-
-        const promoTextsLength = dataBox.promo.projects.length;
-
+        // 卡友專案 生成div
         for (let i = 0; i < promoTextsLength; i++) {
             Promo_Input_Button()
         }
@@ -266,35 +198,17 @@ export function fillValue(data) {
         }
     }
 
-
-    function checkPromoProjectValue() {
-        var promoBox = [];
-        var allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
-    
-        for (let i = 0; i < allPromos.length; i++) {
-            var promoInputsValue = allPromos[i].querySelectorAll('input');
-            var emptyObject = {};
-            emptyObject.text =promoInputsValue[0].value
-            emptyObject.link =promoInputsValue[1].value
-            if(promoInputsValue[0].value == "" || promoInputsValue[1].value == "") { 
-                showMessage("卡友優惠專案 有欄位未填", false);
-                return;
-            }
-            promoBox.push(emptyObject);
-        }
-
-        return promoBox;
-    }
+    /**** 三、卡友優惠專案 end ****/
 
     /**********
     四、紅利折扣
     **********/
 
     function setDiscountContent() {
-    document.getElementById('point').value = dataBox.discount.content.point;
-    document.getElementById('back').value = dataBox.discount.content.back;
-    document.getElementById('upper').value = dataBox.discount.content.upper;
-    document.getElementById('lower').value = dataBox.discount.content.lower;
+        document.getElementById('point').value = dataBox.discount.content.point;
+        document.getElementById('back').value = dataBox.discount.content.back;
+        document.getElementById('upper').value = dataBox.discount.content.upper;
+        document.getElementById('lower').value = dataBox.discount.content.lower;
     }
 
 
@@ -395,34 +309,7 @@ export function fillValue(data) {
             detailedNotice.appendChild(announceTemplate);      
             detailedNotice.appendChild(detailDelBtn);      
         }
-
     }
 
-    // 詳細說明  送出
-    function detailCount() {
-        var detailBox = [];
-        var detailInputs = document.querySelectorAll("#detailed input");
-        detailInputs.forEach(function(item) {
-            if(item.value == "") {
-                showMessage("詳細說明 有欄位未填", false);
-                return ;
-            }
-            detailBox.push(item.value);
-        })
-        return detailBox;
-    }
 
-    // 詳細說明 - 注意事項  送出
-    function announceCount() {
-        var announceBox = [];
-        var announceInputs = document.querySelectorAll("#detailedNotice input");
-        announceInputs.forEach(function(item) {
-            if(item.value == "") {
-                showMessage("詳細說明-注意事項 有欄位未填", false);
-                return ;
-            }
-        announceBox.push(item.value);
-        })
-        return announceBox;
-    }
 }

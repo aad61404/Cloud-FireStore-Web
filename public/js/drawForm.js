@@ -1,4 +1,6 @@
-// import {fenchi} from './fenchi.js'
+// dashboard.js (firestore && Auth && 表單外層function)
+// dataForm.js  (搜尋後 生成表單template)
+// fillValue.js (表單資料內容操作)
 
 /***  Form  (V) ****/ 
 export function drawForm() {
