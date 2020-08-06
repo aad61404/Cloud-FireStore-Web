@@ -3,6 +3,7 @@
 import { firebaseConfig } from './firebaseConfig.js';
 import { showMessage } from './showMessage.js';
 import { isLogin } from './isLogin.js';
+import { fillBannerValue } from './fillBannerValue.js';
 
 document.addEventListener('DOMContentLoaded', function () {  
 
@@ -30,17 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // set url to input
     function setUrlInput() {
         const db = firebase.firestore();
-        db.collection("img").get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-                console.log(doc.id, doc.data())
-                let bannerBox = doc.data();
-                const bannerWrapper = document.querySelectorAll('#bannerWrapper input');
-                bannerWrapper.forEach(function(itemInput, index) {
-                    itemInput.value = bannerBox.url[index]
-                })
-            });
+        db.collection("img").doc('bannerData').get().then(function(doc) {
+            fillBannerValue(doc.data())
+
         });
     }
+
     setUrlInput()
 
     const modifyBtn = document.getElementById('modify-btn')
@@ -50,19 +46,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 送出修改
     function sendUrlModify() {
-        showMessage("修改中", false);
-        console.log('目前修改中...');
         var db = firebase.firestore();
-        var sfDocRef = db.collection("img").doc('bannerImg')
-
-        var urlBox = {
-            url: []
-        };    
-        var bannerWrapper = document.querySelectorAll('#bannerWrapper input');
-        bannerWrapper.forEach(function(imgInput) {
-            urlBox.url.push(imgInput.value)
-        })
-        console.log('urlBox:', urlBox)
+        var sfDocRef = db.collection("img").doc('bannerData')
+        var bannerBox = {
+            url: checkBannerTextsValue()
+        }
+        if(bannerBox.url == false) {
+            showMessage("橫幅圖片 有欄位未填", false);
+            return ;
+        }
+        showMessage("修改中", false);
+        console.log('bannerBox:', bannerBox)
         // return db.runTransaction(function(transaction) {
         //     return transaction.get(sfDocRef).then(function(sfDoc) {
         //         if (!sfDoc.exists) {
@@ -80,5 +74,26 @@ document.addEventListener('DOMContentLoaded', function () {
         // });
     }
 
-
+    function checkBannerTextsValue() {
+        var data = [];
+        var allBanner= document.querySelectorAll('#bannerContainer [class*="banner"]');
+        allBanner.forEach(function(bannerDiv) {
+            const inputs = bannerDiv.querySelectorAll('input')
+            const emptyObject = {};
+            emptyObject.bankName = inputs[0].value
+            emptyObject.text = inputs[1].value
+            emptyObject.link = inputs[2].value
+            emptyObject.imgUrl = inputs[3].value
+            if( _.isEmpty(inputs[0].value) || _.isEmpty(inputs[1].value) || _.isEmpty(inputs[2].value) || _.isEmpty(inputs[3].value) ) { 
+                data = false;
+            } else {
+                data.push(emptyObject)
+            }
+        })
+        if(data == false) {
+            return false;
+        } else {
+            return data;
+        }   
+    }
 }); 

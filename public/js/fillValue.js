@@ -119,7 +119,7 @@ export function fillValue(data) {
             Gift_Input_Button();
         }
         // 將模板內填入資料
-        fillGiftValue()
+        fillGiftInput()
     }
     
 
@@ -156,7 +156,7 @@ export function fillValue(data) {
     }
 
 
-    function fillGiftValue() {
+    function fillGiftInput() {
         const giftInputs = document.querySelectorAll('#giftContainer [class*="gift"]');
     
         for (let i = 0; i < giftInputs.length; i++) {
