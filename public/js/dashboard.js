@@ -1,43 +1,24 @@
 // dashboard.js (firestore && Auth && 搜尋資料和送出)
-// dataForm.js  (搜尋後 生成表單template)
 // fillValue.js (表單資料內容操作)
-
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
+import { firebaseConfig } from './firebaseConfig.js';
+import { isLogin } from './isLogin.js';
 import { showMessage } from './showMessage.js';
-import { drawForm } from './drawForm.js';
 import { fillValue } from './fillValue.js';
 
-document.addEventListener('DOMContentLoaded', function () {  
-    /***  登入 && 登出 start    ****/
-    let detect = false;
 
-    // 確認是否登入
-    firebase.auth().onAuthStateChanged(function (userInfo) {
-      // User is signed in.
-      if (userInfo) {
-          var user = firebase.auth().currentUser;
-          user.providerData.forEach(function (profile) {
-              console.log("Provider-specific UID: " + profile.uid);
-              showMessage('Success signIn', true);
-          });
-      } else {
-        // No user is signed in
-        if (detect == false) {
-            localStorage.setItem("authStorage", `You have not signIn`);
-            console.error('user is null');
-            window.location = "/";
-        } else {
-            localStorage.setItem("authStorage", `Sign out!`);
-            window.location = "/";
-        }
-      }
-    });
+document.addEventListener('DOMContentLoaded', function () {  
+    /***  Initialize Firebase ***/
+    firebase.initializeApp(firebaseConfig);
+    
+    /***  登入 && 登出 start    ****/
+    isLogin();
 
     function signOut() {
-        detect = true;
         firebase.auth().signOut().then(function() {
-            localStorage.setItem("authStorage", `Sign out !`);
+            localStorage.setItem("authStorage", `Log out!`);
+            window.location = '/';
         })
     }
 
@@ -49,17 +30,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /***  Search Bar  (V) ****/ 
+    const selectBtn = document.getElementById('select-btn')
+    const confirmBtn = document.getElementById('confirm-btn')
+    selectBtn.addEventListener('click', function() {
+        sendSearch(); // ↓ ↓
+    })
+    confirmBtn.addEventListener('click', function() {
+        sendModify();
+    })
+
+
     // Selector
     function setbankSelector() {
         const db = firebase.firestore();
         db.collection("card").get().then(function(querySnapshot) {
-            let bankBox = [];  /***  Search Bar  (M) ****/ 
-            let customSelect = document.getElementById('custom-select');
+            /***  Search Bar  (M) ****/ 
+            const customSelect = document.getElementById('custom-select');
 
             querySnapshot.forEach(function(doc) {
-                var option = document.createElement("option");
-                
-                bankBox.push(doc.data());
+                const option = document.createElement("option");
                 option.value = doc.id;
                 option.text = doc.data().name;
                 customSelect.appendChild(option)
@@ -70,22 +59,15 @@ document.addEventListener('DOMContentLoaded', function () {
     setbankSelector()
 
     /***  Search Bar  (C)  start ****/ 
-    const selectBtn = document.getElementById('select-btn')
-
-
-    selectBtn.addEventListener('click', function() {
-        sendSearch();
-    })
-
 
     // 送出查詢
     function sendSearch() {
-        let selectValue = document.getElementById("custom-select").value
-        let docRef = firebase.firestore().collection("card").doc(selectValue);
+        const selectValue = document.getElementById("custom-select").value
+        const docRef = firebase.firestore().collection("card").doc(selectValue);
 
         docRef.get().then(function(doc) {
             if (doc.exists) {
-                drawForm(); // import from  ./drawForm.js
+                showDisplay();
                 fillValue(doc.data());
             } else {
                 showMessage("No such document!", false)
@@ -95,15 +77,21 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Error getting document:", error);
         });
     }
-    const confirmBtn = document.getElementById('confirm-btn')
-    confirmBtn.addEventListener('click', function() {
-        sendModify();
-    })
+    
+    // open
+    function showDisplay() {
+        var tbl = document.getElementById('bank-Form');
+        if( tbl.classList.contains('hidden')) {
+            tbl.classList.add('show');
+            tbl.classList.remove('hidden');
+        }
+    }
+
     // 送出修改
     function sendModify() {
-        showMessage("已送出修改", true);
+        showMessage("開發調整中", false);
         console.log('目前修改中...');
-        var dataBa = {
+        const dataBa = {
             id: document.getElementById('id').value,
             isShow: checkDataIsShow("bankIsShow"),
             name: document.getElementById('name').value,
@@ -119,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 announce: document.getElementById('announce').value,
                 qualify: document.getElementById('qualify').value,
             },
-
             promo: {
                 isShow: checkDataIsShow("promo"),
                 projects: checkPromoProjectValue()
@@ -139,26 +126,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
         console.log('dataBa:', dataBa);
-        var ID = document.getElementById('id').value;
-        // // ID: mega
-        var db = firebase.firestore();
-        var sfDocRef = db.collection("card").doc(ID);
+        const db = firebase.firestore();
+        const ID = document.getElementById('id').value; // ID: mega
+        const sfDocRef = db.collection("card").doc(ID);
 
-        return db.runTransaction(function(transaction) {
-            return transaction.get(sfDocRef).then(function(sfDoc) {
-                if (!sfDoc.exists) {
-                    throw "Document does not exist!";
-                }
-                // console.log('sfDoc:', sfDoc.data())
-                sfDocRef.set(dataBa).then(function() {
-                    console.log("Document successfully written!");
-                });
-            });
-        }).then(function() {
-            console.log("Transaction successfully committed!");
-        }).catch(function(error) {
-            console.log("Transaction failed: ", error);
-        });
+        // return db.runTransaction(function(transaction) {
+        //     return transaction.get(sfDocRef).then(function(sfDoc) {
+        //         if (!sfDoc.exists) {
+        //             throw "Document does not exist!";
+        //         }
+        //         // console.log('sfDoc:', sfDoc.data())
+        //         sfDocRef.set(dataBa).then(function() {
+        //             console.log("Document successfully written!");
+        //         });
+        //     });
+        // }).then(function() {
+        //     console.log("Transaction successfully committed!");
+        // }).catch(function(error) {
+        //     console.log("Transaction failed: ", error);
+        // });
     }
 
 
@@ -166,18 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Radio isShow value
     function checkDataIsShow(id) {
-        var dataIsChecked = $('#'+id+' input:checked');
-        var isTrueSet = (dataIsChecked[0].value == 'true'); // 將"true" 轉成 true 
+        const dataIsChecked = $('#'+id+' input:checked');
+        const isTrueSet = (dataIsChecked[0].value == 'true'); // 將"true" 轉成 true 
 
         return isTrueSet;
     }
 
     //  3,6,10,12 點擊後觸發 (databox.plans)
     function plansCount() {
-        var plansBox = [];
-        var plansChecked = $('#plans input:checked');
+        const plansBox = [];
+        const plansChecked = $('#plans input:checked');
 
-        for (var i = 0; i < plansChecked.length; i++) {
+        for (let i = 0; i < plansChecked.length; i++) {
             plansBox.push(plansChecked[i].value);
         }
         return plansBox;
@@ -189,12 +175,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const allGifts=  document.querySelectorAll('#giftContainer [class*="gift"]');
 
         for (let i = 0; i < allGifts.length; i++) {
-            const giftInputsValue = allGifts[i].querySelectorAll('input')
+            const giftInputs = allGifts[i].querySelectorAll('input')
             const emptyObject = {};
-            emptyObject.condition =giftInputsValue[0].value
-            emptyObject.receive =giftInputsValue[1].value
-            emptyObject.remark =giftInputsValue[2].value    
-            if(giftInputsValue[0].value == "" || giftInputsValue[1].value == "") { 
+            emptyObject.condition = giftInputs[0].value
+            emptyObject.receive = giftInputs[1].value
+            emptyObject.remark = giftInputs[2].value    
+            if( _.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value) ) { 
                  showMessage("刷卡滿額禮 有欄位未填", false);
                  return;
              }
@@ -206,15 +192,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function checkPromoProjectValue() {
-        var promoBox = [];
-        var allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
+        const promoBox = [];
+        const allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
     
         for (let i = 0; i < allPromos.length; i++) {
-            var promoInputsValue = allPromos[i].querySelectorAll('input');
-            var emptyObject = {};
-            emptyObject.text =promoInputsValue[0].value
-            emptyObject.link =promoInputsValue[1].value
-            if(promoInputsValue[0].value == "" || promoInputsValue[1].value == "") { 
+            const promoInputs = allPromos[i].querySelectorAll('input');
+            const emptyObject = {};
+            emptyObject.text = promoInputs[0].value
+            emptyObject.link = promoInputs[1].value
+            if( _.isEmpty(promoInputs[0].value)  || _.isEmpty(promoInputs[1].value) ) { 
                 showMessage("卡友優惠專案 有欄位未填", false);
                 return;
             }
@@ -226,10 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 詳細說明  送出
     function detailCount() {
-        var detailBox = [];
-        var detailInputs = document.querySelectorAll("#detailed input");
+        const detailBox = [];
+        const detailInputs = document.querySelectorAll("#detailed input");
         detailInputs.forEach(function(item) {
-            if(item.value == "") {
+            if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
                 return ;
             }
@@ -240,14 +226,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 詳細說明 - 注意事項  送出
     function announceCount() {
-        var announceBox = [];
-        var announceInputs = document.querySelectorAll("#detailedNotice input");
+        const announceBox = [];
+        const announceInputs = document.querySelectorAll("#detailedNotice input");
         announceInputs.forEach(function(item) {
-            if(item.value == "") {
+            if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
                 return ;
             }
-        announceBox.push(item.value);
+            announceBox.push(item.value);
         })
         return announceBox;
     }
@@ -255,3 +241,33 @@ document.addEventListener('DOMContentLoaded', function () {
     /* sendModify 用到的function  end */
 
 }); 
+
+
+
+// var detectUndefined = 
+// Object.keys(mega_Data).map(function(objectKey, index) {
+//     var value = mega_Data[objectKey];
+//     // 第一層檢查 isShow
+//     if(_.isUndefined(value) ) {
+//         // console.log(objectKey+ ' is empty');
+//         return false;
+//     }
+//     // 第二層檢查 gift.texts , promo.projects 
+//     if(typeof mega_Data[objectKey] == 'object') {
+//         for(var prop in mega_Data[objectKey]){
+//             if( _.isUndefined(mega_Data[objectKey][prop])) {
+//                 // console.log(objectKey ,prop+ ' isUndefined')
+//                 return false;
+//             }
+//         }
+//     }
+//     // 第三層檢查 discount.detail.texts , discount.detail.announces
+//     if( _.isUndefined(mega_Data['discount']['detail']['texts']) || _.isUndefined(mega_Data['discount']['detail']['announces']) ) {
+//         return false;
+//     }
+//     return true;
+// });
+
+// var detect2 = function() {
+    
+// }

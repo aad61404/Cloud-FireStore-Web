@@ -4,19 +4,27 @@
 
 export function fillValue(data) {
     /***  Form   (M) ****/ 
-    let dataBox = []; // firebase.get 資料儲存區
-    dataBox = data// 資料儲存區
-    console.log('dataBox:', dataBox);
+  
+    /***  資料undefined  防呆 start ***/
+
+    function checkfoolProof(pro) {
+        if(_.isUndefined(pro.plans)) {
+            return pro.plans = [];
+        }
+    }
+    checkfoolProof(data);
+    /***  資料undefined  防呆 end ***/
 
     // 寫入表單 
     function setAllValue() {
-        initFillRadio('bankIsShow') // (dataBox.isShow)
+
+        initFillRadio('bankIsShow') // (data.isShow)
         // 一.分期
         setIdInput();
         setFanchiCheckbox(); // 分期checkbox
 
         // 二.刷卡滿額禮
-        initFillRadio('gift'); // 刷卡滿額禮radio box (dataBox.gift.isShow)
+        initFillRadio('gift'); // 刷卡滿額禮radio box (data.gift.isShow)
         initGiftDiv(); // create div + fill value  + 監控
 
         // 三.卡友優惠專案
@@ -31,39 +39,55 @@ export function fillValue(data) {
     }
     setAllValue();
 
+
     /*****   Radio - 表格初始繪完 把資料填入Radio   *****/
     function initFillRadio(radioName) {
-        var  isShowRadios = document.querySelectorAll(`#${radioName} input`)
-
-        // 特殊處理 bankIsShow 在 dataBox.isShow
-        if(radioName == "bankIsShow") {
-            if(dataBox.isShow == true) {
+        const  isShowRadios = document.querySelectorAll(`#${radioName} input`)
+        // _.get 防呆 
+        const  firstFloorIsShow = _.get(data, 'isShow', true);
+        const  secondFloorIsShow = _.get(data, `${radioName}.isShow`, true);
+        if(radioName == 'bankIsShow') {
+            if(firstFloorIsShow == true) {
                 isShowRadios[0].checked = true;
             } else {
                 isShowRadios[1].checked = true;
             }
-        } 
-        else if (dataBox[radioName].isShow == true) {
+        }
+        else if (secondFloorIsShow == true) {
             isShowRadios[0].checked = true;
         }
-        else if (dataBox[radioName].isShow == false) {
+        else if (secondFloorIsShow == false) {
             isShowRadios[1].checked = true;
         }
+        // 特殊處理 bankIsShow 在 data.isShow
+        // if(radioName == "bankIsShow") {
+        //     if(data.isShow == true) {
+        //         isShowRadios[0].checked = true;
+        //     } else {
+        //         isShowRadios[1].checked = true;
+        //     }
+        // } 
+        // else if (data[radioName].isShow == true) {
+        //     isShowRadios[0].checked = true;
+        // }
+        // else if (data[radioName].isShow == false) {
+        //     isShowRadios[1].checked = true;
+        // }
     }
 
     /***  一、分期 Input  ***/
     function setIdInput() {
-        document.getElementById('id').value  = dataBox.id
-        document.getElementById('name').value  = dataBox.name
-        document.getElementById('iconUrl').value  = dataBox.iconUrl
-        document.getElementById('logoUrl').value  = dataBox.logoUrl
+        document.getElementById('id').value  = data.id
+        document.getElementById('name').value  = data.name
+        document.getElementById('iconUrl').value  = data.iconUrl
+        document.getElementById('logoUrl').value  = data.logoUrl
     }
 
 
     /***  一、分期 checkbox ***/
     function setFanchiCheckbox() {
         // 將 data 裡面有的值寫進 Input       
-        dataBox.plans.forEach((item) => {
+        data.plans.forEach((item) => {
             document.querySelectorAll('#plans input').forEach((item2) => {
                 item = String(item);
                 if (item == item2.value) {
@@ -78,12 +102,17 @@ export function fillValue(data) {
     /**** 二、刷卡滿額禮 start ***/
     function initGiftDiv() {
         const newProject = document.getElementById("newProject");
-        const giftTextsLength = dataBox.gift.texts.length;
+        const giftContainer = document.getElementById("giftContainer");
+        const giftTextsLength = data.gift.texts.length;
         
+        // 生成div前 先清除舊資料
+        while (giftContainer.firstChild) {
+            giftContainer.removeChild(giftContainer.firstChild);
+        }
+
         // 新增按鈕監控
         newProject.addEventListener('click', function() {
             Gift_Input_Button();
-            // checkGiftTextsValue(); // 更新 dataBox
         })
         // 根據資料長度 繪製模板(div input空得沒有值)
         for (let i = 0; i < giftTextsLength; i++) {
@@ -121,7 +150,6 @@ export function fillValue(data) {
         deleteBtn.innerText = "一";
         deleteBtn.addEventListener('click', function() {
             createGift.remove();
-            // checkGiftTextsValue(); // 更新 dataBox
         })
         createGift.prepend(deleteBtn);
         document.getElementById('giftContainer').appendChild(createGift);
@@ -133,23 +161,44 @@ export function fillValue(data) {
     
         for (let i = 0; i < giftInputs.length; i++) {
             const single_input = giftInputs[i].querySelectorAll('input')
-            single_input[0].value = dataBox.gift.texts[i].condition
-            single_input[1].value = dataBox.gift.texts[i].receive
-            single_input[2].value = dataBox.gift.texts[i].remark        
+            single_input[0].value = data.gift.texts[i].condition
+            single_input[1].value = data.gift.texts[i].receive
+            single_input[2].value = data.gift.texts[i].remark        
         }
         // 初始畫面 活動日期 結束日期帶入
         // 注意事項 領取條件 活動詳情連結
-        document.getElementById('begDt').value = dataBox.gift.begDt;
-        document.getElementById('endDt').value = dataBox.gift.endDt;
-        document.getElementById('announce').value = dataBox.gift.announce;
-        document.getElementById('qualify').value = dataBox.gift.qualify;
-        document.getElementById('link').value = dataBox.link;
+        document.getElementById('begDt').value = data.gift.begDt;
+        document.getElementById('endDt').value = data.gift.endDt;
+        document.getElementById('announce').value = data.gift.announce;
+        document.getElementById('qualify').value = data.gift.qualify;
+        document.getElementById('link').value = data.link;
     }
 
     /**** 二、刷卡滿額禮 end  ***/
 
 
     /**** 三、卡友優惠專案 start ****/
+    function initPromoDiv() {
+        const addPromo = document.getElementById("addPromo");
+        const promoContainer = document.getElementById("promoContainer");
+        const promoTextsLength = data.promo.projects.length;
+        
+        // 生成div 前先清除舊的 
+        while (promoContainer.firstChild) {
+            promoContainer.removeChild(promoContainer.firstChild);
+        }
+        
+        // 新增按鈕 
+        addPromo.addEventListener('click', function() {
+            Promo_Input_Button()
+        })
+
+        // 卡友專案 生成div
+        for (let i = 0; i < promoTextsLength; i++) {
+            Promo_Input_Button()
+        }
+        fillPromoValue()
+    }
 
     function Promo_Input_Button() {
         const PromoTemplate = `
@@ -171,30 +220,14 @@ export function fillValue(data) {
         document.getElementById('promoContainer').appendChild(createPromoCard);
     }
 
-    function initPromoDiv() {
-        const newPromo = document.getElementById("newPromo");
-        const promoTextsLength = dataBox.promo.projects.length;
-        
-        // 新增按鈕 
-        newPromo.addEventListener('click', function() {
-            Promo_Input_Button()
-        })
-
-        // 卡友專案 生成div
-        for (let i = 0; i < promoTextsLength; i++) {
-            Promo_Input_Button()
-        }
-        fillPromoValue()
-    }
 
     function fillPromoValue() {
         const promoInputs = document.querySelectorAll('#promoContainer [class*="promo"]');
 
         for (let i = 0; i < promoInputs.length; i++) {
             const single_Input = promoInputs[i].querySelectorAll('input');
-            single_Input[0].value = dataBox.promo.projects[i].text
-            single_Input[1].value = dataBox.promo.projects[i].link
-            
+            single_Input[0].value = data.promo.projects[i].text
+            single_Input[1].value = data.promo.projects[i].link
         }
     }
 
@@ -205,17 +238,17 @@ export function fillValue(data) {
     **********/
 
     function setDiscountContent() {
-        document.getElementById('point').value = dataBox.discount.content.point;
-        document.getElementById('back').value = dataBox.discount.content.back;
-        document.getElementById('upper').value = dataBox.discount.content.upper;
-        document.getElementById('lower').value = dataBox.discount.content.lower;
+        document.getElementById('point').value = data.discount.content.point;
+        document.getElementById('back').value = data.discount.content.back;
+        document.getElementById('upper').value = data.discount.content.upper;
+        document.getElementById('lower').value = data.discount.content.lower;
     }
 
 
     // render 詳細說明 Input , X
     function setDetailed() {
         const detailed =  document.getElementById('detailed');
-        const detailLength = dataBox.discount.detail.texts.length;
+        const detailLength = data.discount.detail.texts.length;
         const addBtn = document.createElement('button')
         
         detailed.innerHTML = '';
@@ -228,7 +261,7 @@ export function fillValue(data) {
             
             addInput.setAttribute("type", "text");
             addInput.setAttribute("class", "detail col-md-11");
-    
+
             addDelBtn.setAttribute('class', 'btn btn-danger');
             addDelBtn.innerText = "ㄧ";
             addDelBtn.addEventListener('click', function() {
@@ -246,7 +279,7 @@ export function fillValue(data) {
             detailTemplate.setAttribute("type", "text");
             detailTemplate.classList.add('detail');
             detailTemplate.classList.add('col-md-11');
-            detailTemplate.value = dataBox.discount.detail.texts[i]
+            detailTemplate.value = data.discount.detail.texts[i]
     
             let detailDelBtn = document.createElement('button');
             detailDelBtn.setAttribute('class', 'btn btn-danger');
@@ -258,14 +291,13 @@ export function fillValue(data) {
             detailed.appendChild(detailTemplate);
             detailed.appendChild(detailDelBtn);
         }
-    
     }
     
 
     // render  注意事項 Input , Button
     function setDetailedNotice() {
         const detailedNotice = document.getElementById('detailedNotice');
-        const noticeLength = dataBox.discount.detail.announces.length;
+        const noticeLength = data.discount.detail.announces.length;
         const addBtn = document.createElement('button');
 
         detailedNotice.innerHTML = '';  
@@ -296,7 +328,7 @@ export function fillValue(data) {
             announceTemplate.setAttribute("type", "text");
             announceTemplate.classList.add('detail');
             announceTemplate.classList.add('col-md-11');
-            announceTemplate.value = dataBox.discount.detail.announces[i];
+            announceTemplate.value = data.discount.detail.announces[i];
 
             let detailDelBtn = document.createElement('button');
             detailDelBtn.setAttribute('class', 'btn btn-danger');
