@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showMessage("橫幅圖片 有欄位未填", false);
             return ;
         }
-        showMessage("修改中", false);
+        showMessage("開發中 <br/> 請看console", false);
         console.log('bannerBox:', bannerBox)
         // return db.runTransaction(function(transaction) {
         //     return transaction.get(sfDocRef).then(function(sfDoc) {
@@ -96,4 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return data;
         }   
     }
+
+
+
+
+    
 }); 

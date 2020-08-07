@@ -13,13 +13,56 @@
     <!-- <link href="signin.css" rel="stylesheet"> -->
     <link href="./public/css/bannerControl.css" rel="stylesheet">
     <link href="./public/css/fadeInAnimation.css" rel="stylesheet">
+    <style>
+        /* new start */
+        /* Drag可能要素に対してユーザ選択を無効 */
+        [draggable=true] {
+            user-select: none;
+        }
 
+        #dragList {
+            display: flex;
+            flex-flow: column nowrap;
+            border-radius: 10px;
+            width: 500px;
+            height: 300px;
+            justify-content: center;
+
+        }
+        #dragList li {
+            display: inline;
+            list-style: none;
+            margin: 5px;
+            height: 20%;
+            border-radius: 10px;
+            text-align: center;
+            background-color: lightgreen;
+            font-size: 16px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        #dragList .dragging {
+            opacity: 0.3;
+            background-color: yellow;
+            border: 2px dashed gray;
+        }
+
+        #dragList .dragover {
+            box-shadow: inset 0 0 2px 2px red;
+            transform: scale(1.2);
+            transition: 0.15s ease-in;
+        }
+
+        /* new end */
+    </style>
 </head>
 
 <body>
 
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">BannerControl</a>
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">範例</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="#" id="signOut">Sign out</a>
@@ -39,55 +82,101 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="bannerControl.html">
+                            <a class="nav-link" href="bannerControl.html">
                                 <span data-feather="file"></span>
                                 BannerControl <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                                                <li class="nav-item">
-                            <a class="nav-link" href="dragBank.html">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dragBank.html">
                                 <span data-feather="file"></span>
-                                dragBank
+                                dragBank <span class="sr-only">(current)</span>
                             </a>
                         </li>
+
                     </ul>
                 </div>
             </nav>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 p-4">
 
-                <h1 class="h2">輪播圖修改</h1>
+                <h1 class="h2">順序修改</h1>
 
-                <button  id="modify-btn" type="button" class="btn btn-info col-md-1 m-3">確認</button>
-               
-                <div class="thead" id="bannerForm">
-                    <div class="tr row ml-0">
-                        <div class="col-md-2 mr-4 cornflowerblue">分期注意事項</div>
-                        <div class="col-md-10">
-                            <div class="addSection">
-                                <button id="addPlans" class="btn btn-info">分期注意事項 ＋</button>
-                            </div>
-                            <div class="container pt-4" id="plansNotice">
-                    
-                            </div>   
-                        </div>
-                    </div>
-                    <div class="tr row ml-0">
-                        <div class="col-md-2 mr-4 cornflowerblue">橫幅圖片</div>
-                        <div class="col-md-10">
-                            <div class="addSection">
-                                <button id="addBanner" class="btn btn-info">新增橫幅圖片 ＋</button>
-                            </div>
-                            <div class="container pt-4" id="bannerContainer">
-                    
-                            </div>   
-                        </div>
-                    </div>
+                <button id="drag-btn" type="button" class="btn btn-info col-md-1 m-3">確認</button>
+                <div id="dragContainer">
+
                 </div>
-             
+
+
             </main>
+
         </div>
     </div>
+
+
+
+    <div>
+        <ul id="dragList">
+            <li draggable="true">A</li>
+            <li draggable="true">B</li>
+            <li draggable="true">C</li>
+            <li draggable="true">D</li>
+        </ul>
+    </div>
+
+
+    <script type="text/javascript">
+        var dragSrcEl = null;
+        function handleDragStart(e) {
+            this.classList.add('dragging');
+            dragSrcEl = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+        function handleDragEnter(e) {
+            this.classList.add('dragover');
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) { e.preventDefault(); }
+
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        function handleDragLeave(e) {
+            this.classList.remove('dragover');
+        }
+        function handleDrop(e) {
+            if (e.stopPropagation) { e.stopPropagation(); }
+
+            if (dragSrcEl != this) {
+                dragSrcEl.innerHTML = this.innerHTML;
+                this.innerHTML = e.dataTransfer.getData('text/html');
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            [].forEach.call(cols, function (col) {
+                col.classList.remove('dragover');
+                col.classList.remove('dragging');
+
+            });
+        }
+
+        var cols = document.querySelectorAll('#dragList li');
+
+        [].forEach.call(cols, function (col) {
+            col.addEventListener('dragstart', handleDragStart, false);
+            col.addEventListener('dragenter', handleDragEnter, false);
+            col.addEventListener('dragover', handleDragOver, false);
+            col.addEventListener('dragleave', handleDragLeave, false);
+            col.addEventListener('drop', handleDrop, false);
+            col.addEventListener('dragend', handleDragEnd, false);
+        });
+
+    </script>
+
 
 
     <!-- toast notification -->
@@ -118,7 +207,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
 
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -127,7 +216,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
 
     <!-- Custom js for this template -->
-    <script src="./public/js/bannerControl.js" type="module"></script>
+    <script src="./public/js/dragBank.js" type="module"></script>
 </body>
 
 </html>

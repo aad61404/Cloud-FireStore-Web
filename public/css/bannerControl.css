@@ -89,3 +89,14 @@ body {
     background-color: rgba(0, 0, 0, .25);
 }
 
+.detail {
+    margin-bottom: 15px;
+}
+
+#plansNotice .btn-danger , #bannerContainer .btn-danger{
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    right: 15px;
+    border-radius: 10px;
+}

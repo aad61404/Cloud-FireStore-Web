@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /**
+            * Drag and Drop Basic
+        **/
+        [draggable="true"] {
+            /*
+                To prevent user selecting inside the drag source
+            */
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        #drag-drop-basic {
+            display: flex;
+        }
+
+        #drag-drop-basic #source-container {
+            height: 400px;
+            border: 2px solid #CCC;
+            flex: 1;
+        }
+
+        #drag-drop-basic #target-container {
+            height: 400px;
+            border: 2px solid #CCC;
+            flex: 1;
+        }
+
+        #drag-drop-basic #drag-source {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: steelblue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>You can drag and drop blue circle between left and right</h1>
+    <div id="drag-drop-basic">
+        <div id="source-container" data-role="drag-drop-container">
+            <div id="drag-source" draggable="true"></div>
+        </div>
+        <div id="target-container" data-role="drag-drop-container"></div>
+    </div>
+
+    <script>
+        /**
+            * Drag and Drop multiple elements in multiple sources 
+        **/
+
+        var sourceContainerId = ''
+
+        // Allow multiple draggable items
+        var dragSources = document.querySelectorAll('[draggable="true"]')
+        dragSources.forEach(dragSource => {
+            dragSource.addEventListener('dragstart', dragStart)
+        })
+
+        // Allow multiple dropped targets
+        var dropTargets = document.querySelectorAll('[data-role="drag-drop-container"]')
+        dropTargets.forEach(dropTarget => {
+            dropTarget.addEventListener('drop', dropped)
+            dropTarget.addEventListener('dragenter', cancelDefault)
+            dropTarget.addEventListener('dragover', cancelDefault)
+        })
+
+        function cancelDefault(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            return false
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id)
+            sourceContainerId = this.parentElement.id
+            console.log('sourceContainerId', sourceContainerId)
+        }
+
+        function dropped(e) {
+            // execute function only when target container is different from source container
+            if (this.id !== sourceContainerId) {
+                cancelDefault(e)
+                var id = e.dataTransfer.getData('text/plain')
+                e.target.appendChild(document.querySelector('#' + id))
+            }
+        }
+        // End of Drag and Drop Basic
+    </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>    
+</body>
+
+</html>

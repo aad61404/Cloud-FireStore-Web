@@ -72,9 +72,70 @@ export function fillBannerValue(data) {
 
     initBannerDiv()
 
+    // 寫入表單 
+    function setAllValue() {
+        setPlansNotice(); // 分期注意事項
+    }
+    setAllValue();
 
+    // render  注意事項 Input , Button
+    function setPlansNotice() {
+        const plansNotice = document.getElementById('plansNotice');
+        var data = {
+            announces : ["三期分期付款適用東南全商品；六/十/十二期分期分期付款僅適用國外團體行程(促銷、折扣、專案、同業等專案產品不適用)。",
+          "兆豐商銀之政府網路採購卡、公司商務卡及VISA金融卡不適用分期付款活動。",
+          "信用卡分期付款交易係由各家銀行一次墊付消費款予特約商店，並由持卡人分期繳付消費帳款予各家銀行。各家銀行並未介入商品之交付或商品瑕疵等買賣之實體關係，相關商品退貨或服務取消之退款事宜，持卡人應先洽東南旅行社尋求解決，如無法解決，得要求發卡銀行就該筆交易以『帳款疑義之處理程序』辦理，不得因此拒付信用卡款項。",
+          "各家銀行對持卡人使用分期交易購買商品時，會依持卡人之當時信用及往來狀況來核給使用，並保留最後授權與否之權利。",
+          "以上各家發卡行之專案活動內容，請參照東南旅遊網站及各發卡銀行網站；如遇爭議，以東南旅行社或各發卡行釋意為準。",
+          "分期付款不得與信用卡紅利折抵同時併用。",
+          "東南旅行社保留本分期專案接單與否之權利。",
+          "永豐Prestige美國運通卡、公司卡、虛擬卡、銀聯卡不適用分期付款活動。"]
+        };
+        const noticeLength = data.announces.length;
+        const addBtn = document.createElement('button');
 
+        plansNotice.innerHTML = '';  
 
-    
+        addBtn.setAttribute("class","btn btn-success d-block mb-3");
+        addBtn.innerText = '＋';
+        addBtn.onclick = function () {
+            let addInput = document.createElement('input');
+            let addDelBtn = document.createElement('button');
+            
+            addInput.setAttribute("type", "text");
+            addInput.setAttribute("class", "detail col-md-11");
+
+            addDelBtn.setAttribute('class', 'btn btn-danger');
+            addDelBtn.innerText = "一";
+            addDelBtn.addEventListener('click', function() {
+                this.previousSibling.remove();
+                this.remove();
+            })
+            plansNotice.append(addInput,addDelBtn);
+        }
+        
+        plansNotice.prepend(addBtn)
+
+        // Set Inputs Texts
+        for (let i = 0; i <noticeLength; i++) {
+            let announceTemplate = document.createElement('input');
+            announceTemplate.setAttribute("type", "text");
+            announceTemplate.classList.add('detail');
+            announceTemplate.classList.add('col-md-11');
+            announceTemplate.value =  data.announces[i];
+            
+            let detailDelBtn = document.createElement('button');
+            detailDelBtn.setAttribute('class', 'btn btn-danger');
+            detailDelBtn.innerText = "一";
+            detailDelBtn.addEventListener('click', function() {
+                announceTemplate.remove()
+                detailDelBtn.remove();
+            })
+
+            plansNotice.appendChild(announceTemplate);      
+            plansNotice.appendChild(detailDelBtn);      
+        }
+    }
+
 
 }
