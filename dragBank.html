@@ -107,76 +107,10 @@
 
                 </div>
 
-
             </main>
 
         </div>
     </div>
-
-
-
-    <div>
-        <ul id="dragList">
-            <li draggable="true">A</li>
-            <li draggable="true">B</li>
-            <li draggable="true">C</li>
-            <li draggable="true">D</li>
-        </ul>
-    </div>
-
-
-    <script type="text/javascript">
-        var dragSrcEl = null;
-        function handleDragStart(e) {
-            this.classList.add('dragging');
-            dragSrcEl = this;
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.innerHTML);
-        }
-        function handleDragEnter(e) {
-            this.classList.add('dragover');
-        }
-
-        function handleDragOver(e) {
-            if (e.preventDefault) { e.preventDefault(); }
-
-            e.dataTransfer.dropEffect = 'move';
-            return false;
-        }
-        function handleDragLeave(e) {
-            this.classList.remove('dragover');
-        }
-        function handleDrop(e) {
-            if (e.stopPropagation) { e.stopPropagation(); }
-
-            if (dragSrcEl != this) {
-                dragSrcEl.innerHTML = this.innerHTML;
-                this.innerHTML = e.dataTransfer.getData('text/html');
-            }
-            return false;
-        }
-
-        function handleDragEnd(e) {
-            [].forEach.call(cols, function (col) {
-                col.classList.remove('dragover');
-                col.classList.remove('dragging');
-
-            });
-        }
-
-        var cols = document.querySelectorAll('#dragList li');
-
-        [].forEach.call(cols, function (col) {
-            col.addEventListener('dragstart', handleDragStart, false);
-            col.addEventListener('dragenter', handleDragEnter, false);
-            col.addEventListener('dragover', handleDragOver, false);
-            col.addEventListener('dragleave', handleDragLeave, false);
-            col.addEventListener('drop', handleDrop, false);
-            col.addEventListener('dragend', handleDragEnd, false);
-        });
-
-    </script>
-
 
 
     <!-- toast notification -->
