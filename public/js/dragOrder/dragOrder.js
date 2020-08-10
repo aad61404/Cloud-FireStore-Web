@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('signOut').addEventListener("click", function() {
         signOut();
     })
+    document.getElementById('locked-drag').addEventListener("click", function() {
+        lockedBtn();
+    })
 
     /***  登入 && 登出 end    ****/
     const dragContainer = document.getElementById('dragContainer');
@@ -68,5 +71,17 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         console.log('bankOrder:', bankOrder)
     }
+
+    function lockedBtn() {
+        var allBtn = document.querySelectorAll('#dragList li')
+        var comfirmBtn = document.getElementById('drag-btn');
+        allBtn.forEach(item=>{
+            item.classList.toggle('readonly')
+            item.classList.toggle('liLocked')
+            
+        })
+        comfirmBtn.toggleAttribute("disabled");
+    }
+
 
 }); 

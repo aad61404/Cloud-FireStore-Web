@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
         signOut();
     })
 
+    document.getElementById('locked-banner').addEventListener("click", function() {
+        lockedBtn();
+    })
+
     /***  登入 && 登出 end    ****/
     
     /***  輪播圖 start    ****/
@@ -119,4 +123,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     
+    function lockedBtn() {
+        var allInputs = document.querySelectorAll('#bannerForm input[type=text]')
+        var allBtn = document.querySelectorAll('#bannerForm button')
+ 
+        allInputs.forEach(item => {
+            item.classList.toggle('readonly')
+            item.toggleAttribute("readonly");
+        })
+
+        allBtn.forEach(item=>{
+            item.toggleAttribute("disabled"); 
+        })
+
+
+    }
+
+
 }); 

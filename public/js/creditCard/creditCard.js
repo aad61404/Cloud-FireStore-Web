@@ -30,15 +30,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /***  Search Bar  (V) ****/ 
-    const selectBtn = document.getElementById('select-btn')
-    const confirmBtn = document.getElementById('confirm-btn')
-    selectBtn.addEventListener('click', function() {
+    document.getElementById('select-btn').addEventListener('click', function() {
         sendSearch(); // ↓ ↓
     })
-    confirmBtn.addEventListener('click', function() {
+    document.getElementById('confirm-btn').addEventListener('click', function() {
         sendModify();
     })
-
+    document.getElementById('edit-btn').addEventListener('click', function() {
+        isLocked();
+    })
+    
 
     // Selector
     function setbankSelector() {
@@ -252,10 +253,31 @@ document.addEventListener('DOMContentLoaded', function () {
         return announceBox;
     }
 
-
-
-
     /* sendModify 用到的function  end */
+
+
+    function isLocked() {
+        var allInputs = document.querySelectorAll('#bank-Form input[type=text]')
+        var allBtn = document.querySelectorAll('#bank-Form button')
+        var allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
+        var allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
+        allInputs.forEach(item => {
+            item.classList.toggle('readonly')
+            item.toggleAttribute("readonly");
+        })
+
+        allBtn.forEach(item=>{
+            item.toggleAttribute("disabled"); 
+        })
+
+        allRadiobox.forEach(item=> {
+            item.toggleAttribute("disabled"); 
+        })
+        allCheckbox.forEach(item=> {
+            item.toggleAttribute("disabled"); 
+        })
+    }
+
 
 }); 
 

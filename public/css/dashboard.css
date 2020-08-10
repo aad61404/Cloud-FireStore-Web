@@ -100,3 +100,11 @@ body {
     right: 15px;
     border-radius: 10px;
 }
+
+.readonly {
+    background-color: darkgray !important;
+}
+
+.liLocked {
+    pointer-events: none;
+}
