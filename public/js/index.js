@@ -1,5 +1,3 @@
-// dashboard.js (firestore && Auth && 表單外層function)
-// fillValue.js (表單資料內容操作)
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 import { firebaseConfig } from './firebaseConfig.js';
 import { showMessage } from './showMessage.js';
@@ -25,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const user = firebase.auth().currentUser;
             if (user != null) {
                 localStorage.setItem("authStorage", `Sign In !`);
-                window.location = 'dashboard.html';
+                window.location = 'creditCard.html';
             } else {
                 showMessage('user is null', false);
             }

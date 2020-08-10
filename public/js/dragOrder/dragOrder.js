@@ -1,8 +1,8 @@
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-import { firebaseConfig } from './firebaseConfig.js';
-import { showMessage } from './showMessage.js';
-import { isLogin } from './isLogin.js';
+import { firebaseConfig } from '../firebaseConfig.js';
+import { showMessage } from '../showMessage.js';
+import { isLogin } from '../isLogin.js';
 import { filldragBankValue } from './filldragBankValue.js'
 
 
@@ -49,12 +49,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function countOrder() {
         var listLi = document.querySelectorAll('.list li');
-        var dataOrder = [];
+        var bankOrder = [];
 
         listLi.forEach(function(item) {
-            dataOrder.push(item.innerText);
+            bankOrder.push(item.innerText);
         })
-        console.log('dataOrder:', dataOrder)
+
+        bankOrder.forEach(function(item, index) {
+            const db = firebase.firestore();
+            const bankRef = db.collection('card').doc(item);
+            bankRef.set({
+                order : index
+            }, { merge : true}).then(function() {
+                showMessage('修改成功',true);
+            }).catch(function(error) {
+                showMessage(error, false);
+            })
+        })
+        console.log('bankOrder:', bankOrder)
     }
 
 }); 

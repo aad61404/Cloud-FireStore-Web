@@ -1,11 +1,11 @@
-// dashboard.js (firestore && Auth && 搜尋資料和送出)
-// fillValue.js (表單資料內容操作)
+// creditCardSpecial.js (firestore && Auth && 搜尋資料和送出)
+// fillCreditCardValue.js (表單資料內容操作)
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-import { firebaseConfig } from './firebaseConfig.js';
-import { isLogin } from './isLogin.js';
-import { showMessage } from './showMessage.js';
-import { fillValue } from './fillValue.js';
+import { firebaseConfig } from '../firebaseConfig.js';
+import { isLogin } from '../isLogin.js';
+import { showMessage } from '../showMessage.js';
+import { fillCreditCardValue } from './fillCreditCardValue.js';
 
 
 document.addEventListener('DOMContentLoaded', function () {  
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         docRef.get().then(function(doc) {
             if (doc.exists) {
                 showDisplay();
-                fillValue(doc.data());
+                fillCreditCardValue(doc.data());
             } else {
                 showMessage("No such document!", false)
             }
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 送出修改
     function sendModify() {
-        showMessage("開發調整中", false);
+        
         console.log('目前修改中...');
         const dataBa = {
             id: document.getElementById('id').value,
@@ -125,26 +125,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         };
+
+        function sendCheckIsValue () {
+            if(dataBa.gift.texts === false || dataBa.promo.projects === false || dataBa.discount.detail.announces === false || dataBa.discount.detail.texts === false) {
+                return false;
+            }
+        }
         console.log('dataBa:', dataBa);
         const db = firebase.firestore();
         const ID = document.getElementById('id').value; // ID: mega
-        const sfDocRef = db.collection("card").doc(ID);
+        const bankRef = db.collection("card").doc(ID);
 
-        // return db.runTransaction(function(transaction) {
-        //     return transaction.get(sfDocRef).then(function(sfDoc) {
-        //         if (!sfDoc.exists) {
-        //             throw "Document does not exist!";
-        //         }
-        //         // console.log('sfDoc:', sfDoc.data())
-        //         sfDocRef.set(dataBa).then(function() {
-        //             console.log("Document successfully written!");
-        //         });
-        //     });
-        // }).then(function() {
-        //     console.log("Transaction successfully committed!");
-        // }).catch(function(error) {
-        //     console.log("Transaction failed: ", error);
-        // });
+        return db.runTransaction(function(transaction) {
+            return transaction.get(bankRef).then(function(sfDoc) {
+                if (!sfDoc.exists) {
+                    throw "Document does not exist!";
+                }
+                if (sendCheckIsValue() == false) {
+                    console.log('at here');
+                    return ;
+                } else {
+                    console.log('in else');
+                    showMessage("修改成功!", true);
+                    // bankRef.set(dataBa ,{merge : true}).then(function() {
+                    //     showMessage("修改成功!", true);
+                    // }).catch(function(error) {
+                    //     showMessage(error, false);
+                    // });
+                }
+            });
+        })
+        .then(function() {
+            console.log("Transaction successfully committed!");
+        }).catch(function(error) {
+            console.log("Transaction failed: ", error);
+        });
     }
 
 
@@ -171,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
    // 送出時 檢查 (二)刷卡滿額禮所有欄位 (databox.gift.texts)
    function checkGiftTextsValue() {
-        const giftTextsBox = [];
+        let giftTextsBox = [];
         const allGifts=  document.querySelectorAll('#giftContainer [class*="gift"]');
 
         for (let i = 0; i < allGifts.length; i++) {
@@ -182,17 +197,16 @@ document.addEventListener('DOMContentLoaded', function () {
             emptyObject.remark = giftInputs[2].value    
             if( _.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value) ) { 
                  showMessage("刷卡滿額禮 有欄位未填", false);
-                 return;
+                 return giftTextsBox = false;
              }
             giftTextsBox.push(emptyObject);
         }
-        // console.log('giftTextsBox:', giftTextsBox)
         return giftTextsBox;
     }
 
 
     function checkPromoProjectValue() {
-        const promoBox = [];
+        let promoBox = [];
         const allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
     
         for (let i = 0; i < allPromos.length; i++) {
@@ -202,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
             emptyObject.link = promoInputs[1].value
             if( _.isEmpty(promoInputs[0].value)  || _.isEmpty(promoInputs[1].value) ) { 
                 showMessage("卡友優惠專案 有欄位未填", false);
-                return;
+                return promoBox = false;
             }
             promoBox.push(emptyObject);
         }
@@ -212,12 +226,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 詳細說明  送出
     function detailCount() {
-        const detailBox = [];
+        let detailBox = [];
         const detailInputs = document.querySelectorAll("#detailed input");
         detailInputs.forEach(function(item) {
             if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
-                return ;
+                return detailBox = false;
             }
             detailBox.push(item.value);
         })
@@ -226,17 +240,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 詳細說明 - 注意事項  送出
     function announceCount() {
-        const announceBox = [];
+        let announceBox = [];
         const announceInputs = document.querySelectorAll("#detailedNotice input");
         announceInputs.forEach(function(item) {
             if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
-                return ;
+                return  announceBox = false;
             }
             announceBox.push(item.value);
         })
         return announceBox;
     }
+
+
+
 
     /* sendModify 用到的function  end */
 

@@ -1,10 +1,8 @@
-// dashboard.js (firestore && Auth && 表單外層function)
-// dataForm.js  (搜尋後 生成表單template)
-// fillValue.js (表單資料內容操作)
+// creditCardSpecial.js (firestore && Auth && 表單外層function)
+// fillCreditCardValue.js (表單資料內容操作)
 
-export function fillValue(data) {
+export function fillCreditCardValue(data) {
     /***  Form   (M) ****/ 
-  
     /***  資料undefined  防呆 start ***/
 
     function checkfoolProof(pro) {
@@ -59,20 +57,6 @@ export function fillValue(data) {
         else if (secondFloorIsShow == false) {
             isShowRadios[1].checked = true;
         }
-        // 特殊處理 bankIsShow 在 data.isShow
-        // if(radioName == "bankIsShow") {
-        //     if(data.isShow == true) {
-        //         isShowRadios[0].checked = true;
-        //     } else {
-        //         isShowRadios[1].checked = true;
-        //     }
-        // } 
-        // else if (data[radioName].isShow == true) {
-        //     isShowRadios[0].checked = true;
-        // }
-        // else if (data[radioName].isShow == false) {
-        //     isShowRadios[1].checked = true;
-        // }
     }
 
     /***  一、分期 Input  ***/
