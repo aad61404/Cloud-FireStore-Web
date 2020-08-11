@@ -3,7 +3,7 @@
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
 import { firebaseConfig } from '../firebaseConfig.js';
-import { isLogin } from '../isLogin.js';
+import { initLogin } from '../initLogin.js';
 import { showMessage } from '../showMessage.js';
 import { fillCreditCardValue } from './fillCreditCardValue.js';
 
@@ -13,11 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
     firebase.initializeApp(firebaseConfig);
     
     /***  登入 && 登出 start    ****/
-    isLogin();
+    initLogin();
 
     function signOut() {
         firebase.auth().signOut().then(function() {
-            localStorage.setItem("authStorage", `Log out!`);
             window.location = '/';
         })
     }
@@ -30,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /***  Search Bar  (V) ****/ 
+    let lockedStat = 1;
+
     document.getElementById('select-btn').addEventListener('click', function() {
         sendSearch(); // ↓ ↓
     })
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sendModify();
     })
     document.getElementById('edit-btn').addEventListener('click', function() {
-        isLocked();
+        unLocked();
     })
     
 
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 送出查詢
     function sendSearch() {
         const selectValue = document.getElementById("custom-select").value
-        const docRef = firebase.firestore().collection("card").doc(selectValue);
+        const docRef = firebase.firestore().collection("creditcard").doc(selectValue);
 
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -81,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // open
     function showDisplay() {
-        var tbl = document.getElementById('bank-Form');
+        const tbl = document.getElementById('bank-Form');
+        // tbl.classList.toggle('hidden')
         if( tbl.classList.contains('hidden')) {
             tbl.classList.add('show');
             tbl.classList.remove('hidden');
@@ -255,17 +257,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* sendModify 用到的function  end */
 
+    function unLocked() {
+        const allInputs = document.querySelectorAll('#bank-Form input[type=text]')
+        const allBtn = document.querySelectorAll('#bank-Form button')
+        const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
+        const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
+        const comfirm = document.getElementById('confirm-btn');
+        const lockedBtn = document.getElementById('edit-btn')
 
-    function isLocked() {
-        var allInputs = document.querySelectorAll('#bank-Form input[type=text]')
-        var allBtn = document.querySelectorAll('#bank-Form button')
-        var allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
-        var allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
-        allInputs.forEach(item => {
-            item.classList.toggle('readonly')
-            item.toggleAttribute("readonly");
-        })
-
+        for(let i=2; i < allInputs.length; i++){
+            allInputs[i].classList.toggle('readonly')
+            allInputs[i].toggleAttribute("readonly");
+        }
+        
         allBtn.forEach(item=>{
             item.toggleAttribute("disabled"); 
         })
@@ -276,7 +280,18 @@ document.addEventListener('DOMContentLoaded', function () {
         allCheckbox.forEach(item=> {
             item.toggleAttribute("disabled"); 
         })
+
+        comfirm.toggleAttribute("disabled"); 
+        lockedStat++;
+        console.log('lockedStat:', lockedStat)
+        if(lockedStat >= 2) {
+            lockedBtn.innerText = '放棄修改'
+        }  
+        if ( lockedStat >= 3) {
+            window.location.reload();
+        }
     }
+
 
 
 }); 

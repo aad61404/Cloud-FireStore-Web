@@ -2,7 +2,7 @@
 
 import { firebaseConfig } from '../firebaseConfig.js';
 import { showMessage } from '../showMessage.js';
-import { isLogin } from '../isLogin.js';
+import { initLogin } from '../initLogin.js';
 import { fillBannerValue } from './fillBannerValue.js';
 import { fillPlanValue } from './fillPlanValue.js';
 
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     firebase.initializeApp(firebaseConfig);
     
     /***  登入 && 登出 start    ****/
-    isLogin();
+    initLogin();
     
     function signOut() {
         firebase.auth().signOut().then(function() {
@@ -25,40 +25,38 @@ document.addEventListener('DOMContentLoaded', function () {
         signOut();
     })
 
-    document.getElementById('locked-banner').addEventListener("click", function() {
+    document.getElementById('locked-btn').addEventListener("click", function() {
         lockedBtn();
     })
 
-    /***  登入 && 登出 end    ****/
-    
-    /***  輪播圖 start    ****/
-   
-    // set url to input
-    function setUrlInput() {
-        const db = firebase.firestore();
-        db.collection("img").doc('bannerData').get().then(function(doc) {
-            fillBannerValue(doc.data())
-        });
-        db.collection('img').doc('planAnnounces').get().then(function(doc) {
-            fillPlanValue(doc.data())
-        })
-    }
-
-    setUrlInput()
-
     // 送出按鈕監控
-    document.getElementById('modify-btn').addEventListener('click', function() {
+    document.getElementById('comfirm').addEventListener('click', function() {
         sendUrlModify();
     })
 
+    /***  登入 && 登出 end    ****/
+
+    /***  輪播圖 start    ****/
+   
+    // set url to input
+    const db = firebase.firestore();
+    let lockedStat = 0;
+    db.collection("img").doc('bannerData').get().then(function(doc) {
+        fillBannerValue(doc.data())
+    });
+    db.collection('img').doc('planAnnounces').get().then(function(doc) {
+        fillPlanValue(doc.data())
+        lockedBtn();
+    })
+
     function sendUrlModify() {
-        var db = firebase.firestore();
+        const db = firebase.firestore();
         const bannerRef = db.collection('img').doc('bannerData');
         const AnnouncesRef = db.collection('img').doc('planAnnounces');
-        var bannerBox = {
+        const bannerBox = {
             url: checkBannerTextsValue()
         }
-        var plansBox = {
+        const plansBox = {
             announces: checkPlansValue()
         }
 
@@ -92,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkBannerTextsValue() {
         let bannerTextsBox = [];
-        var allBanner= document.querySelectorAll('#bannerContainer [class*="banner"]');
+        const allBanner= document.querySelectorAll('#bannerContainer [class*="banner"]');
         allBanner.forEach(function(bannerDiv) {
             const inputs = bannerDiv.querySelectorAll('input')
             const emptyObject = {};
@@ -111,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkPlansValue() {
         let planBox = [];
-        var plansInput = document.querySelectorAll('#plansNotice input');
+        const plansInput = document.querySelectorAll('#plansNotice input');
         plansInput.forEach(item=> {
             if(_.isEmpty(item.value) ) {
                 return planBox = false;
@@ -124,9 +122,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     function lockedBtn() {
-        var allInputs = document.querySelectorAll('#bannerForm input[type=text]')
-        var allBtn = document.querySelectorAll('#bannerForm button')
- 
+        
+        const allInputs = document.querySelectorAll('#bannerForm input[type=text]')
+        const allBtn = document.querySelectorAll('#bannerForm button')
+        const comfirmBtn = document.getElementById('comfirm')
+        const lockedBtn = document.getElementById('locked-btn');
+
         allInputs.forEach(item => {
             item.classList.toggle('readonly')
             item.toggleAttribute("readonly");
@@ -135,8 +136,16 @@ document.addEventListener('DOMContentLoaded', function () {
         allBtn.forEach(item=>{
             item.toggleAttribute("disabled"); 
         })
+        comfirmBtn.toggleAttribute("disabled");
 
-
+        lockedStat++;
+        console.log('lockedStat:', lockedStat)
+        if(lockedStat >= 2) {
+            lockedBtn.innerText = '取消修改'
+        }  
+        if ( lockedStat >= 3) {
+            window.location.reload();
+        }
     }
 
 

@@ -4,7 +4,7 @@
 export function fillCreditCardValue(data) {
     /***  Form   (M) ****/ 
     /***  資料undefined  防呆 start ***/
-
+    console.log('data:', data)
     function checkfoolProof(pro) {
         if(_.isUndefined(pro.plans)) {
             return pro.plans = [];
@@ -34,6 +34,7 @@ export function fillCreditCardValue(data) {
         setDiscountContent(); // 紅利折扣內容
         setDetailed(); // 詳細說明
         setDetailedNotice(); // 詳細說明-注意事項
+        Locked()
     }
     setAllValue();
 
@@ -63,8 +64,8 @@ export function fillCreditCardValue(data) {
     function setIdInput() {
         document.getElementById('id').value  = data.id
         document.getElementById('name').value  = data.name
-        document.getElementById('iconUrl').value  = data.iconUrl
-        document.getElementById('logoUrl').value  = data.logoUrl
+        // document.getElementById('iconUrl').value  = data.iconUrl
+        // document.getElementById('logoUrl').value  = data.logoUrl
     }
 
 
@@ -87,7 +88,7 @@ export function fillCreditCardValue(data) {
     function initGiftDiv() {
         const newProject = document.getElementById("newProject");
         const giftContainer = document.getElementById("giftContainer");
-        const giftTextsLength = data.gift.texts.length;
+        const giftTextsLength = data.gift.desc.length;
         
         // 生成div前 先清除舊資料
         while (giftContainer.firstChild) {
@@ -145,9 +146,9 @@ export function fillCreditCardValue(data) {
     
         for (let i = 0; i < giftInputs.length; i++) {
             const single_input = giftInputs[i].querySelectorAll('input')
-            single_input[0].value = data.gift.texts[i].condition
-            single_input[1].value = data.gift.texts[i].receive
-            single_input[2].value = data.gift.texts[i].remark        
+            single_input[0].value = data.gift.desc[i].condition
+            single_input[1].value = data.gift.desc[i].receive
+            single_input[2].value = data.gift.desc[i].remark        
         }
         // 初始畫面 活動日期 結束日期帶入
         // 注意事項 領取條件 活動詳情連結
@@ -195,7 +196,7 @@ export function fillCreditCardValue(data) {
         createPromoCard.classList.add("promo");
         createPromoCard.innerHTML = PromoTemplate;
         
-        deleteBtn.setAttribute('class', 'remove btn-danger');
+        deleteBtn.setAttribute('class', 'remove btn btn-danger');
         deleteBtn.innerText = "一";
         deleteBtn.addEventListener('click', function() {
             createPromoCard.remove();
@@ -232,7 +233,7 @@ export function fillCreditCardValue(data) {
     // render 詳細說明 Input , X
     function setDetailed() {
         const detailed =  document.getElementById('detailed');
-        const detailLength = data.discount.detail.texts.length;
+        const detailLength = data.discount.detail.desc.length;
         const addBtn = document.createElement('button')
         
         detailed.innerHTML = '';
@@ -263,7 +264,7 @@ export function fillCreditCardValue(data) {
             detailTemplate.setAttribute("type", "text");
             detailTemplate.classList.add('detail');
             detailTemplate.classList.add('col-md-11');
-            detailTemplate.value = data.discount.detail.texts[i]
+            detailTemplate.value = data.discount.detail.desc[i]
     
             let detailDelBtn = document.createElement('button');
             detailDelBtn.setAttribute('class', 'btn btn-danger');
@@ -281,7 +282,7 @@ export function fillCreditCardValue(data) {
     // render  注意事項 Input , Button
     function setDetailedNotice() {
         const detailedNotice = document.getElementById('detailedNotice');
-        const noticeLength = data.discount.detail.announces.length;
+        const noticeLength = data.discount.detail.notice.length;
         const addBtn = document.createElement('button');
 
         detailedNotice.innerHTML = '';  
@@ -312,7 +313,7 @@ export function fillCreditCardValue(data) {
             announceTemplate.setAttribute("type", "text");
             announceTemplate.classList.add('detail');
             announceTemplate.classList.add('col-md-11');
-            announceTemplate.value = data.discount.detail.announces[i];
+            announceTemplate.value = data.discount.detail.notice[i];
 
             let detailDelBtn = document.createElement('button');
             detailDelBtn.setAttribute('class', 'btn btn-danger');
@@ -325,6 +326,32 @@ export function fillCreditCardValue(data) {
             detailedNotice.appendChild(announceTemplate);      
             detailedNotice.appendChild(detailDelBtn);      
         }
+    }
+
+
+
+    function Locked() {
+        const allInputs = document.querySelectorAll('#bank-Form input[type=text]')
+        const allBtn = document.querySelectorAll('#bank-Form button')
+        const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
+        const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
+        const comfirm = document.getElementById('confirm-btn');
+        for(let i=2; i < allInputs.length; i++) {
+            allInputs[i].classList.add('readonly')
+            allInputs[i].setAttribute('readonly', true);
+        }
+        
+        allBtn.forEach(item=>{
+            item.setAttribute('disabled', true);
+        })
+
+        allRadiobox.forEach(item=> {
+            item.setAttribute('disabled', true);
+        })
+        allCheckbox.forEach(item=> {
+            item.setAttribute('disabled', true); 
+        })
+        comfirm.setAttribute('disabled', true);
     }
 
 

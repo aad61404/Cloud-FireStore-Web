@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         firebase.auth().signInWithEmailAndPassword(account, password).then(function (res) {
             const user = firebase.auth().currentUser;
             if (user != null) {
-                localStorage.setItem("authStorage", `Sign In !`);
+                // localStorage.setItem("authStorage", `Sign In !`);
                 window.location = 'creditCard.html';
             } else {
                 showMessage('user is null', false);
@@ -43,15 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 檢查 localStorage 若不是登入狀態 回到首頁
-    if (window.localStorage.getItem('authStorage') !== null) {
-        const authStorage = window.localStorage.getItem('authStorage');
-        if (authStorage == `Log out!`) {
-            showMessage(authStorage, true);
-        } else {
-            showMessage(authStorage, false);
-        }
-        window.localStorage.clear();
-    }
+    // if (window.localStorage.getItem('authStorage') !== null) {
+    //     const authStorage = window.localStorage.getItem('authStorage');
+    //     if (authStorage == `Log out!`) {
+    //         showMessage(authStorage, true);
+    //     } else {
+    //         showMessage(authStorage, false);
+    //     }
+    //     window.localStorage.clear();
+    // }
   
 }); 
 

@@ -2,7 +2,7 @@
 
 import { firebaseConfig } from '../firebaseConfig.js';
 import { showMessage } from '../showMessage.js';
-import { isLogin } from '../isLogin.js';
+import { initLogin } from '../initLogin.js';
 import { filldragBankValue } from './filldragBankValue.js'
 
 
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     firebase.initializeApp(firebaseConfig);
     
     /***  登入 && 登出 start    ****/
-    isLogin();
+    initLogin();
     
     function signOut() {
         firebase.auth().signOut().then(function() {
@@ -24,35 +24,36 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('signOut').addEventListener("click", function() {
         signOut();
     })
-    document.getElementById('locked-drag').addEventListener("click", function() {
+    document.getElementById('locked-btn').addEventListener("click", function() {
         lockedBtn();
     })
 
     /***  登入 && 登出 end    ****/
-    const dragContainer = document.getElementById('dragContainer');
 
     const db = firebase.firestore();
-    let dbName = [];
+    const dbName = [];
+    let lockedStat = 0;
     db.collection("card").get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             dbName.push(doc.id);
+           
         });
-
+        
         filldragBankValue(dbName);
-    
+        lockedBtn();
     });
 
 
 
-    const dragBtn = document.getElementById('drag-btn');
+    const dragBtn = document.getElementById('comfirm');
     dragBtn.addEventListener('click', function() {
         countOrder()
     })
 
     function countOrder() {
-        var listLi = document.querySelectorAll('.list li');
-        var bankOrder = [];
+        const listLi = document.querySelectorAll('.list li');
+        const bankOrder = [];
 
         listLi.forEach(function(item) {
             bankOrder.push(item.innerText);
@@ -69,18 +70,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 showMessage(error, false);
             })
         })
-        console.log('bankOrder:', bankOrder)
     }
 
     function lockedBtn() {
-        var allBtn = document.querySelectorAll('#dragList li')
-        var comfirmBtn = document.getElementById('drag-btn');
+        const allBtn = document.querySelectorAll('#dragList li')
+        const comfirmBtn = document.getElementById('comfirm');
+        const lockedBtn = document.getElementById('locked-btn');
+
         allBtn.forEach(item=>{
             item.classList.toggle('readonly')
             item.classList.toggle('liLocked')
             
         })
         comfirmBtn.toggleAttribute("disabled");
+        lockedStat++;
+        console.log('lockedStat:', lockedStat)
+        if(lockedStat >= 2) {
+            lockedBtn.innerText = '取消修改'
+        }  
+        if ( lockedStat >= 3) {
+            window.location.reload();
+        }
     }
 
 
