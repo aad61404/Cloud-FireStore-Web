@@ -1,7 +1,7 @@
 // creditCardSpecial.js (firestore && Auth && 表單外層function)
-// fillCreditCardValue.js (表單資料內容操作)
+// searchEditComfirm.js (表單資料內容操作)
 
-export function fillCreditCardValue(data) {
+export function searchEditComfirm(data) {
     /***  Form   (M) ****/ 
     /***  資料undefined  防呆 start ***/
     console.log('data:', data)
@@ -34,7 +34,7 @@ export function fillCreditCardValue(data) {
         setDiscountContent(); // 紅利折扣內容
         setDetailed(); // 詳細說明
         setDetailedNotice(); // 詳細說明-注意事項
-        Locked()
+
     }
     setAllValue();
 
@@ -62,6 +62,7 @@ export function fillCreditCardValue(data) {
 
     /***  一、分期 Input  ***/
     function setIdInput() {
+        document.getElementById('id').value  = data.id
         document.getElementById('name').value  = data.name
         // document.getElementById('logoUrl').value  = data.logoUrl
     }
@@ -84,19 +85,8 @@ export function fillCreditCardValue(data) {
 
     /**** 二、刷卡滿額禮 start ***/
     function initGiftDiv() {
-        const newProject = document.getElementById("newProject");
-        const giftContainer = document.getElementById("giftContainer");
         const giftTextsLength = data.gift.desc.length;
-        
-        // 生成div前 先清除舊資料
-        while (giftContainer.firstChild) {
-            giftContainer.removeChild(giftContainer.firstChild);
-        }
 
-        // 新增按鈕監控
-        newProject.addEventListener('click', function() {
-            Gift_Input_Button();
-        })
         // 根據資料長度 繪製模板(div input空得沒有值)
         for (let i = 0; i < giftTextsLength; i++) {
             Gift_Input_Button();
@@ -162,19 +152,7 @@ export function fillCreditCardValue(data) {
 
     /**** 三、卡友優惠專案 start ****/
     function initPromoDiv() {
-        const addPromo = document.getElementById("addPromo");
-        const promoContainer = document.getElementById("promoContainer");
         const promoTextsLength = data.promo.projects.length;
-        
-        // 生成div 前先清除舊的 
-        while (promoContainer.firstChild) {
-            promoContainer.removeChild(promoContainer.firstChild);
-        }
-        
-        // 新增按鈕 
-        addPromo.addEventListener('click', function() {
-            Promo_Input_Button()
-        })
 
         // 卡友專案 生成div
         for (let i = 0; i < promoTextsLength; i++) {
@@ -233,31 +211,12 @@ export function fillCreditCardValue(data) {
 
     // render 詳細說明 Input , X
     function setDetailed() {
-        const detailed =  document.getElementById('detailed');
+        const detailedDesc =  document.getElementById('detailedDesc');
         const detailLength = data.discount.detail.desc.length;
-        const addBtn = document.createElement('button')
         
-        detailed.innerHTML = '';
-    
-        addBtn.setAttribute("class","btn btn-success d-block mb-3");
-        addBtn.innerText = '＋';
-        addBtn.onclick = function () {
-            let addInput = document.createElement('input');
-            let addDelBtn = document.createElement('button');
-            
-            addInput.setAttribute("type", "text");
-            addInput.setAttribute("class", "detail col-md-11");
+        detailedDesc.innerHTML = '';
 
-            addDelBtn.setAttribute('class', 'btn btn-danger');
-            addDelBtn.innerText = "ㄧ";
-            addDelBtn.addEventListener('click', function() {
-                this.previousSibling.remove();
-                this.remove();
-            })
-    
-            detailed.append(addInput,addDelBtn);
-        }
-        detailed.prepend(addBtn)
+        // detailedDesc.prepend(addBtn)
     
         // Set Inputs Texts 
         for (let i = 0; i < detailLength; i++) {
@@ -274,8 +233,8 @@ export function fillCreditCardValue(data) {
                 detailTemplate.remove()
                 detailDelBtn.remove();
             })
-            detailed.appendChild(detailTemplate);
-            detailed.appendChild(detailDelBtn);
+            detailedDesc.appendChild(detailTemplate);
+            detailedDesc.appendChild(detailDelBtn);
         }
     }
     
@@ -284,29 +243,7 @@ export function fillCreditCardValue(data) {
     function setDetailedNotice() {
         const detailedNotice = document.getElementById('detailedNotice');
         const noticeLength = data.discount.detail.notice.length;
-        const addBtn = document.createElement('button');
-
         detailedNotice.innerHTML = '';  
-
-        addBtn.setAttribute("class","btn btn-success d-block mb-3");
-        addBtn.innerText = '＋';
-        addBtn.onclick = function () {
-            let addInput = document.createElement('input');
-            let addDelBtn = document.createElement('button');
-            
-            addInput.setAttribute("type", "text");
-            addInput.setAttribute("class", "detail col-md-11");
-
-            addDelBtn.setAttribute('class', 'btn btn-danger');
-            addDelBtn.innerText = "一";
-            addDelBtn.addEventListener('click', function() {
-                this.previousSibling.remove();
-                this.remove();
-            })
-            detailedNotice.append(addInput,addDelBtn);
-        }
-        
-        detailedNotice.prepend(addBtn)
 
         // Set Inputs Texts
         for (let i = 0; i <noticeLength; i++) {
@@ -331,29 +268,7 @@ export function fillCreditCardValue(data) {
 
 
 
-    function Locked() {
-        const allInputs = document.querySelectorAll('#bank-Form input[type=text]')
-        const allBtn = document.querySelectorAll('#bank-Form button')
-        const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
-        const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
-        const comfirm = document.getElementById('confirm-btn');
-        for(let i=1; i < allInputs.length; i++) {
-            allInputs[i].classList.add('readonly')
-            allInputs[i].setAttribute('readonly', true);
-        }
-        
-        allBtn.forEach(item=>{
-            item.setAttribute('disabled', true);
-        })
 
-        allRadiobox.forEach(item=> {
-            item.setAttribute('disabled', true);
-        })
-        allCheckbox.forEach(item=> {
-            item.setAttribute('disabled', true); 
-        })
-        comfirm.setAttribute('disabled', true);
-    }
 
 
 }

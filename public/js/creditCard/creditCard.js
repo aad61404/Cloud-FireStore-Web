@@ -1,57 +1,56 @@
 // creditCardSpecial.js (firestore && Auth && 搜尋資料和送出)
-// fillCreditCardValue.js (表單資料內容操作)
+// searchEditComfirm.js (表單資料內容操作)
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
 import { firebaseConfig } from '../firebaseConfig.js';
 import { initLogin } from '../initLogin.js';
 import { showMessage } from '../showMessage.js';
-import { fillCreditCardValue } from './fillCreditCardValue.js';
+import { searchEditComfirm } from './searchEditComfirm.js';
+import { initForm } from './initForm.js';
 
 
-document.addEventListener('DOMContentLoaded', function () {  
+document.addEventListener('DOMContentLoaded', function () {
     /***  Initialize Firebase ***/
     firebase.initializeApp(firebaseConfig);
-    
+
     /***  登入 && 登出 start    ****/
     initLogin();
 
     function signOut() {
-        firebase.auth().signOut().then(function() {
+        firebase.auth().signOut().then(function () {
             window.location = '/';
         })
     }
 
-    document.getElementById('signOut').addEventListener("click", function() {
+    document.getElementById('signOut').addEventListener("click", function () {
         signOut();
     })
 
     /***  登入 && 登出 end    ****/
 
-
-    /***  Search Bar  (V) ****/ 
-    let setdataID ;
+    /***  Search Bar  (V) ****/
     let lockedStat = 1;
-    document.getElementById('select-btn').addEventListener('click', function() {
-        sendSearch(); // ↓ ↓
+
+    document.getElementById('newbank-btn').addEventListener('click', function () {
+        sendNewBank(); // 新增銀行
     })
-    document.getElementById('edit-btn').addEventListener('click', function() {
+    document.getElementById('select-btn').addEventListener('click', function () {
+        sendSearch(); // 送出查詢
+    })
+    document.getElementById('edit-btn').addEventListener('click', function () {
         unLocked(); // 開啟修改
     })
-    document.getElementById('confirm-btn').addEventListener('click', function() {
+    document.getElementById('confirm-btn').addEventListener('click', function () {
         sendModify(); // 送出
     })
-
-    
-
 
     // Selector
     function setbankSelector() {
         const db = firebase.firestore();
-        db.collection("CreditCards").get().then(function(querySnapshot) {
-            /***  Search Bar  (M) ****/ 
-            const customSelect = document.getElementById('custom-select');
-
-            querySnapshot.forEach(function(doc) {
+        const customSelect = document.getElementById('custom-select');
+        db.collection("CreditCards").get().then(function (querySnapshot) {
+            /***  Search Bar  (M) ****/
+            querySnapshot.forEach(function (doc) {
                 const option = document.createElement("option");
                 option.value = doc.id;
                 option.text = doc.data().name;
@@ -59,35 +58,44 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    
+
     setbankSelector()
 
-    /***  Search Bar  (C)  start ****/ 
+    /***  Search Bar  (C)  start ****/
+    // 新增銀行
+    function sendNewBank() {
+        showDisplay();
+        initForm();
+    }
 
     // 送出查詢
     function sendSearch() {
         const selectValue = document.getElementById("custom-select").value
-        setdataID = selectValue;
-        const docRef = firebase.firestore().collection("CreditCards").doc(setdataID);
+        const docRef = firebase.firestore().collection("CreditCards").doc(selectValue);
 
-        docRef.get().then(function(doc) {
+        docRef.get().then(function (doc) {
             if (doc.exists) {
                 showDisplay();
-                fillCreditCardValue(doc.data());
+                initForm();
+                searchEditComfirm(doc.data());
+                Locked()
             } else {
                 showMessage("No such document!", false)
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             // showMessage(error, false)
             console.log("Error getting document:", error);
         });
+        const editBtn = document.getElementById('edit-btn');
+        editBtn.innerText = '修改';
+        lockedStat = 1;
     }
-    
+
     // open
     function showDisplay() {
         const tbl = document.getElementById('bank-Form');
         // tbl.classList.toggle('hidden')
-        if( tbl.classList.contains('hidden')) {
+        if (tbl.classList.contains('hidden')) {
             tbl.classList.add('show');
             tbl.classList.remove('hidden');
         }
@@ -95,21 +103,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 送出修改
     function sendModify() {
-
         console.log('目前修改中...');
         const dataBa = {
+            id: document.getElementById('id').value,
             name: document.getElementById('name').value,
-            seqNo : 'nums',
+            seqNo: 'nums',
             isShow: checkDataIsShow("bankIsShow"),
             link: document.getElementById('link').value,
-            plans: calcPlans(),  // calc => Calculate
+            plans: calcPlans(), // calc => Calculate
             gift: {
                 isShow: checkDataIsShow("gift"),
                 begDt: document.getElementById('begDt').value,
                 endDt: document.getElementById('endDt').value,
                 announce: document.getElementById('announce').value,
                 qualify: document.getElementById('qualify').value,
-                desc:  checkGiftDescValue(),
+                desc: checkGiftDescValue(),
             },
             promo: {
                 isShow: checkDataIsShow("promo"),
@@ -130,14 +138,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        function sendCheckIsValue () {
-            if(dataBa.gift.texts === false || dataBa.promo.projects === false || dataBa.discount.detail.announces === false || dataBa.discount.detail.texts === false) {
+        function sendCheckIsValue() {
+            if (dataBa.gift.texts === false || dataBa.promo.projects === false || dataBa.discount.detail.announces === false || dataBa.discount.detail.texts === false) {
                 return false;
             }
         }
         console.log('dataBa:', dataBa);
         const db = firebase.firestore();
-        const bankRef = db.collection("CreditCards").doc(setdataID);
+        const ID = document.getElementById('id').value; // ID: mega
+        // const bankRef = db.collection("card").doc(ID);
 
         // return db.runTransaction(function(transaction) {
         //     return transaction.get(bankRef).then(function(sfDoc) {
@@ -165,12 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // });
     }
 
-
     /**** sendModify 用到的function  start ****/
-    
+
     // Radio isShow value
     function checkDataIsShow(id) {
-        const dataIsChecked = $('#'+id+' input:checked');
+        const dataIsChecked = $('#' + id + ' input:checked');
         const isTrueSet = (dataIsChecked[0].value == 'true'); // 將"true" 轉成 true 
 
         return isTrueSet;
@@ -187,38 +195,37 @@ document.addEventListener('DOMContentLoaded', function () {
         return plansBox;
     }
 
-   // 送出時 檢查 (二)刷卡滿額禮所有欄位 (databox.gift.texts)
-   function checkGiftDescValue() {
+    // 送出時 檢查 (二)刷卡滿額禮所有欄位 (databox.gift.texts)
+    function checkGiftDescValue() {
         let giftDescBox = [];
-        const allGifts=  document.querySelectorAll('#giftContainer [class*="gift"]');
+        const allGifts = document.querySelectorAll('#giftContainer [class*="gift"]');
 
         for (let i = 0; i < allGifts.length; i++) {
             const giftInputs = allGifts[i].querySelectorAll('input')
             const emptyObject = {};
             emptyObject.condition = giftInputs[0].value
             emptyObject.receive = giftInputs[1].value
-            emptyObject.remark = giftInputs[2].value    
-            if( _.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value) ) { 
-                 showMessage("刷卡滿額禮 有欄位未填", false);
-                 return giftDescBox = false;
-             }
+            emptyObject.remark = giftInputs[2].value
+            if (_.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value)) {
+                showMessage("刷卡滿額禮 有欄位未填", false);
+                return giftDescBox = false;
+            }
             giftDescBox.push(emptyObject);
         }
         return giftDescBox;
     }
-
-
+    // 檢查 卡友優惠專案 欄位
     function checkPromoProjectValue() {
         let promoBox = [];
-        const allPromos=  document.querySelectorAll('#promoContainer [class*="promo"]');
-    
+        const allPromos = document.querySelectorAll('#promoContainer [class*="promo"]');
+
         for (let i = 0; i < allPromos.length; i++) {
             const promoInputs = allPromos[i].querySelectorAll('input');
             const emptyObject = {};
             emptyObject.text = promoInputs[0].value
             emptyObject.link = promoInputs[1].value
             emptyObject.imgUrl = promoInputs[2].value
-            if( _.isEmpty(promoInputs[0].value)  || _.isEmpty(promoInputs[1].value) ) { 
+            if (_.isEmpty(promoInputs[0].value) || _.isEmpty(promoInputs[1].value)) {
                 showMessage("卡友優惠專案 有欄位未填", false);
                 return promoBox = false;
             }
@@ -231,9 +238,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // 詳細說明  送出
     function calcDesc() {
         let descBox = [];
-        const detailInputs = document.querySelectorAll("#detailed input");
-        detailInputs.forEach(function(item) {
-            if( _.isEmpty(item.value) ) {
+        const detailInputs = document.querySelectorAll("#detailedDesc input");
+        detailInputs.forEach(function (item) {
+            if (_.isEmpty(item.value)) {
                 showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
                 return descBox = false;
             }
@@ -246,10 +253,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function calcNotice() {
         let noticeBox = [];
         const noticeInputs = document.querySelectorAll("#detailedNotice input");
-        noticeInputs.forEach(function(item) {
-            if( _.isEmpty(item.value) ) {
+        noticeInputs.forEach(function (item) {
+            if (_.isEmpty(item.value)) {
                 showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
-                return  noticeBox = false;
+                return noticeBox = false;
             }
             noticeBox.push(item.value);
         })
@@ -257,6 +264,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* sendModify 用到的function  end */
+
+
+    function Locked() {
+        const allInputs = document.querySelectorAll('#bank-Form input[type=text]')
+        const allBtn = document.querySelectorAll('#bank-Form button')
+        const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
+        const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
+        const comfirm = document.getElementById('confirm-btn');
+
+        allInputs[0].setAttribute('class', 'col-md-10 readonly');
+        allInputs[0].setAttribute('readonly', true);
+        allInputs[1].setAttribute('class', 'col-md-10 readonly');
+        allInputs[1].setAttribute('readonly', true);
+
+        for(let i=2; i < allInputs.length; i++) {
+            allInputs[i].classList.add('readonly')
+            allInputs[i].setAttribute('readonly', true);
+        }
+        
+        allBtn.forEach(item=>{
+            item.setAttribute('disabled', true);
+        })
+
+        allRadiobox.forEach(item=> {
+            item.setAttribute('disabled', true);
+        })
+        allCheckbox.forEach(item=> {
+            item.setAttribute('disabled', true); 
+        })
+        comfirm.setAttribute('disabled', true);
+    }
 
     function unLocked() {
         const allInputs = document.querySelectorAll('#bank-Form input[type=text]')
@@ -266,36 +304,36 @@ document.addEventListener('DOMContentLoaded', function () {
         const comfirm = document.getElementById('confirm-btn');
         const lockedBtn = document.getElementById('edit-btn')
 
-        for(let i=1; i < allInputs.length; i++){
+        for (let i = 2; i < allInputs.length; i++) {
             allInputs[i].classList.toggle('readonly')
             allInputs[i].toggleAttribute("readonly");
         }
-        
-        allBtn.forEach(item=>{
-            item.toggleAttribute("disabled"); 
+
+        allBtn.forEach(item => {
+            item.toggleAttribute("disabled");
         })
 
-        allRadiobox.forEach(item=> {
-            item.toggleAttribute("disabled"); 
+        allRadiobox.forEach(item => {
+            item.toggleAttribute("disabled");
         })
-        allCheckbox.forEach(item=> {
-            item.toggleAttribute("disabled"); 
+        allCheckbox.forEach(item => {
+            item.toggleAttribute("disabled");
         })
 
-        comfirm.toggleAttribute("disabled"); 
+        comfirm.toggleAttribute("disabled");
         lockedStat++;
         console.log('lockedStat:', lockedStat)
-        if(lockedStat >= 2) {
+        if (lockedStat >= 2) {
             lockedBtn.innerText = '↻放棄修改'
-        }  
-        if ( lockedStat >= 3) {
+        }
+        if (lockedStat >= 3) {
             window.location.reload();
         }
     }
 
 
 
-}); 
+});
 
 
 
@@ -324,5 +362,5 @@ document.addEventListener('DOMContentLoaded', function () {
 // });
 
 // var detect2 = function() {
-    
+
 // }
