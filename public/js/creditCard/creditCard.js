@@ -29,23 +29,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     /***  Search Bar  (V) ****/ 
+    let setdataID ;
     let lockedStat = 1;
-
     document.getElementById('select-btn').addEventListener('click', function() {
         sendSearch(); // ↓ ↓
     })
-    document.getElementById('confirm-btn').addEventListener('click', function() {
-        sendModify();
-    })
     document.getElementById('edit-btn').addEventListener('click', function() {
-        unLocked();
+        unLocked(); // 開啟修改
     })
+    document.getElementById('confirm-btn').addEventListener('click', function() {
+        sendModify(); // 送出
+    })
+
     
+
 
     // Selector
     function setbankSelector() {
         const db = firebase.firestore();
-        db.collection("card").get().then(function(querySnapshot) {
+        db.collection("CreditCards").get().then(function(querySnapshot) {
             /***  Search Bar  (M) ****/ 
             const customSelect = document.getElementById('custom-select');
 
@@ -65,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // 送出查詢
     function sendSearch() {
         const selectValue = document.getElementById("custom-select").value
-        const docRef = firebase.firestore().collection("creditcard").doc(selectValue);
+        setdataID = selectValue;
+        const docRef = firebase.firestore().collection("CreditCards").doc(setdataID);
 
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -92,23 +95,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 送出修改
     function sendModify() {
-        
+
         console.log('目前修改中...');
         const dataBa = {
-            id: document.getElementById('id').value,
-            isShow: checkDataIsShow("bankIsShow"),
             name: document.getElementById('name').value,
-            iconUrl: document.getElementById('iconUrl').value,
-            logoUrl: document.getElementById('logoUrl').value,
+            seqNo : 'nums',
+            isShow: checkDataIsShow("bankIsShow"),
             link: document.getElementById('link').value,
-            plans: plansCount(),
+            plans: calcPlans(),  // calc => Calculate
             gift: {
                 isShow: checkDataIsShow("gift"),
-                texts:  checkGiftTextsValue(),
                 begDt: document.getElementById('begDt').value,
                 endDt: document.getElementById('endDt').value,
                 announce: document.getElementById('announce').value,
                 qualify: document.getElementById('qualify').value,
+                desc:  checkGiftDescValue(),
             },
             promo: {
                 isShow: checkDataIsShow("promo"),
@@ -118,13 +119,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 isShow: checkDataIsShow("discount"),
                 content: {
                     point: document.getElementById('point').value,
-                    back: document.getElementById('back').value,
+                    amount: document.getElementById('amount').value,
                     upper: document.getElementById('upper').value,
                     lower: document.getElementById('lower').value,
                 },
                 detail: {
-                    announces: announceCount(),
-                    texts: detailCount()
+                    desc: calcDesc(), // 詳細說明
+                    notice: calcNotice(), // 注意事項
                 }
             }
         };
@@ -136,33 +137,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         console.log('dataBa:', dataBa);
         const db = firebase.firestore();
-        const ID = document.getElementById('id').value; // ID: mega
-        const bankRef = db.collection("card").doc(ID);
+        const bankRef = db.collection("CreditCards").doc(setdataID);
 
-        return db.runTransaction(function(transaction) {
-            return transaction.get(bankRef).then(function(sfDoc) {
-                if (!sfDoc.exists) {
-                    throw "Document does not exist!";
-                }
-                if (sendCheckIsValue() == false) {
-                    console.log('at here');
-                    return ;
-                } else {
-                    console.log('in else');
-                    showMessage("修改成功!", true);
-                    // bankRef.set(dataBa ,{merge : true}).then(function() {
-                    //     showMessage("修改成功!", true);
-                    // }).catch(function(error) {
-                    //     showMessage(error, false);
-                    // });
-                }
-            });
-        })
-        .then(function() {
-            console.log("Transaction successfully committed!");
-        }).catch(function(error) {
-            console.log("Transaction failed: ", error);
-        });
+        // return db.runTransaction(function(transaction) {
+        //     return transaction.get(bankRef).then(function(sfDoc) {
+        //         if (!sfDoc.exists) {
+        //             throw "Document does not exist!";
+        //         }
+        //         if (sendCheckIsValue() == false) {
+        //             console.log('at here');
+        //             return ;
+        //         } else {
+        //             console.log('in else');
+        //             showMessage("修改成功!", true);
+        //             // bankRef.set(dataBa ,{merge : true}).then(function() {
+        //             //     showMessage("修改成功!", true);
+        //             // }).catch(function(error) {
+        //             //     showMessage(error, false);
+        //             // });
+        //         }
+        //     });
+        // })
+        // .then(function() {
+        //     console.log("Transaction successfully committed!");
+        // }).catch(function(error) {
+        //     console.log("Transaction failed: ", error);
+        // });
     }
 
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     //  3,6,10,12 點擊後觸發 (databox.plans)
-    function plansCount() {
+    function calcPlans() {
         const plansBox = [];
         const plansChecked = $('#plans input:checked');
 
@@ -188,8 +188,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
    // 送出時 檢查 (二)刷卡滿額禮所有欄位 (databox.gift.texts)
-   function checkGiftTextsValue() {
-        let giftTextsBox = [];
+   function checkGiftDescValue() {
+        let giftDescBox = [];
         const allGifts=  document.querySelectorAll('#giftContainer [class*="gift"]');
 
         for (let i = 0; i < allGifts.length; i++) {
@@ -200,11 +200,11 @@ document.addEventListener('DOMContentLoaded', function () {
             emptyObject.remark = giftInputs[2].value    
             if( _.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value) ) { 
                  showMessage("刷卡滿額禮 有欄位未填", false);
-                 return giftTextsBox = false;
+                 return giftDescBox = false;
              }
-            giftTextsBox.push(emptyObject);
+            giftDescBox.push(emptyObject);
         }
-        return giftTextsBox;
+        return giftDescBox;
     }
 
 
@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const emptyObject = {};
             emptyObject.text = promoInputs[0].value
             emptyObject.link = promoInputs[1].value
+            emptyObject.imgUrl = promoInputs[2].value
             if( _.isEmpty(promoInputs[0].value)  || _.isEmpty(promoInputs[1].value) ) { 
                 showMessage("卡友優惠專案 有欄位未填", false);
                 return promoBox = false;
@@ -228,31 +229,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 詳細說明  送出
-    function detailCount() {
-        let detailBox = [];
+    function calcDesc() {
+        let descBox = [];
         const detailInputs = document.querySelectorAll("#detailed input");
         detailInputs.forEach(function(item) {
             if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
-                return detailBox = false;
+                return descBox = false;
             }
-            detailBox.push(item.value);
+            descBox.push(item.value);
         })
-        return detailBox;
+        return descBox;
     }
 
-    // 詳細說明 - 注意事項  送出
-    function announceCount() {
-        let announceBox = [];
-        const announceInputs = document.querySelectorAll("#detailedNotice input");
-        announceInputs.forEach(function(item) {
+    // 詳細說明 - 注意事項  送出 ,  calc => Calculate
+    function calcNotice() {
+        let noticeBox = [];
+        const noticeInputs = document.querySelectorAll("#detailedNotice input");
+        noticeInputs.forEach(function(item) {
             if( _.isEmpty(item.value) ) {
                 showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
-                return  announceBox = false;
+                return  noticeBox = false;
             }
-            announceBox.push(item.value);
+            noticeBox.push(item.value);
         })
-        return announceBox;
+        return noticeBox;
     }
 
     /* sendModify 用到的function  end */
@@ -265,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const comfirm = document.getElementById('confirm-btn');
         const lockedBtn = document.getElementById('edit-btn')
 
-        for(let i=2; i < allInputs.length; i++){
+        for(let i=1; i < allInputs.length; i++){
             allInputs[i].classList.toggle('readonly')
             allInputs[i].toggleAttribute("readonly");
         }
@@ -285,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
         lockedStat++;
         console.log('lockedStat:', lockedStat)
         if(lockedStat >= 2) {
-            lockedBtn.innerText = '放棄修改'
+            lockedBtn.innerText = '↻放棄修改'
         }  
         if ( lockedStat >= 3) {
             window.location.reload();

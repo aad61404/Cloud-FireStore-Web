@@ -17,9 +17,7 @@ const isLogin = () =>
  export const initLogin = async () => {
     if ( await isLogin() === true) {
       loginAction();
-      // console.log('isLogin true');
     } else if ( await isLogin() === false){
-      // console.log('isLogin false');
       notLoginAction();
     } else {
       console.log(isLogin());
@@ -32,7 +30,11 @@ const loginAction = () => {
 
 const notLoginAction = () => {
   // 2. 未登入直接連操作頁面  談回首頁
-  window.location = '/';
+  if(window.location.pathname === "/") {
+    showMessage('You have not Login', false);
+  } else {
+    window.location = '/';
+  }
 };
 
 

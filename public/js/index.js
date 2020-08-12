@@ -1,12 +1,16 @@
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 import { firebaseConfig } from './firebaseConfig.js';
 import { showMessage } from './showMessage.js';
+import { initLogin } from './initLogin.js';
 
 /***  Firestore start    ****/
 document.addEventListener('DOMContentLoaded', function () {  
     
     /***  Initialize Firebase ***/
     firebase.initializeApp(firebaseConfig);
+    
+    /***  登入 && 登出 start    ****/
+    initLogin();
 
     /***  addEventtListener ***/
     document.getElementById('inputPassword').addEventListener('keydown', keyEnterLogin, false);

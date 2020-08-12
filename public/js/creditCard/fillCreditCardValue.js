@@ -62,9 +62,7 @@ export function fillCreditCardValue(data) {
 
     /***  一、分期 Input  ***/
     function setIdInput() {
-        document.getElementById('id').value  = data.id
         document.getElementById('name').value  = data.name
-        // document.getElementById('iconUrl').value  = data.iconUrl
         // document.getElementById('logoUrl').value  = data.logoUrl
     }
 
@@ -187,8 +185,9 @@ export function fillCreditCardValue(data) {
 
     function Promo_Input_Button() {
         const PromoTemplate = `
-        <label class="col-md-3">專案名稱</label><input type="text" class="col-md-10">
-        <label class="col-md-3">專案連結</label><input type="text" class="col-md-10">
+        <label class="col-md-3">標題</label><input type="text" class="col-md-10">
+        <label class="col-md-3">活動URL</label><input type="text" class="col-md-10">
+        <label class="col-md-3">圖片</label><input type="text" class="col-md-10">
         `;
         const createPromoCard = document.createElement('div');
         const deleteBtn = document.createElement('button');
@@ -213,6 +212,8 @@ export function fillCreditCardValue(data) {
             const single_Input = promoInputs[i].querySelectorAll('input');
             single_Input[0].value = data.promo.projects[i].text
             single_Input[1].value = data.promo.projects[i].link
+            single_Input[2].value = data.promo.projects[i].imgUrl
+
         }
     }
 
@@ -224,7 +225,7 @@ export function fillCreditCardValue(data) {
 
     function setDiscountContent() {
         document.getElementById('point').value = data.discount.content.point;
-        document.getElementById('back').value = data.discount.content.back;
+        document.getElementById('amount').value = data.discount.content.amount;
         document.getElementById('upper').value = data.discount.content.upper;
         document.getElementById('lower').value = data.discount.content.lower;
     }
@@ -336,7 +337,7 @@ export function fillCreditCardValue(data) {
         const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
         const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
         const comfirm = document.getElementById('confirm-btn');
-        for(let i=2; i < allInputs.length; i++) {
+        for(let i=1; i < allInputs.length; i++) {
             allInputs[i].classList.add('readonly')
             allInputs[i].setAttribute('readonly', true);
         }

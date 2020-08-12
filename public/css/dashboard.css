@@ -108,3 +108,7 @@ body {
 .liLocked {
     pointer-events: none;
 }
+
+#edit-btn {
+    white-space: nowrap;
+}
