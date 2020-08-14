@@ -77,10 +77,10 @@ export function initForm() {
         while (giftContainer.firstChild) {
             giftContainer.removeChild(giftContainer.firstChild);
         }
-        // newProject.removeEventListener('click', Gift_Input_Button);
-        newProject.removeEventListener('click', Gift_Input_Button, false);
-        // 新增按鈕監控
-        newProject.addEventListener('click', Gift_Input_Button)
+        // 新增刷卡滿額禮 按鈕監控
+        newProject.onclick = Gift_Input_Button;
+        // newProject.removeEventListener('click', Gift_Input_Button, true);
+        // newProject.addEventListener('click', Gift_Input_Button,true)
     }
 
 
@@ -129,15 +129,17 @@ export function initForm() {
             promoContainer.removeChild(promoContainer.firstChild);
         }
 
-        // 新增按鈕 
-        addPromo.addEventListener('click', function () {
-            Promo_Input_Button
-        })
+        // 新增卡友優惠按鈕監控
+        addPromo.onclick = Promo_Input_Button;
+        // addPromo.addEventListener('click', function () {
+        //     Promo_Input_Button
+        // })
 
     }
 
     function Promo_Input_Button() {
         const PromoTemplate = `
+        <h4>專案</h4>
         <label class="col-md-3">標題</label><input type="text" class="col-md-10">
         <label class="col-md-3">活動URL</label><input type="text" class="col-md-10">
         <label class="col-md-3">圖片</label><input type="text" class="col-md-10">

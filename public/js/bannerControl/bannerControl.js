@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const plansBox = {
             announces: checkPlansValue()
         }
-
+        const refresh = () => window.location.reload();
+        
         if(checkBannerTextsValue() === false || checkPlansValue() === false ) {
             showMessage("有欄位未填 請檢查", false);
             return ;
@@ -70,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!banDoc.exists) {
                         return  isSuccess = false;
                     }   else {                        
-                        // console.log('bannerBox:', bannerBox)
                         bannerRef.set(bannerBox);
                     };
                 })
@@ -83,7 +83,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         AnnouncesRef.set(plansBox);
                     };  
                 })
-                isSuccess ?showMessage('修改成功',true) : showMessage('修改失敗',false)
+
+                
+                isSuccess ?  showMessage('修改成功',true)  : showMessage('修改失敗',false)
+                isSuccess ?  setTimeout(refresh,1000) : false;
             });
         }
     }

@@ -44,7 +44,7 @@ export function searchEditComfirm(data) {
         const  isShowRadios = document.querySelectorAll(`#${radioName} input`)
         // _.get 防呆 
         const  firstFloorIsShow = _.get(data, 'isShow', true);
-        const  secondFloorIsShow = _.get(data, `${radioName}.isShow`, true);
+        const  secondFloorIsShow = _.get(data, `${radioName}.isShow`, false);
         if(radioName == 'bankIsShow') {
             if(firstFloorIsShow == true) {
                 isShowRadios[0].checked = true;

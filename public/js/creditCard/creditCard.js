@@ -2,11 +2,21 @@
 // searchEditComfirm.js (表單資料內容操作)
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-import { firebaseConfig } from '../firebaseConfig.js';
-import { initLogin } from '../initLogin.js';
-import { showMessage } from '../showMessage.js';
-import { searchEditComfirm } from './searchEditComfirm.js';
-import { initForm } from './initForm.js';
+import {
+    firebaseConfig
+} from '../firebaseConfig.js';
+import {
+    initLogin
+} from '../initLogin.js';
+import {
+    showMessage
+} from '../showMessage.js';
+import {
+    searchEditComfirm
+} from './searchEditComfirm.js';
+import {
+    initForm
+} from './initForm.js';
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -30,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /***  Search Bar  (V) ****/
     let lockedStat = 1;
+    let MessageTexts = "";
 
     document.getElementById('newbank-btn').addEventListener('click', function () {
         sendNewBank(); // 新增銀行
@@ -66,6 +77,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function sendNewBank() {
         showDisplay();
         initForm();
+        // 新增銀行 radio預設
+        const confirm = document.getElementById('confirm-btn')
+        const bankRadio = document.querySelectorAll('#bankIsShow input[type="radio"]')
+        const allRadio = document.querySelectorAll('#bank-Form input[type="radio"]')
+        confirm.removeAttribute('disabled')
+        bankRadio[0].checked = true; // 信用卡優惠專區 true
+        allRadio[3].checked = true; // 刷卡滿額禮 false
+        allRadio[5].checked = true; // 卡友優惠專案 false
+        allRadio[7].checked = true; // 紅利折扣 false
     }
 
     // 送出查詢
@@ -104,6 +124,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // 送出修改
     function sendModify() {
         console.log('目前修改中...');
+
+        if (checkAllDataIsEmpty() == null) return;
+
+        console.log('還在嗎');
         const dataBa = {
             id: document.getElementById('id').value,
             name: document.getElementById('name').value,
@@ -179,6 +203,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Radio isShow value
     function checkDataIsShow(id) {
         const dataIsChecked = $('#' + id + ' input:checked');
+        if (dataIsChecked.length === 0) {
+            return;
+        }
+
         const isTrueSet = (dataIsChecked[0].value == 'true'); // 將"true" 轉成 true 
 
         return isTrueSet;
@@ -241,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const detailInputs = document.querySelectorAll("#detailedDesc input");
         detailInputs.forEach(function (item) {
             if (_.isEmpty(item.value)) {
-                showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
+                // showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
                 return descBox = false;
             }
             descBox.push(item.value);
@@ -255,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const noticeInputs = document.querySelectorAll("#detailedNotice input");
         noticeInputs.forEach(function (item) {
             if (_.isEmpty(item.value)) {
-                showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
+                // showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
                 return noticeBox = false;
             }
             noticeBox.push(item.value);
@@ -271,29 +299,29 @@ document.addEventListener('DOMContentLoaded', function () {
         const allBtn = document.querySelectorAll('#bank-Form button')
         const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
         const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
-        const comfirm = document.getElementById('confirm-btn');
+        const confirm = document.getElementById('confirm-btn');
 
         allInputs[0].setAttribute('class', 'col-md-10 readonly');
         allInputs[0].setAttribute('readonly', true);
         allInputs[1].setAttribute('class', 'col-md-10 readonly');
         allInputs[1].setAttribute('readonly', true);
 
-        for(let i=2; i < allInputs.length; i++) {
+        for (let i = 2; i < allInputs.length; i++) {
             allInputs[i].classList.add('readonly')
             allInputs[i].setAttribute('readonly', true);
         }
-        
-        allBtn.forEach(item=>{
+
+        allBtn.forEach(item => {
             item.setAttribute('disabled', true);
         })
 
-        allRadiobox.forEach(item=> {
+        allRadiobox.forEach(item => {
             item.setAttribute('disabled', true);
         })
-        allCheckbox.forEach(item=> {
-            item.setAttribute('disabled', true); 
+        allCheckbox.forEach(item => {
+            item.setAttribute('disabled', true);
         })
-        comfirm.setAttribute('disabled', true);
+        confirm.setAttribute('disabled', true);
     }
 
     function unLocked() {
@@ -301,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const allBtn = document.querySelectorAll('#bank-Form button')
         const allRadiobox = document.querySelectorAll('#bank-Form input[type=radio]')
         const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
-        const comfirm = document.getElementById('confirm-btn');
+        const confirm = document.getElementById('confirm-btn');
         const lockedBtn = document.getElementById('edit-btn')
 
         for (let i = 2; i < allInputs.length; i++) {
@@ -320,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
             item.toggleAttribute("disabled");
         })
 
-        comfirm.toggleAttribute("disabled");
+        confirm.toggleAttribute("disabled");
         lockedStat++;
         console.log('lockedStat:', lockedStat)
         if (lockedStat >= 2) {
@@ -331,7 +359,85 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /***  檢查是否未填 start ***/
+    function checkAllDataIsEmpty() {
+        // 信用卡優惠專區
+        if (_.isEmpty(document.getElementById('id').value)) MessageTexts += 'id 未填請檢查 <br />'
+        if (_.isEmpty(document.getElementById('name').value)) MessageTexts += 'name 未填請檢查 <br />'
+        if (_.isEmpty(document.querySelectorAll('#plans input[type="checkbox"]:checked'))) MessageTexts += '適用無息分期 未填請檢查 <br />'
+        // 二. 刷卡滿額禮
+        if (document.querySelectorAll('#gift input')[0].checked == true) {
+            if (checkGiftInputs() === false) MessageTexts += '刷卡滿額禮優惠  未填請檢查 <br />'
+            if (_.isEmpty(document.getElementById('begDt').value) || _.isEmpty(document.getElementById('endDt').value)) MessageTexts += '活動日期 未填請檢查 <br />'
+            if (_.isEmpty(document.getElementById('announce').value)) MessageTexts += '注意事項 未填請檢查 <br />'
+            if (_.isEmpty(document.getElementById('qualify').value)) MessageTexts += '領取條件 未填請檢查 <br />'
+            if (_.isEmpty(document.getElementById('link').value)) MessageTexts += '活動詳情連結 未填請檢查 <br />'
+        }
+        // 三. 卡友優惠專案
+        if (document.querySelectorAll('#promo input')[0].checked == true) {
+            if (checkPromoInputs() === false) MessageTexts += '卡友優惠專案  未填請檢查 <br />'
+        }
+        // 四. 紅利折扣
+        if (document.querySelectorAll('#discount input')[0].checked == true) {
+            if (_.isEmpty(document.getElementById('point').value)  ||
+                _.isEmpty(document.getElementById('amount').value) ||
+                _.isEmpty(document.getElementById('upper').value)  ) {  
+                    MessageTexts += '紅利折扣內容 未填請檢查 <br />' 
+            }
+            if (checkDetailedInputs() === false) MessageTexts += '詳細說明 未填請檢查 <br />'
+        }
 
+        // show text
+        if (MessageTexts.length > 0) {
+            showMessage(MessageTexts, false);
+            MessageTexts = '';
+            console.log('null', null);
+            return null;
+        }
+        return true;
+    }
+
+    function checkGiftInputs() {
+        const allGiftInputs = document.querySelectorAll('#giftContainer .gift input')
+        for (let index = 0; index < allGiftInputs.length; index++) {
+            // 只檢查前兩個欄位
+            if ((index + 1) % 3 == 0) {
+                continue;
+            }
+            if (_.isEmpty(allGiftInputs[index].value)) {
+                return false;
+            }
+        }
+    }
+
+    function checkPromoInputs() {
+        const promoInputs = document.querySelectorAll('#promoContainer input')
+        for (let index = 0; index < promoInputs.length; index++) {
+            if (_.isEmpty(promoInputs[index].value)) {
+                return false;
+            }
+        }
+    }
+
+    function checkDetailedInputs() {
+        const descInputs = document.querySelectorAll('#detailedDesc input')
+        const noticeInputs = document.querySelectorAll('#noticeInputs input')
+        if(descInputs.length === 0 && noticeInputs.length === 0  ) {
+            return false;
+        }
+        for (let index = 0; index < descInputs.length; index++) {
+            if (_.isEmpty(descInputs[index].value)) {
+                return false;
+            }
+        }
+        for (let index = 0; index < noticeInputs.length; index++) {
+            if (_.isEmpty(noticeInputs[index].value)) {
+                return false;
+            }
+        }
+    }
+
+    /***  檢查是否未填 end ***/
 
 });
 

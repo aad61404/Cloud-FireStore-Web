@@ -2,6 +2,10 @@
         /* Drag可能要素に対してユーザ選択を無効 */
         [draggable=true] {
             user-select: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
 
         #dragList {
@@ -38,3 +42,11 @@
             transform: scale(1.2);
             transition: 0.15s ease-in;
         }
+
+
+        li.drag-sort-active {
+            background-color: yellow;
+            box-shadow: inset 0 0 2px 2px red;
+            transform: scale(1.2);
+            transition: 0.15s ease-in;
+    } 

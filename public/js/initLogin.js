@@ -30,7 +30,7 @@ const loginAction = () => {
 
 const notLoginAction = () => {
   // 2. 未登入直接連操作頁面  談回首頁
-  if(window.location.pathname === "/") {
+  if(window.location.pathname === "/" || window.location.pathname === '/info/cardAdmin/index.html') {
     showMessage('You have not Login', false);
   } else {
     window.location = '/';
