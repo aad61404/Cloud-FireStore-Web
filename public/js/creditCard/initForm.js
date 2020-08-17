@@ -90,15 +90,27 @@ export function initForm() {
             <h5>優惠 </h5>
             <div class="tr row">
                 <label class="col-md-2">消費條件</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text" required>
+                    <div class="invalid-feedback">
+                        請輸入 消費條件
+                    </div>
+                </div>
             </div>
             <div class="tr row">
                 <label class="col-md-2">贈送</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text" required>
+                    <div class="invalid-feedback">
+                        請輸入 贈送
+                    </div>
+                </div>
             </div>
             <div class="tr row">
                 <label class="col-md-2">備註</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text">
+                </div>
             </div>
         `;
         const createGift = document.createElement('div');
@@ -137,12 +149,22 @@ export function initForm() {
 
     }
 
+
     function Promo_Input_Button() {
         const PromoTemplate = `
-        <h4>專案</h4>
-        <label class="col-md-3">標題</label><input type="text" class="col-md-10">
-        <label class="col-md-3">活動URL</label><input type="text" class="col-md-10">
-        <label class="col-md-3">圖片</label><input type="text" class="col-md-10">
+            <h4>專案</h4>
+            <label class="col-md-3">標題</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 標題
+            </div>
+            <label class="col-md-3">活動URL</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 活動URL
+            </div>
+            <label class="col-md-3">圖片</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 圖片
+            </div>
         `;
         const createPromoCard = document.createElement('div');
         const deleteBtn = document.createElement('button');
@@ -175,11 +197,19 @@ export function initForm() {
         detailedDesc.innerHTML = '';
 
         detailedDescBtn.onclick = function () {
+            let addDiv = document.createElement('div');
+            let addInvalid = document.createElement('div');
             let addInput = document.createElement('input');
             let addDelBtn = document.createElement('button');
 
+            addDiv.setAttribute("class","col-md-12 mb-2 pl-0")
+            addInvalid.setAttribute("class","invalid-feedback")
             addInput.setAttribute("type", "text");
-            addInput.setAttribute("class", "detail col-md-11");
+            addInput.setAttribute("class", "col-md-11 form-control2 deepGreen");
+            addInput.required = true;
+
+            // addInput.setAttribute("type", "text");
+            // addInput.setAttribute("class", "mb-2 col-md-11 form-control2 deepGreen");
 
             addDelBtn.setAttribute('class', 'btn btn-danger');
             addDelBtn.innerText = "ㄧ";
@@ -187,7 +217,11 @@ export function initForm() {
                 this.previousSibling.remove();
                 this.remove();
             })
-            detailedDesc.append(addInput, addDelBtn);
+
+            addInvalid.innerText = '請輸入 詳細說明'
+
+            addDiv.append(addInput, addDelBtn, addInvalid);
+            detailedDesc.append(addDiv);
         }
     }
 
@@ -200,11 +234,16 @@ export function initForm() {
         detailedNotice.innerHTML = '';
 
         detailedDescBtn.onclick = function () {
+            let addDiv = document.createElement('div');
+            let addInvalid = document.createElement('div');
             let addInput = document.createElement('input');
             let addDelBtn = document.createElement('button');
 
+            addDiv.setAttribute("class","col-md-12 mb-2 pl-0")
+            addInvalid.setAttribute("class","invalid-feedback")
             addInput.setAttribute("type", "text");
-            addInput.setAttribute("class", "detail col-md-11");
+            addInput.setAttribute("class", "col-md-11 form-control2 deepGreen");
+            addInput.required = true;
 
             addDelBtn.setAttribute('class', 'btn btn-danger');
             addDelBtn.innerText = "一";
@@ -212,7 +251,11 @@ export function initForm() {
                 this.previousSibling.remove();
                 this.remove();
             })
-            detailedNotice.append(addInput, addDelBtn);
+
+            addInvalid.innerText = '請輸入 注意事項'
+
+            addDiv.append(addInput, addDelBtn, addInvalid);
+            detailedNotice.append(addDiv);
         }
     }
 

@@ -65,191 +65,272 @@
                     信用卡優惠專區
                     <button id="newbank-btn" type="button" class="btn btn-info col-md-2 m-3">新增銀行 +</button>
                 </h1>
-                
+
+                <form class="needs-validation" novalidate>
+
                 <div class="row">
                     <select id="custom-select" class="custom-select custom-select-lg col-md-3 m-3">
                         <option selected>Open this select menu</option>
                     </select>
                     <button id="select-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5">查詢</button>
-                    <button id="edit-btn"  type="button"  class="btn btn-info col-md-1 m-3 mr-5">修改</button>
-                    <button id="confirm-btn" type="button" class="btn btn-info col-md-1 m-3">確認</button>
+                    <button id="edit-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5">修改</button>
+                    <button id="confirm-btn" type="submit" class="btn btn-info col-md-1 m-3">確認</button>
                 </div>
 
                 <!-- render table -->
+
+
                 <div id="bank-Form" class="bank-Form hidden">
                     <div class="thead">
+
                         <div class="tr" id="bankIsShow">
                             <label class="form-label" style="display: block;">銀行顯示狀態<span
                                     class="form-required">*</span></label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="bankIsShow1" id="bankIsShow1"
                                     value="true">
-                                <label class="form-check-label" for="bankIsShow1">上架</label>
+                                <label class="mb-0" for="bankIsShow1">上架</label>
+                                <!-- <label class="form-check-label" for="bankIsShow1">上架</label> -->
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="bankIsShow1" id="bankIsShow2"
                                     value="false">
-                                <label class="form-check-label" for="bankIsShow2">下架</label>
+                                <label class="mb-0" for="bankIsShow2">下架</label>
+                                <!-- <label class="form-check-label" for="bankIsShow2">下架</label> -->
                             </div>
                         </div>
-                        <div class="tr row">
+
+                    
+                            <!-- sssss -->
+                            <!-- <button id="sendout" class="btn btn-primary" type="submit">Submit form</button> -->
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">id<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control deepGreen" id="id" required>
+                                    <div class="invalid-feedback">
+                                        請輸入 id
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">name<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control deepGreen" id="name" required>
+                                    <div class="invalid-feedback">
+                                        請輸入 name
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">適用無息分期<span class="form-required">*</span></div>
+                                <div class="col-md-10 d-block" id="plans">
+                                    <div class="deepGreen">
+                                        <div class="form-check">
+                                            <input class="form-check-input message" type="checkbox" id="inlineCheckbox1"
+                                                value="3">
+                                            <label class="mb-0" for="inlineCheckbox1">3期</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input message" type="checkbox" id="inlineCheckbox2"
+                                                value="6">
+                                            <label class="mb-0" for="inlineCheckbox2">6期</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input message" type="checkbox" id="inlineCheckbox3"
+                                                value="10">
+                                            <label class="mb-0" for="inlineCheckbox3">10期</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input message" type="checkbox" id="inlineCheckbox4"
+                                                value="12">
+                                            <label class="mb-0" for="inlineCheckbox4">12期</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <h2>二. 刷卡滿額禮</h2>
+                            <hr />
+                            <div class="tr" id="gift">
+                                <label class="form-label" style="display: block;">刷卡滿額禮狀態
+                                    <span class="form-required">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="giftIsShow1" id="giftIsShow1"
+                                        value="true">
+                                    <label class="mb-0" for="giftIsShow1">上架</label>
+                                    <!-- <label class="form-check-label" for="giftIsShow1">上架</label> -->
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="giftIsShow1" id="giftIsShow2"
+                                        value="false">
+                                    <label class="mb-0" for="giftIsShow2">下架</label>
+                                    <!-- <label class="form-check-label" for="giftIsShow2">下架</label> -->
+                                </div>
+                            </div>
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">專案<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <div class="addSection">
+                                        <button id="newProject" type="button" class="btn btn-info">新增專案 ＋</button>
+                                    </div>
+                                    <div id="giftContainer" class="deepGreen"></div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">活動日期<span class="form-required">*</span></div>
+                                <div class="col-md-10 d-block">
+                                    <div class="deepGreen">
+                                        <label>活動日期</label>
+                                        <input type="text" class="col-md-12 form-control deepGreen mb-1" id="begDt"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            請輸入 開始日期
+                                        </div>
+                                        <input type="text" class="col-md-12 form-control deepGreen" id="endDt" required>
+                                        <div class="invalid-feedback">
+                                            請輸入 截止日期
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">注意事項<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control deepGreen" id="announce" required>
+                                    <div class="invalid-feedback">
+                                        請輸入 注意事項
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">領取條件<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control deepGreen" id="qualify" required>
+                                    <div class="invalid-feedback">
+                                        請輸入 領取條件
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">活動詳情連結<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control deepGreen" id="link" required>
+                                    <div class="invalid-feedback">
+                                        請輸入 活動詳情連結
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2>三. 卡友優惠專案</h2>
+                            <hr />
+                            <div class="tr" id="promo">
+                                <label class="form-label" style="display: block;">卡友優惠專案狀態<span
+                                        class="form-required">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="promoIsShow1" id="promoIsShow1"
+                                        value="true">
+                                    <label class="mb-0" for="promoIsShow1">上架</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="promoIsShow1" id="promoIsShow2"
+                                        value="false">
+                                    <label class="mb-0" for="promoIsShow2">下架</label>
+                                </div>
+                            </div>
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">卡友優惠專案<span class="form-required">*</span></div>
+                                <div class="col-md-10">
+                                    <div class="addSection">
+                                        <button id="addPromo" type="button" class="btn btn-info">新增卡友優惠專案 ＋</button>
+                                    </div>
+                                    <div id="promoContainer" class="deepGreen"></div>
+                                </div>
+                            </div>
+
+
+                            <h2>四. 紅利折扣</h2>
+                            <hr />
+                            <div class="tr" id="discount">
+                                <label class="form-label" style="display: block;">紅利折扣狀態<span
+                                        class="form-required">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="discountIsShow1"
+                                        id="discountIsShow1" value="true">
+                                    <label class="mb-0" for="discountIsShow1">上架</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="discountIsShow1"
+                                        id="discountIsShow2" value="false">
+                                    <label class="mb-0" for="discountIsShow2">下架</label>
+                                </div>
+                            </div>
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">紅利折扣內容<span class="form-required">*</span></div>
+                                <div class="col-md-10 d-block">
+                                    <div class="deepGreen">
+                                        <label class="d-block">紅利折扣內容</label>
+                                        <input type="text" class="col-md-10 form-control deepGreen" id="point" required>
+                                        <div class="invalid-feedback">
+                                            請輸入 紅利折扣內容
+                                        </div>
+                                        <label class="d-block">折抵</label>
+                                        <input type="text" class="col-md-10 form-control deepGreen" id="amount"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            請輸入 折抵
+                                        </div>
+                                        <label class="d-block">最高上限折抵</label>
+                                        <input type="text" class="col-md-10 form-control deepGreen" id="upper" required>
+                                        <div class="invalid-feedback">
+                                            請輸入 最高上限折抵
+                                        </div>
+                                        <label class="d-block">刷卡最低限制</label>
+                                        <input type="text" class="col-md-10 form-control deepGreen" id="lower">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">詳細說明<span class="form-required">*</span></div>
+                                <div class="col-md-10 d-block">
+                                    <div class="deepGreen">
+                                        <button class="btn btn-success d-block mb-3" id="detailedDesc-btn" type="button">＋</button>
+                                        <div id="detailedDesc">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tr row">
+                                <div class="col-md-2 cornflowerblue">詳細說明ㄧ注意事項<span class="form-required">*</span></div>
+                                <div class="col-md-10 d-block">
+                                    <div class="deepGreen">
+                                        <button class="btn btn-success d-block mb-3" id="detailedNotice-btn" type="button">＋</button>
+                                        <div id="detailedNotice">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <!-- <div class="tr row">
                             <div class="col-md-2 cornflowerblue">id</div>
                             <input type="text" class="col-md-10" id="id">
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">name</div>
-                            <input type="text" class="col-md-10" id="name">
-                        </div>
-                        <!-- <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">iconUrl</div>
-                            <input type="text" class="col-md-10" id="iconUrl">
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">logoUrl</div>
-                            <input type="text" class="col-md-10" id="logoUrl">
                         </div> -->
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">適用無息分期<span class="form-required">*</span></div>
-                            <div class="col-md-10 d-block" id="plans">
-                                <div class="form-check">
-                                    <input class="form-check-input message" type="checkbox" id="inlineCheckbox1"
-                                        value="3">
-                                    <label class="form-check-label" for="inlineCheckbox1">3期</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input message" type="checkbox" id="inlineCheckbox2"
-                                        value="6">
-                                    <label class="form-check-label" for="inlineCheckbox2">6期</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input message" type="checkbox" id="inlineCheckbox3"
-                                        value="10">
-                                    <label class="form-check-label" for="inlineCheckbox3">10期</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input message" type="checkbox" id="inlineCheckbox4"
-                                        value="12">
-                                    <label class="form-check-label" for="inlineCheckbox4">12期</label>
-                                </div>
-                            </div>
-                        </div>
-                        <h2>二. 刷卡滿額禮</h2>
-                        <hr />
-                        <div class="tr" id="gift">
-                            <label class="form-label" style="display: block;">刷卡滿額禮狀態<span
-                                    class="form-required">*</span></label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="giftIsShow1" id="giftIsShow1"
-                                    value="true">
-                                <label class="form-check-label" for="giftIsShow1">上架</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="giftIsShow1" id="giftIsShow2"
-                                    value="false">
-                                <label class="form-check-label" for="giftIsShow2">下架</label>
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">專案</div>
-                            <div class="col-md-10">
-                                <div class="addSection">
-                                    <button id="newProject" class="btn btn-info">新增專案 ＋</button>
-                                </div>
-                                <div id="giftContainer"></div>
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">活動日期</div>
-                            <div class="col-md-10 d-block">
-                                <label>活動日期</label>
-                                <input type="text" class="col-md-12 mb-3" id="begDt">
-                                <input type="text" class="col-md-12" id="endDt">
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">注意事項</div>
-                            <input type="text" class="col-md-10" id="announce">
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">領取條件</div>
-                            <input type="text" class="col-md-10" id="qualify">
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">活動詳情連結</div>
-                            <input type="text" class="col-md-10" id="link">
-                        </div>
-                        <h2>三. 卡友優惠專案</h2>
-                        <hr />
-                        <div class="tr" id="promo">
-                            <label class="form-label" style="display: block;">卡友優惠專案狀態<span
-                                    class="form-required">*</span></label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="promoIsShow1" id="promoIsShow1"
-                                    value="true">
-                                <label class="form-check-label" for="promoIsShow1">上架</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="promoIsShow1" id="promoIsShow2"
-                                    value="false">
-                                <label class="form-check-label" for="promoIsShow2">下架</label>
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">卡友優惠專案</div>
-                            <div class="col-md-10">
-                                <div class="addSection">
-                                    <button id="addPromo" class="btn btn-info">新增卡友優惠專案 ＋</button>
-                                </div>
-                                <div id="promoContainer"></div>
-                            </div>
-                        </div>
-                        <h2>四. 紅利折扣</h2>
-                        <hr />
-                        <div class="tr" id="discount">
-                            <label class="form-label" style="display: block;">紅利折扣狀態<span
-                                    class="form-required">*</span></label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="discountIsShow1" id="discountIsShow1"
-                                    value="true">
-                                <label class="form-check-label" for="discountIsShow1">上架</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="discountIsShow1" id="discountIsShow2"
-                                    value="false">
-                                <label class="form-check-label" for="discountIsShow2">下架</label>
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">紅利折扣內容</div>
-                            <div class="col-md-10 d-block">
-                                <label class="d-block">紅利折扣內容</label>
-                                <input type="text" class="col-md-10" id="point">
-                                <label class="d-block">折抵</label>
-                                <input type="text" class="col-md-10" id="amount">
-                                <label class="d-block">最高上限折抵</label>
-                                <input type="text" class="col-md-10" id="upper">
-                                <label class="d-block">刷卡最低限制</label>
-                                <input type="text" class="col-md-10" id="lower">
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">詳細說明</div>
-                            <div class="col-md-10 d-block" >
-                                <button class="btn btn-success d-block mb-3" id="detailedDesc-btn">＋</button>
-                                <div id="detailedDesc">
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tr row">
-                            <div class="col-md-2 cornflowerblue">詳細說明ㄧ注意事項</div>
-                            <div class="col-md-10 d-block">
-                                <button class="btn btn-success d-block mb-3" id="detailedNotice-btn">＋</button>
-                                <div id="detailedNotice">
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -261,7 +342,7 @@
 
     <!-- toast notification -->
     <div class="toast" data-delay="6000"
-        style="position: absolute; top: 65px; right: 20px; min-width: 250px; z-index: 1022;">
+        style="position: fixed; top: 65px; right: 20px; min-width: 250px; z-index: 522;">
         <div class="alert-danger" style="padding: .75rem;">
             <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid slice" role="img" focusable="false">
@@ -278,6 +359,36 @@
         </div>
     </div>
 
+
+
+
+    <script>
+
+
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                // if (form.checkValidity() === false) {
+                //     event.preventDefault();
+                //     event.stopPropagation();
+                // }
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                // 
+                // if( _.isEmpty(document.querySelectorAll('#plans input[type="checkbox"]:checked')) === true ){
+                //     event.preventDefault();
+                //     event.stopPropagation();
+                // }
+
+            }, false);
+        });
+
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -288,7 +399,7 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
-    
+
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>

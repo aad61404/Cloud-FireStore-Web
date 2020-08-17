@@ -102,26 +102,38 @@ export function searchEditComfirm(data) {
             <h5>優惠 </h5>
             <div class="tr row">
                 <label class="col-md-2">消費條件</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text" required>
+                    <div class="invalid-feedback">
+                        請輸入 消費條件
+                    </div>
+                </div>
             </div>
             <div class="tr row">
                 <label class="col-md-2">贈送</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text" required>
+                    <div class="invalid-feedback">
+                        請輸入 贈送
+                    </div>
+                </div>
             </div>
             <div class="tr row">
                 <label class="col-md-2">備註</label>
-                <input class="col-md-9" type="text">
+                <div class="col-md-9">
+                    <input class="form-control deepGreen" type="text">
+                </div>
             </div>
         `;
         const createGift = document.createElement('div');
         const deleteBtn = document.createElement('button');
-    
+
         createGift.classList.add("gift");
         createGift.innerHTML = GiftTemplate;
-        
+
         deleteBtn.setAttribute('class', 'remove btn btn-danger');
         deleteBtn.innerText = "一";
-        deleteBtn.addEventListener('click', function() {
+        deleteBtn.addEventListener('click', function () {
             createGift.remove();
         })
         createGift.prepend(deleteBtn);
@@ -163,9 +175,19 @@ export function searchEditComfirm(data) {
 
     function Promo_Input_Button() {
         const PromoTemplate = `
-        <label class="col-md-3">標題</label><input type="text" class="col-md-10">
-        <label class="col-md-3">活動URL</label><input type="text" class="col-md-10">
-        <label class="col-md-3">圖片</label><input type="text" class="col-md-10">
+            <h4>專案</h4>
+            <label class="col-md-3">標題</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 標題
+            </div>
+            <label class="col-md-3">活動URL</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 活動URL
+            </div>
+            <label class="col-md-3">圖片</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <div class="invalid-feedback">
+                請輸入 圖片
+            </div>
         `;
         const createPromoCard = document.createElement('div');
         const deleteBtn = document.createElement('button');
@@ -215,26 +237,32 @@ export function searchEditComfirm(data) {
         const detailLength = data.discount.detail.desc.length;
         
         detailedDesc.innerHTML = '';
-
-        // detailedDesc.prepend(addBtn)
     
         // Set Inputs Texts 
         for (let i = 0; i < detailLength; i++) {
-            let detailTemplate = document.createElement('input');
-            detailTemplate.setAttribute("type", "text");
-            detailTemplate.classList.add('detail');
-            detailTemplate.classList.add('col-md-11');
-            detailTemplate.value = data.discount.detail.desc[i]
-    
-            let detailDelBtn = document.createElement('button');
-            detailDelBtn.setAttribute('class', 'btn btn-danger');
-            detailDelBtn.innerText = "一";
-            detailDelBtn.addEventListener('click', function() {
-                detailTemplate.remove()
-                detailDelBtn.remove();
+            let addDiv = document.createElement('div');
+            let addInvalid = document.createElement('div');
+            let addInput = document.createElement('input');
+            let addDelBtn = document.createElement('button');
+            
+            addDiv.setAttribute("class","col-md-12 mb-2 pl-0")
+            addInvalid.setAttribute("class","invalid-feedback")
+            addInput.setAttribute("type", "text");
+            addInput.setAttribute("class", "col-md-11 form-control2 deepGreen");
+            addInput.value = data.discount.detail.desc[i];
+            addInput.required = true;
+            
+            addDelBtn.setAttribute('class', 'btn btn-danger');
+            addDelBtn.innerText = "一";
+            addDelBtn.addEventListener('click', function() {
+                addInput.remove()
+                addDelBtn.remove();
             })
-            detailedDesc.appendChild(detailTemplate);
-            detailedDesc.appendChild(detailDelBtn);
+
+            addInvalid.innerText = '請輸入 詳細說明'
+
+            addDiv.append(addInput, addDelBtn, addInvalid);
+            detailedDesc.appendChild(addDiv);
         }
     }
     
@@ -243,26 +271,34 @@ export function searchEditComfirm(data) {
     function setDetailedNotice() {
         const detailedNotice = document.getElementById('detailedNotice');
         const noticeLength = data.discount.detail.notice.length;
+
         detailedNotice.innerHTML = '';  
 
         // Set Inputs Texts
         for (let i = 0; i <noticeLength; i++) {
-            let announceTemplate = document.createElement('input');
-            announceTemplate.setAttribute("type", "text");
-            announceTemplate.classList.add('detail');
-            announceTemplate.classList.add('col-md-11');
-            announceTemplate.value = data.discount.detail.notice[i];
+            let addDiv = document.createElement('div');
+            let addInvalid = document.createElement('div');
+            let addInput = document.createElement('input');
+            let addDelBtn = document.createElement('button');
 
-            let detailDelBtn = document.createElement('button');
-            detailDelBtn.setAttribute('class', 'btn btn-danger');
-            detailDelBtn.innerText = "一";
-            detailDelBtn.addEventListener('click', function() {
-                announceTemplate.remove()
-                detailDelBtn.remove();
+            addDiv.setAttribute("class","col-md-12 mb-2 pl-0")
+            addInvalid.setAttribute("class","invalid-feedback")
+            addInput.setAttribute("type", "text");
+            addInput.setAttribute("class", "col-md-11 form-control2 deepGreen");
+            addInput.value = data.discount.detail.notice[i];
+            addInput.required = true;
+
+            addDelBtn.setAttribute('class', 'btn btn-danger');
+            addDelBtn.innerText = "一";
+            addDelBtn.addEventListener('click', function() {
+                addInput.remove()
+                addDelBtn.remove();
             })
 
-            detailedNotice.appendChild(announceTemplate);      
-            detailedNotice.appendChild(detailDelBtn);      
+            addInvalid.innerText = '請輸入 注意事項'
+
+            addDiv.append(addInput, addDelBtn, addInvalid);
+            detailedNotice.appendChild(addDiv);      
         }
     }
 

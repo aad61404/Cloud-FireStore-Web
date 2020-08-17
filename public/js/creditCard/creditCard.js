@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         unLocked(); // 開啟修改
     })
     document.getElementById('confirm-btn').addEventListener('click', function () {
-        sendModify(); // 送出
+        sendModify(event); // 送出
     })
 
     // Selector
@@ -123,11 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 送出修改
     function sendModify() {
-        console.log('目前修改中...');
-
         if (checkAllDataIsEmpty() == null) return;
 
-        console.log('還在嗎');
         const dataBa = {
             id: document.getElementById('id').value,
             name: document.getElementById('name').value,
@@ -162,43 +159,49 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        function sendCheckIsValue() {
-            if (dataBa.gift.texts === false || dataBa.promo.projects === false || dataBa.discount.detail.announces === false || dataBa.discount.detail.texts === false) {
-                return false;
-            }
+        if (dataBa.gift.desc === false || dataBa.promo.projects === false || dataBa.discount.detail.desc === false || dataBa.discount.detail.notice === false) {
+                showMessage('請再檢查是否有空欄位',false)
+                return null;
         }
+
+        console.log('還在嗎');
         console.log('dataBa:', dataBa);
         const db = firebase.firestore();
         const ID = document.getElementById('id').value; // ID: mega
-        // const bankRef = db.collection("card").doc(ID);
+        const bankRef = db.collection("CreditCards").doc(ID);
 
-        // return db.runTransaction(function(transaction) {
-        //     return transaction.get(bankRef).then(function(sfDoc) {
-        //         if (!sfDoc.exists) {
-        //             throw "Document does not exist!";
-        //         }
-        //         if (sendCheckIsValue() == false) {
-        //             console.log('at here');
-        //             return ;
-        //         } else {
-        //             console.log('in else');
-        //             showMessage("修改成功!", true);
-        //             // bankRef.set(dataBa ,{merge : true}).then(function() {
-        //             //     showMessage("修改成功!", true);
-        //             // }).catch(function(error) {
-        //             //     showMessage(error, false);
-        //             // });
-        //         }
-        //     });
-        // })
-        // .then(function() {
-        //     console.log("Transaction successfully committed!");
-        // }).catch(function(error) {
-        //     console.log("Transaction failed: ", error);
-        // });
+        return db.runTransaction(function(transaction) {
+            return transaction.get(bankRef).then(function(sfDoc) {
+                if (!sfDoc.exists) {
+                    throw "Document does not exist!";
+                }
+                 else {
+                    showMessage("修改成功!", true);
+                    bankRef.set(dataBa ,{merge : true}).then(function() {
+                        showMessage("修改成功!", true);
+                    }).catch(function(error) {
+                        showMessage(error, false);
+                    });
+                }
+            });
+        })
+        .then(function() {
+            initForm();
+            sendSearch();
+            console.log("Transaction successfully committed!");
+        }).catch(function(error) {
+            console.log("Transaction failed: ", error);
+        });
+
+
     }
 
     /**** sendModify 用到的function  start ****/
+
+
+
+
+
 
     // Radio isShow value
     function checkDataIsShow(id) {
@@ -235,7 +238,8 @@ document.addEventListener('DOMContentLoaded', function () {
             emptyObject.receive = giftInputs[1].value
             emptyObject.remark = giftInputs[2].value
             if (_.isEmpty(giftInputs[0].value) || _.isEmpty(giftInputs[1].value)) {
-                showMessage("刷卡滿額禮 有欄位未填", false);
+                // MessageTexts += '刷卡滿額禮優惠  未填請檢查 <br />'
+                // showMessage("刷卡滿額禮 有欄位未填", false);
                 return giftDescBox = false;
             }
             giftDescBox.push(emptyObject);
@@ -254,7 +258,6 @@ document.addEventListener('DOMContentLoaded', function () {
             emptyObject.link = promoInputs[1].value
             emptyObject.imgUrl = promoInputs[2].value
             if (_.isEmpty(promoInputs[0].value) || _.isEmpty(promoInputs[1].value)) {
-                showMessage("卡友優惠專案 有欄位未填", false);
                 return promoBox = false;
             }
             promoBox.push(emptyObject);
@@ -301,9 +304,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const allCheckbox = document.querySelectorAll('#bank-Form input[type=checkbox]')
         const confirm = document.getElementById('confirm-btn');
 
-        allInputs[0].setAttribute('class', 'col-md-10 readonly');
+        allInputs[0].setAttribute('class', 'form-control deepGreen readonly');
         allInputs[0].setAttribute('readonly', true);
-        allInputs[1].setAttribute('class', 'col-md-10 readonly');
+        allInputs[1].setAttribute('class', 'form-control deepGreen readonly');
+        // allInputs[1].setAttribute('class', 'col-md-10 readonly');
         allInputs[1].setAttribute('readonly', true);
 
         for (let i = 2; i < allInputs.length; i++) {
@@ -421,9 +425,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkDetailedInputs() {
         const descInputs = document.querySelectorAll('#detailedDesc input')
-        const noticeInputs = document.querySelectorAll('#noticeInputs input')
+        const noticeInputs = document.querySelectorAll('#detailedNotice input')
         if(descInputs.length === 0 && noticeInputs.length === 0  ) {
-            return false;
+            return true;
         }
         for (let index = 0; index < descInputs.length; index++) {
             if (_.isEmpty(descInputs[index].value)) {
@@ -437,6 +441,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+
+    
     /***  檢查是否未填 end ***/
 
 });
