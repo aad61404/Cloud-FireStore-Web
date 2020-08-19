@@ -29,11 +29,12 @@
         -webkit-animation-name: fadeInRight;
         animation-name: fadeInRight;
         position: absolute;
-        animation: fadeInRight 0.5s;
+        animation: fadeInRight 0.2s;
       }
   
       .animate__fadeOutRight {
         -webkit-animation-name: fadeOutRight;
         animation-name: fadeOutRight;
         position: relative;
+        animation: fadeOutRight 0.2s;
       }
