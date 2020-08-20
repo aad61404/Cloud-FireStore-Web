@@ -11,7 +11,6 @@ import { initForm } from './initForm.js';
 document.addEventListener('DOMContentLoaded', function () {
   /***  Initialize Firebase ***/
   firebase.initializeApp(firebaseConfig);
-
   /***  登入 && 登出 start    ****/
   initLogin();
 
@@ -20,20 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
       .auth()
       .signOut()
       .then(function () {
-        window.location = '/';
+        window.location = '/info/cardAdmin/index.html';
       });
   }
 
+  /***  登入 && 登出 end    ****/
+
+  /***  addEventListener start    ****/
   document.getElementById('signOut').addEventListener('click', function () {
     signOut();
   });
-
-  /***  登入 && 登出 end    ****/
-
-  /***  Search Bar  (V) ****/
-  let lockedStat = 1;
-  let MessageTexts = '';
-
   document.getElementById('newbank-btn').addEventListener('click', function () {
     sendNewBank(); // 新增銀行
   });
@@ -47,26 +42,104 @@ document.addEventListener('DOMContentLoaded', function () {
     sendModify(); // 送出
   });
 
-  // Selector
-  function setbankSelector() {
+  /***  addEventListener end    ****/
+
+  //------------------------
+  // /***  variable    ****/
+  //------------------------
+
+  /***  Search Bar  (V) ****/
+  let lockedStat = 1; // 按鈕狀態
+  let MessageTexts = ''; // 錯誤提示儲存 空間
+
+  /*** Cookie 與 Selector 操作 邏輯  ***/
+  /*** 有allBankName 在cookie -> 印出 ， 若cookie 沒有 allBankName -> queryBankName (撈資料) 再印出  ***/
+  if (_.isEmpty(getCookie('allBankName'))) {
+    console.log('no cookie');
+    queryBankName();
+  } else {
+    const allBankName = JSON.parse(getCookie('allBankName'));
+    const customSelect = document.getElementById('custom-select');
+    allBankName.forEach((element) => {
+      const option = document.createElement('option');
+      option.value = element.id;
+      option.text = element.text;
+      customSelect.appendChild(option);
+    });
+  }
+
+  //------------------------
+  // /***  function    ****/
+  //------------------------
+
+  /***  selector value 存在cookie  start ****/
+  // 新增 cookie
+  function createCookie(name, value) {
+    const date = new Date();
+    date.setTime(date.getTime() + 1000 * 1000);
+    const expires = '; expires=' + date.toGMTString();
+
+    document.cookie = name + '=' + value + expires + '; path=/';
+  }
+  // 讀取 cookie
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  //刪除cookie
+  function delCookie(name) {
+    const exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    const cval = getCookie(name);
+    if (cval != null)
+      document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString();
+  }
+
+  // firestore 拿資料 存入selector
+  function queryBankName() {
     const db = firebase.firestore();
     const customSelect = document.getElementById('custom-select');
+    const bankNameBox = [];
+
     db.collection('CreditCards')
       .get()
       .then(function (querySnapshot) {
         /***  Search Bar  (M) ****/
         querySnapshot.forEach(function (doc) {
+          const smallbox = {};
+          smallbox.id = doc.id;
+          smallbox.text = doc.data().name;
+          bankNameBox.push(smallbox);
+        });
+      })
+      .then(function () {
+        createCookie('allBankName', JSON.stringify(bankNameBox));
+        const allBankName = JSON.parse(getCookie('allBankName'));
+        console.log('allBankName:', allBankName);
+        allBankName.forEach((element) => {
           const option = document.createElement('option');
-          option.value = doc.id;
-          option.text = doc.data().name;
+          option.value = element.id;
+          option.text = element.text;
           customSelect.appendChild(option);
         });
       });
   }
+  /***  selector value 存在cookie  end ****/
 
-  setbankSelector();
+  /***  Click Bar  (C)  start ****/
 
-  /***  Search Bar  (C)  start ****/
+  // show div
+  function showDisplay() {
+    const tbl = document.getElementById('bank-Form');
+    // tbl.classList.toggle('hidden')
+    if (tbl.classList.contains('hidden')) {
+      tbl.classList.add('show');
+      tbl.classList.remove('hidden');
+    }
+  }
+
   // 新增銀行
   function sendNewBank() {
     showDisplay();
@@ -118,18 +191,13 @@ document.addEventListener('DOMContentLoaded', function () {
     lockedStat = 1;
   }
 
-  // open
-  function showDisplay() {
-    const tbl = document.getElementById('bank-Form');
-    // tbl.classList.toggle('hidden')
-    if (tbl.classList.contains('hidden')) {
-      tbl.classList.add('show');
-      tbl.classList.remove('hidden');
-    }
-  }
-
   // 送出修改
   function sendModify() {
+    const db = firebase.firestore();
+    const ID = document.getElementById('id').value; // ID: mega
+    const bankRef = db.collection('CreditCards').doc(ID);
+    const idIsReadOnly = document.getElementById('id').readOnly;
+
     if (checkAllDataIsEmpty() == null) return;
 
     const dataBa = {
@@ -175,15 +243,8 @@ document.addEventListener('DOMContentLoaded', function () {
       return null;
     }
 
-    console.log('還在嗎');
-
-    const db = firebase.firestore();
-    const ID = document.getElementById('id').value; // ID: mega
-    const bankRef = db.collection('CreditCards').doc(ID);
-
-    const idIsReadOnly = document.getElementById('id').readOnly;
-
-    // id是readOnly -> 新增  , id 不是readOnly 修改
+    // 1.  id 是readOnly -> 新增
+    // 2.  id 不是readOnly 修改
     if (idIsReadOnly === false) {
       let dataSize;
       let allId = [];
@@ -209,9 +270,13 @@ document.addEventListener('DOMContentLoaded', function () {
               .then(function () {
                 showMessage('新增成功', true);
                 console.log('Document successfully written!');
+                // 08/20
+                // selector 改用 cookie 讀取 在cookie 重新render前
+                delCookie('allBankName');
+                // end ------------------
                 setTimeout(() => {
                   window.location.reload();
-                }, 2000);
+                }, 1300);
               })
               .catch(function (error) {
                 showMessage(error, false);
@@ -221,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     } else {
       // update 修改
+
       console.log('修改');
       return db
         .runTransaction(function (transaction) {
@@ -255,13 +321,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /**** sendModify 用到的function  start ****/
 
+  // ----------------------------------
+  /**** 渲染下方 form 的function    start ****/
+  // ----------------------------------
+
   // Radio isShow value
   function checkDataIsShow(id) {
     const dataIsChecked = $('#' + id + ' input:checked');
     if (dataIsChecked.length === 0) {
       return;
     }
-
     const isTrueSet = dataIsChecked[0].value == 'true'; // 將"true" 轉成 true
 
     return isTrueSet;
@@ -278,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return plansBox;
   }
 
-  // 送出時 檢查 (二)刷卡滿額禮所有欄位 (databox.gift.texts)
+  // 送出時 檢查 二、刷卡滿額禮所有欄位 (databox.gift.texts)
   function checkGiftDescValue() {
     let giftDescBox = [];
     const allGifts = document.querySelectorAll(
@@ -300,7 +369,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     return giftDescBox;
   }
-  // 檢查 卡友優惠專案 欄位
+
+  // 檢查 三、卡友優惠專案 欄位
   function checkPromoProjectValue() {
     let promoBox = [];
     const allPromos = document.querySelectorAll(
@@ -322,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return promoBox;
   }
 
-  // 詳細說明  送出
+  // 四、紅利折扣 詳細說明  送出
   function calcDesc() {
     let descBox = [];
     const detailInputs = document.querySelectorAll('#detailedDesc input');
@@ -336,7 +406,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return descBox;
   }
 
-  // 詳細說明 - 注意事項  送出 ,  calc => Calculate
+  // 四、紅利折扣  注意事項  送出 ,  calc => Calculate
   function calcNotice() {
     let noticeBox = [];
     const noticeInputs = document.querySelectorAll('#detailedNotice input');
@@ -349,9 +419,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     return noticeBox;
   }
+  /**** 渲染下方 form 的function  end  ****/
+  //------------------------
 
-  /* sendModify 用到的function  end */
+  /**** 其他 新增 start ****/
+  //------------------------
 
+  // readonly input
   function Locked() {
     const allInputs = document.querySelectorAll('#bank-Form input[type=text]');
     const allBtn = document.querySelectorAll('#bank-Form button');
@@ -425,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /***  檢查是否未填 start ***/
+  /***  檢查是否未填       start ***/
   function checkAllDataIsEmpty() {
     // 信用卡優惠專區
     if (_.isEmpty(document.getElementById('id').value))
@@ -527,26 +601,3 @@ document.addEventListener('DOMContentLoaded', function () {
   /***  檢查是否未填 end ***/
 });
 
-// var detectUndefined =
-// Object.keys(mega_Data).map(function(objectKey, index) {
-//     var value = mega_Data[objectKey];
-//     // 第一層檢查 isShow
-//     if(_.isUndefined(value) ) {
-//         // console.log(objectKey+ ' is empty');
-//         return false;
-//     }
-//     // 第二層檢查 gift.texts , promo.projects
-//     if(typeof mega_Data[objectKey] == 'object') {
-//         for(var prop in mega_Data[objectKey]){
-//             if( _.isUndefined(mega_Data[objectKey][prop])) {
-//                 // console.log(objectKey ,prop+ ' isUndefined')
-//                 return false;
-//             }
-//         }
-//     }
-//     // 第三層檢查 discount.detail.texts , discount.detail.announces
-//     if( _.isUndefined(mega_Data['discount']['detail']['texts']) || _.isUndefined(mega_Data['discount']['detail']['announces']) ) {
-//         return false;
-//     }
-//     return true;
-// });
