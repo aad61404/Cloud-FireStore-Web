@@ -9,7 +9,7 @@ export function fillPlanValue(data) {
   // render  注意事項 Input , Button
   function setPlansNotice() {
     const plansNotice = document.getElementById('plansNotice');
-    const noticeLength = data.announces.length;
+    const noticeLength = data.instalmentDesc.length;
     const addPlans = document.getElementById('addPlans');
     plansNotice.innerHTML = '';
 
@@ -37,7 +37,7 @@ export function fillPlanValue(data) {
       announceTemplate.setAttribute('type', 'text');
       announceTemplate.classList.add('detail');
       announceTemplate.classList.add('col-md-11');
-      announceTemplate.value = data.announces[i];
+      announceTemplate.value = data.instalmentDesc[i];
 
       let detailDelBtn = document.createElement('button');
       detailDelBtn.setAttribute('class', 'btn btn-danger');

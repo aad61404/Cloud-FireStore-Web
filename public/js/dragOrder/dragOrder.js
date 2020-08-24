@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function signOut() {
         firebase.auth().signOut().then(function () {
             localStorage.setItem("authStorage", `Log out!`);
-            window.location = '/';
+            window.location = '/info/cardAdmin/index.html';
         })
     }
 

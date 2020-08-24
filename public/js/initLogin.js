@@ -33,7 +33,7 @@ const notLoginAction = () => {
   if(window.location.pathname === "/" || window.location.pathname === '/info/cardAdmin/index.html') {
     showMessage('You have not Login', false);
   } else {
-    window.location = '/';
+    window.location = '/info/cardAdmin/index.html';
   }
 };
 

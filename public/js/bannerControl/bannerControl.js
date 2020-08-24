@@ -5,6 +5,7 @@ import { showMessage } from '../showMessage.js';
 import { initLogin } from '../initLogin.js';
 import { fillBannerValue } from './fillBannerValue.js';
 import { fillPlanValue } from './fillPlanValue.js';
+import { setDraggable } from './setDraggable.js';
 
 document.addEventListener('DOMContentLoaded', function () {  
 
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function signOut() {
         firebase.auth().signOut().then(function() {
             localStorage.setItem("authStorage", `Log out!`);
-            window.location = '/';
+            window.location = '/info/cardAdmin/index.html';
         })
     }
 
@@ -41,24 +42,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // set url to input
     const db = firebase.firestore();
     let lockedStat = 0;
-    db.collection("img").doc('bannerData').get().then(function(doc) {
+    db.collection("CreditCardsSummary").doc('info').get().then(function(doc) {
         fillBannerValue(doc.data())
-    });
-    db.collection('img').doc('planAnnounces').get().then(function(doc) {
         fillPlanValue(doc.data())
-        lockedBtn();
-    })
+        lockedBtn(); // open editable and draggable
+    });
+    // db.collection('CreditCardsSummary').doc('info').get().then(function(doc) {
+
+    // })
 
     function sendUrlModify() {
         const db = firebase.firestore();
-        const bannerRef = db.collection('img').doc('bannerData');
-        const AnnouncesRef = db.collection('img').doc('planAnnounces');
+        const bannerRef = db.collection('CreditCardsSummary').doc('info');
+        // const AnnouncesRef = db.collection('CreditCardsSummary').doc('info');
+        // console.log('checkBannerTextsValue():', checkBannerTextsValue())
+        // console.log('checkPlansValue():', checkPlansValue())
         const bannerBox = {
-            url: checkBannerTextsValue()
+            banner: checkBannerTextsValue(),
+            instalmentDesc: checkPlansValue(), 
         }
-        const plansBox = {
-            announces: checkPlansValue()
-        }
+        // const plansBox = {
+        //     announces: checkPlansValue()
+        // }
+        console.log('bannerBox:', bannerBox)
         const refresh = () => window.location.reload();
         
         if(checkBannerTextsValue() === false || checkPlansValue() === false ) {
@@ -75,16 +81,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     };
                 })
 
-                await transaction.get(AnnouncesRef).then(function(planDoc) {
-                    if (!planDoc.exists) {
-                        return isSuccess = false;
-                    }else {
-                        // console.log('plansBox:', plansBox)
-                        AnnouncesRef.set(plansBox);
-                    };  
-                })
+                // await transaction.get(AnnouncesRef).then(function(planDoc) {
+                //     if (!planDoc.exists) {
+                //         return isSuccess = false;
+                //     }else {
+                //         // console.log('plansBox:', plansBox)
+                //         AnnouncesRef.set(plansBox);
+                //     };  
+                // })
 
-                
                 isSuccess ?  showMessage('修改成功',true)  : showMessage('修改失敗',false)
                 isSuccess ?  setTimeout(refresh,1000) : false;
             });
@@ -144,7 +149,8 @@ document.addEventListener('DOMContentLoaded', function () {
         lockedStat++;
         console.log('lockedStat:', lockedStat)
         if(lockedStat >= 2) {
-            lockedBtn.innerText = '取消修改'
+            lockedBtn.innerText = '取消修改';
+            setDraggable();
         }  
         if ( lockedStat >= 3) {
             window.location.reload();
@@ -152,4 +158,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    // -----------------------------
+
 }); 
+
+
