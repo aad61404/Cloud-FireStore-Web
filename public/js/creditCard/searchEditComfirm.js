@@ -140,17 +140,18 @@ export function searchEditComfirm(data) {
 
     for (let i = 0; i < giftInputs.length; i++) {
       const single_input = giftInputs[i].querySelectorAll('input');
-      single_input[0].value = data.gift.desc[i].condition;
-      single_input[1].value = data.gift.desc[i].receive;
-      single_input[2].value = data.gift.desc[i].remark;
+      single_input[0].value = _.get(data , `gift.desc[${i}].condition`,'')
+      single_input[1].value = _.get(data , `gift.desc[${i}].receive`,'')
+      single_input[2].value = _.get(data , `gift.desc[${i}].remark`,'')
     }
+
     // 初始畫面 活動日期 結束日期帶入
     // 注意事項 領取條件 活動詳情連結
-    document.getElementById('begDt').value = data.gift.begDt;
-    document.getElementById('endDt').value = data.gift.endDt;
-    document.getElementById('announce').value = data.gift.announce;
-    document.getElementById('qualify').value = data.gift.qualify;
-    document.getElementById('link').value = data.link;
+    document.getElementById('begDt').value = _.get(data , 'gift.begDt','');
+    document.getElementById('endDt').value = _.get(data , 'gift.endDt','');
+    document.getElementById('announce').value = _.get(data , 'gift.announce','');
+    document.getElementById('qualify').value = _.get(data , 'gift.qualify','');
+    document.getElementById('link').value = _.get(data , 'link','');
   }
 
   /**** 二、刷卡滿額禮 end  ***/

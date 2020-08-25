@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fillBannerValue(doc.data())
         fillPlanValue(doc.data())
         lockedBtn(); // open editable and draggable
+        setDraggable();
     });
     // db.collection('CreditCardsSummary').doc('info').get().then(function(doc) {
 
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //     announces: checkPlansValue()
         // }
         console.log('bannerBox:', bannerBox)
+        
         const refresh = () => window.location.reload();
         
         if(checkBannerTextsValue() === false || checkPlansValue() === false ) {
@@ -150,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('lockedStat:', lockedStat)
         if(lockedStat >= 2) {
             lockedBtn.innerText = '取消修改';
-            setDraggable();
+
         }  
         if ( lockedStat >= 3) {
             window.location.reload();

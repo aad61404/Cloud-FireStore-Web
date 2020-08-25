@@ -6,19 +6,14 @@ export function setDraggable() {
   // document.addEventListener('DOMContentLoaded', (event) => {
   var dragSrcEl = null;
   var allBoxClass = document.querySelectorAll('#bannerContainer .box');
-  // console.log('allBoxClass:', allBoxClass)
-  allBoxClass.forEach((item) => {
-    item.style.backgroundColor = 'transparent';
-  })
+    allBoxClass.forEach((item) => {
+      item.classList.add('transparent')
+    })
 
   function handleDragStart(e) {
-    this.style.opacity = '0.4';
-    this.style.border = '3px dotted #666';
     dragSrcEl = this;
-    console.log('dragSrcEl:', dragSrcEl)
 
     e.dataTransfer.effectAllowed = 'move';
-    console.log('e.dataTransfer:', e.dataTransfer)
     e.dataTransfer.setData('text/html', this.innerHTML);
   }
 
@@ -33,11 +28,16 @@ export function setDraggable() {
   }
 
   function handleDragEnter(e) {
+    items.forEach(function (item) {
+      item.classList.remove('over');
+    });
     this.classList.add('over');
   }
 
   function handleDragLeave(e) {
-    this.classList.remove('over');
+    if ( e.target.className == "banner box" ) {
+      this.classList.remove('over');
+    }
   }
 
   function handleDrop(e) {
@@ -55,7 +55,6 @@ export function setDraggable() {
 
   function handleDragEnd(e) {
     this.style.opacity = '1';
-    this.style.border = '3px solid #666';
     items.forEach(function (item) {
       item.classList.remove('over');
     });
