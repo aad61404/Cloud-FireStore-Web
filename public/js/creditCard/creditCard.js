@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sendSearch(); // 送出查詢
   });
   document.getElementById('edit-btn').addEventListener('click', function () {
-    unLocked(); // 開啟修改
+    unLocked(); // 開啟編輯
   });
   document.getElementById('confirm-btn').addEventListener('click', function () {
     sendModify(); // 送出
@@ -186,12 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // showMessage(error, false)
         console.log('Error getting document:', error);
       });
-    const editBtn = document.getElementById('edit-btn');
-    editBtn.innerText = '修改';
+    const lockedBtn = document.getElementById('edit-btn');
+    lockedBtn.innerText = '編輯';
     lockedStat = 1;
   }
 
-  // 送出修改
+  // 送出編輯
   function sendModify() {
     const db = firebase.firestore();
     const ID = document.getElementById('id').value; // ID: mega
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 1.  id 是readOnly -> 新增
-    // 2.  id 不是readOnly 修改
+    // 2.  id 不是readOnly 編輯
     if (idIsReadOnly === false) {
       let dataSize;
       let allId = [];
@@ -285,22 +285,21 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
     } else {
-      // update 修改
+      // update 編輯
 
-      console.log('修改');
       return db
         .runTransaction(function (transaction) {
           return transaction.get(bankRef).then(function (sfDoc) {
             if (!sfDoc.exists) {
               throw 'Document does not exist!';
             } else {
-              showMessage('修改成功!', true);
+              showMessage('編輯成功!', true);
               bankRef
                 .set(dataBa, {
                   merge: true,
                 })
                 .then(function () {
-                  showMessage('修改成功!', true);
+                  showMessage('編輯成功!', true);
                 })
                 .catch(function (error) {
                   showMessage(error, false);
@@ -398,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const detailInputs = document.querySelectorAll('#detailedDesc input');
     detailInputs.forEach(function (item) {
       if (_.isEmpty(item.value)) {
-        // showMessage("詳細說明 有欄位未填 <br />修改未送出", false);
+        // showMessage("詳細說明 有欄位未填 <br />編輯未送出", false);
         return (descBox = false);
       }
       descBox.push(item.value);
@@ -412,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const noticeInputs = document.querySelectorAll('#detailedNotice input');
     noticeInputs.forEach(function (item) {
       if (_.isEmpty(item.value)) {
-        // showMessage("詳細說明-注意事項 有欄位未填 <br />修改未送出", false);
+        // showMessage("詳細說明-注意事項 有欄位未填 <br />編輯未送出", false);
         return (noticeBox = false);
       }
       noticeBox.push(item.value);
@@ -491,11 +490,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     confirm.toggleAttribute('disabled');
     lockedStat++;
-    if (lockedStat >= 2) {
-      lockedBtn.innerText = '↻放棄修改';
+    // 第一次點擊編輯
+    if (lockedStat == 2) {
+      lockedBtn.innerText = '↻放棄編輯';
     }
+    // 點擊放棄編輯
     if (lockedStat >= 3) {
-      window.location.reload();
+      lockedBtn.innerText = '編輯';
+      lockedStat = 1;
+      initForm()
+      sendSearch()
     }
   }
 

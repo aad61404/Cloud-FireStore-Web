@@ -6,14 +6,17 @@ export function setDraggable() {
   // document.addEventListener('DOMContentLoaded', (event) => {
   var dragSrcEl = null;
   var allBoxClass = document.querySelectorAll('#bannerContainer .box');
+  // console.log('allBoxClass:', allBoxClass)
     allBoxClass.forEach((item) => {
       item.classList.add('transparent')
     })
 
   function handleDragStart(e) {
+    // this.classList.add('drag-start')
     dragSrcEl = this;
 
     e.dataTransfer.effectAllowed = 'move';
+    // console.log('e.dataTransfer:', e.dataTransfer)
     e.dataTransfer.setData('text/html', this.innerHTML);
   }
 

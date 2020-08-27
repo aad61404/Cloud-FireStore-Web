@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }, {
                 merge: true
             }).then(function () {
-                showMessage('修改成功', true);
+                showMessage('編輯成功', true);
                 const refresh = () => window.location.reload();
                 setTimeout(refresh,1000); // 1秒後刷新
             }).catch(function (error) {
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sortBtn.toggleAttribute("disabled");
         lockedStat++;
         if (lockedStat >= 2) {
-            lockedBtn.innerText = '取消修改'
+            lockedBtn.innerText = '取消編輯'
         }
         if (lockedStat >= 3) {
             window.location.reload();

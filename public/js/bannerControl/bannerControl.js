@@ -5,7 +5,6 @@ import { showMessage } from '../showMessage.js';
 import { initLogin } from '../initLogin.js';
 import { fillBannerValue } from './fillBannerValue.js';
 import { fillPlanValue } from './fillPlanValue.js';
-import { setDraggable } from './setDraggable.js';
 
 document.addEventListener('DOMContentLoaded', function () {  
 
@@ -46,25 +45,17 @@ document.addEventListener('DOMContentLoaded', function () {
         fillBannerValue(doc.data())
         fillPlanValue(doc.data())
         lockedBtn(); // open editable and draggable
-        setDraggable();
+        // setDraggable();
     });
-    // db.collection('CreditCardsSummary').doc('info').get().then(function(doc) {
-
-    // })
 
     function sendUrlModify() {
         const db = firebase.firestore();
         const bannerRef = db.collection('CreditCardsSummary').doc('info');
-        // const AnnouncesRef = db.collection('CreditCardsSummary').doc('info');
-        // console.log('checkBannerTextsValue():', checkBannerTextsValue())
-        // console.log('checkPlansValue():', checkPlansValue())
         const bannerBox = {
             banner: checkBannerTextsValue(),
             instalmentDesc: checkPlansValue(), 
         }
-        // const plansBox = {
-        //     announces: checkPlansValue()
-        // }
+
         console.log('bannerBox:', bannerBox)
         
         const refresh = () => window.location.reload();
@@ -83,16 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     };
                 })
 
-                // await transaction.get(AnnouncesRef).then(function(planDoc) {
-                //     if (!planDoc.exists) {
-                //         return isSuccess = false;
-                //     }else {
-                //         // console.log('plansBox:', plansBox)
-                //         AnnouncesRef.set(plansBox);
-                //     };  
-                // })
-
-                isSuccess ?  showMessage('修改成功',true)  : showMessage('修改失敗',false)
+                isSuccess ?  showMessage('編輯成功',true)  : showMessage('編輯失敗',false)
                 isSuccess ?  setTimeout(refresh,1000) : false;
             });
         }
@@ -149,10 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
         comfirmBtn.toggleAttribute("disabled");
 
         lockedStat++;
-        console.log('lockedStat:', lockedStat)
         if(lockedStat >= 2) {
-            lockedBtn.innerText = '取消修改';
-
+            lockedBtn.innerText = '取消編輯';
         }  
         if ( lockedStat >= 3) {
             window.location.reload();

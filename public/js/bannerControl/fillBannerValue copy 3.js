@@ -1,15 +1,7 @@
 // import { setDraggable } from './setDraggable.js';
 
 export function fillBannerValue(data) {
-
-    // drag 
-    let dragSrcEl = null;
-    
-    // input 綁定 html tag value
-    document.querySelector('#bannerContainer').addEventListener('change', function (event) {
-        event.target.setAttribute("value", `${event.target.value}`);
-    });
-
+    console.log('data:', data)
     // 繪製外層div
     function initBannerDiv() {
         const addBanner = document.getElementById("addBanner")
@@ -19,6 +11,7 @@ export function fillBannerValue(data) {
         addBanner.addEventListener('click', function () {
             Banner_Input_Button();
             // 新增拖曳
+            // setDraggable()
         })
         // 根據資料長度 繪製模板(div input空得沒有值)
         for (let i = 0; i < bannerImgLength; i++) {
@@ -26,12 +19,15 @@ export function fillBannerValue(data) {
         }
         // 將banner 資料填入
         fillBannerInput()
+
     }
 
-    initBannerDiv()
+    document.querySelector('#bannerContainer').addEventListener('change', function (event) {
+        event.target.setAttribute("value", `${event.target.value}`);
+    });
+    var dragSrcEl2 = null;
 
     function Banner_Input_Button() {
- 
         const InputTemplate = `
             <h3>橫幅圖片</h3>
             <div class="tr row">
@@ -66,15 +62,29 @@ export function fillBannerValue(data) {
         })
         createBanner.prepend(deleteBtn);
 
+
+        // ---
+        createBanner.classList.add('transparent');
+        createBanner.addEventListener('dragstart', handleDragStart, false);
+        createBanner.addEventListener('dragenter', handleDragEnter, false);
+        createBanner.addEventListener('dragover', handleDragOver, false);
+        createBanner.addEventListener('dragleave', handleDragLeave, false);
+        createBanner.addEventListener('dragend', handleDragEnd, false);
+        createBanner.addEventListener('drop', handleDrop, false);
+        // ---
+
         document.getElementById('bannerContainer').appendChild(createBanner);
 
-        // setDraggable(createBanner)
-        //  start -------------------------------------
-  
+
+        // -------------------------------------
+
         let items = document.querySelectorAll('#bannerContainer .banner');
- 
+
+
+
         function handleDragStart(e) {
-            dragSrcEl = this;
+            dragSrcEl2 = this;
+            console.log('dragSrcEl2:', dragSrcEl2)
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', this.innerHTML);
         }
@@ -83,20 +93,27 @@ export function fillBannerValue(data) {
             if (e.preventDefault) {
                 e.preventDefault();
             }
+
             e.dataTransfer.dropEffect = 'move';
+
             return false;
         }
 
         function handleDragEnter(e) {
-            let items = document.querySelectorAll('#bannerContainer .banner');
+            if (e.target.classList.contains('banner box')) {
+     
+                e.target.classList.remove('over');
+            }
             items.forEach(function (item) {
                 item.classList.remove('over');
             });
+            console.log(' e.target:',  e.target)
             this.classList.add('over');
         }
 
         function handleDragLeave(e) {
-            if (e.target.className == "banner box") {
+            if (e.target.classList.contains('banner box')) {
+    
                 e.target.classList.remove('over');
             }
         }
@@ -105,8 +122,8 @@ export function fillBannerValue(data) {
             if (e.stopPropagation) {
                 e.stopPropagation(); // stops the browser from redirecting.
             }
-            if (dragSrcEl != this) {
-                dragSrcEl.innerHTML = this.innerHTML;
+            if (dragSrcEl2 != this) {
+                dragSrcEl2.innerHTML = this.innerHTML;
                 this.innerHTML = e.dataTransfer.getData('text/html');
             }
             items.forEach(function (item) {
@@ -116,21 +133,15 @@ export function fillBannerValue(data) {
         }
 
         function handleDragEnd(e) {
+            // console.log('handleDragEnd:')
             this.style.opacity = '1';
             items.forEach(function (item) {
                 item.classList.remove('over');
             });
         }
 
-        createBanner.classList.add('transparent');
-        createBanner.addEventListener('dragstart', handleDragStart, false);
-        createBanner.addEventListener('dragenter', handleDragEnter, false);
-        createBanner.addEventListener('dragover', handleDragOver, false);
-        createBanner.addEventListener('dragleave', handleDragLeave, false);
-        createBanner.addEventListener('dragend', handleDragEnd, false);
-        createBanner.addEventListener('drop', handleDrop, false);
 
-        // setDraggable(createBanner)  end -------------------------------------
+        // -------------------------------------
 
 
     }
@@ -144,7 +155,17 @@ export function fillBannerValue(data) {
             banner_input[1].setAttribute("value", _.get(data, `banner.${i}.text`))
             banner_input[2].setAttribute("value", _.get(data, `banner.${i}.link`))
             banner_input[3].setAttribute("value", _.get(data, `banner.${i}.imgUrl`))
+            // banner_input[0].value = _.get(data, `banner.${i}.bankName`)
+            // banner_input[1].value = _.get(data, `banner.${i}.text`)
+            // banner_input[2].value = _.get(data, `banner.${i}.link`)
+            // banner_input[3].value = _.get(data, `banner.${i}.imgUrl`)
         }
     }
+
+    initBannerDiv()
+
+
+
+
 
 }

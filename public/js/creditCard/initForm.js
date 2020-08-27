@@ -165,6 +165,8 @@ export function initForm() {
             <div class="invalid-feedback">
                 請輸入 圖片
             </div>
+            <div class="imgWrapper">
+            </div>
         `;
     const createPromoCard = document.createElement('div');
     const deleteBtn = document.createElement('button');
@@ -179,6 +181,13 @@ export function initForm() {
     });
     createPromoCard.prepend(deleteBtn);
     document.getElementById('promoContainer').appendChild(createPromoCard);
+    
+    // promo.projects.imgUrl -> 顯示圖片預覽
+    const thirdInput = createPromoCard.querySelector('input:nth-of-type(3)');
+    thirdInput.addEventListener('change', function(e) {
+      createPromoCard.querySelector('.imgWrapper').innerHTML = `<img src="${e.target.value}" />`
+    })
+   
   }
 
   /**** 三、卡友優惠專案 end ****/
