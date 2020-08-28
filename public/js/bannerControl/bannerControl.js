@@ -116,23 +116,22 @@ document.addEventListener('DOMContentLoaded', function () {
     function lockedBtn() {
         
         const allInputs = document.querySelectorAll('#bannerForm input[type=text]')
-        const allBtn = document.querySelectorAll('#bannerForm button')
-        const comfirmBtn = document.getElementById('comfirm')
         const lockedBtn = document.getElementById('locked-btn');
+        const addPlanBtn = document.getElementById('addPlanBtn');
+        const addBannerBtn = document.getElementById('addBannerBtn');
+        const comfirmBtn = document.getElementById('comfirm')
 
         allInputs.forEach(item => {
             item.classList.toggle('readonly')
             item.toggleAttribute("readonly");
         })
 
-        allBtn.forEach(item=>{
-            item.toggleAttribute("disabled"); 
-        })
-        comfirmBtn.toggleAttribute("disabled");
-
         lockedStat++;
         if(lockedStat >= 2) {
             lockedBtn.innerText = '取消編輯';
+            addPlanBtn.classList.toggle('invisible');
+            addBannerBtn.classList.toggle('invisible');
+            comfirmBtn.classList.toggle('invisible');
         }  
         if ( lockedStat >= 3) {
             window.location.reload();

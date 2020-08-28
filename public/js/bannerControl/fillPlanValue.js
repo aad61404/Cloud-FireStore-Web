@@ -10,12 +10,12 @@ export function fillPlanValue(data) {
   function setPlansNotice() {
     const plansNotice = document.getElementById('plansNotice');
     const noticeLength = data.instalmentDesc.length;
-    const addPlans = document.getElementById('addPlans');
+    const addPlanBtn = document.getElementById('addPlanBtn');
     plansNotice.innerHTML = '';
 
-    addPlans.setAttribute('class', 'btn btn-info d-block mb-3');
-    addPlans.innerText = '分期注意事項 ＋';
-    addPlans.onclick = function () {
+    // addPlanBtn.setAttribute('class', 'btn btn-info d-block mb-3');
+    // addPlanBtn.innerText = '分期注意事項 ＋';
+    addPlanBtn.onclick = function () {
       let addInput = document.createElement('input');
       let addDelBtn = document.createElement('button');
 

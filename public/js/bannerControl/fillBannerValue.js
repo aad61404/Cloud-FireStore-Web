@@ -12,11 +12,11 @@ export function fillBannerValue(data) {
 
     // 繪製外層div
     function initBannerDiv() {
-        const addBanner = document.getElementById("addBanner")
+        const addBannerBtn = document.getElementById("addBannerBtn")
         const bannerImgLength = data.banner.length;
 
         // 新增按鈕監控
-        addBanner.addEventListener('click', function () {
+        addBannerBtn.addEventListener('click', function () {
             Banner_Input_Button();
             // 新增拖曳
         })
