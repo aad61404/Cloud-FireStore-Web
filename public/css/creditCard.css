@@ -281,6 +281,7 @@
 
   #confirm-btn {
     z-index: 1000;
+    min-height: 50px;
   }
 
   .readonly {

@@ -17,20 +17,22 @@ export function fillBannerValue(data) {
 
         // 新增按鈕監控
         addBannerBtn.addEventListener('click', function () {
-            Banner_Input_Button();
+            Banner_Input_Button('new');
+            bannerOrder();
             // 新增拖曳
         })
         // 根據資料長度 繪製模板(div input空得沒有值)
         for (let i = 0; i < bannerImgLength; i++) {
-            Banner_Input_Button();
+            Banner_Input_Button('initial');
         }
         // 將banner 資料填入
         fillBannerInput()
+        bannerOrder()
     }
 
     initBannerDiv()
 
-    function Banner_Input_Button() {
+    function Banner_Input_Button(param) {
  
         const InputTemplate = `
             <h3>橫幅圖片</h3>
@@ -66,7 +68,11 @@ export function fillBannerValue(data) {
         })
         createBanner.prepend(deleteBtn);
 
-        document.getElementById('bannerContainer').appendChild(createBanner);
+        if(param === 'initial') {
+            document.getElementById('bannerContainer').appendChild(createBanner);
+        } else if(param === 'new') {
+            document.getElementById('bannerContainer').prepend(createBanner);
+        }
 
         // setDraggable(createBanner)
         //  start -------------------------------------
@@ -112,6 +118,9 @@ export function fillBannerValue(data) {
             items.forEach(function (item) {
                 item.classList.remove('over');
             });
+
+            bannerOrder();
+
             return false;
         }
 
@@ -131,9 +140,15 @@ export function fillBannerValue(data) {
         createBanner.addEventListener('drop', handleDrop, false);
 
         // setDraggable(createBanner)  end -------------------------------------
-
-
     }
+
+    function bannerOrder() {
+        const allbanner = document.querySelectorAll('#bannerContainer .banner.box.transparent h3')
+        allbanner.forEach( (item,index) => {
+          item.innerText = `橫幅圖片${index+1}`;
+        })
+    }
+
 
     function fillBannerInput() {
         const bannerInputs = document.querySelectorAll('#bannerContainer [class*="banner"]');

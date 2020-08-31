@@ -36,7 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
     sendSearch(); // 送出查詢
   });
   document.getElementById('edit-btn').addEventListener('click', function () {
-    unLocked(); // 開啟編輯
+    unLocked(); // 開放編輯
+  });
+  document.getElementById('edit-btn2').addEventListener('click', function () {
+    discardChange(); // 放棄編輯
   });
   document.getElementById('confirm-btn').addEventListener('click', function () {
     sendModify(); // 送出
@@ -145,19 +148,21 @@ document.addEventListener('DOMContentLoaded', function () {
     showDisplay();
     initForm();
     // 新增銀行 radio預設
-    const confirm = document.getElementById('confirm-btn');
-    const bankRadio = document.querySelectorAll(
-      '#bankIsShow input[type="radio"]'
-    );
-    const allRadio = document.querySelectorAll(
-      '#bank-Form input[type="radio"]'
-    );
-    confirm.removeAttribute('disabled');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const bankRadio = document.querySelectorAll('#bankIsShow input[type="radio"]');
+    const allRadio = document.querySelectorAll('#bank-Form input[type="radio"]');
+    const lockedBtn = document.getElementById('edit-btn');
+    const discardBtn = document.getElementById('edit-btn2');
+
     bankRadio[0].checked = true; // 信用卡優惠專區 true
     allRadio[3].checked = true; // 刷卡滿額禮 false
     allRadio[5].checked = true; // 卡友優惠專案 false
     allRadio[7].checked = true; // 紅利折扣 false
-
+    
+    // BTN 消失 
+    lockedBtn.classList.add('invisible');
+    confirmBtn.classList.remove('invisible');
+    discardBtn.classList.add('invisible');
     // select 設為預設
     document.getElementById('custom-select').value = 'default';
   }
@@ -165,10 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // 送出查詢
   function sendSearch() {
     const selectValue = document.getElementById('custom-select').value;
-    const docRef = firebase
-      .firestore()
-      .collection('CreditCards')
-      .doc(selectValue);
+    const docRef = firebase.firestore().collection('CreditCards').doc(selectValue);
 
     docRef
       .get()
@@ -178,6 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
           initForm();
           searchEditComfirm(doc.data());
           Locked();
+          showEditBtn();
         } else {
           showMessage('No such document!', false);
         }
@@ -186,8 +189,17 @@ document.addEventListener('DOMContentLoaded', function () {
         // showMessage(error, false)
         console.log('Error getting document:', error);
       });
+  }
+
+  function showEditBtn() {
+    const confirmBtn = document.getElementById('confirm-btn');
     const lockedBtn = document.getElementById('edit-btn');
-    lockedBtn.innerText = '編輯';
+    const discardBtn = document.getElementById('edit-btn2');
+
+    confirmBtn.classList.add('invisible');
+    lockedBtn.classList.remove('invisible');
+    discardBtn.classList.add('invisible');
+
     lockedStat = 1;
   }
 
@@ -197,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ID = document.getElementById('id').value; // ID: mega
     const bankRef = db.collection('CreditCards').doc(ID);
     const idIsReadOnly = document.getElementById('id').readOnly;
-
+    const confirmBtn = document.getElementById('confirm-btn');
     if (checkAllDataIsEmpty() == null) return;
 
     const dataBa = {
@@ -310,6 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(function () {
           initForm();
           sendSearch();
+          confirmBtn.classList.add('invisible');
           console.log('Transaction successfully committed!');
         })
         .catch(function (error) {
@@ -317,8 +330,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
   }
-
-  /**** sendModify 用到的function  start ****/
 
   // ----------------------------------
   /**** 渲染下方 form 的function    start ****/
@@ -434,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allCheckbox = document.querySelectorAll(
       '#bank-Form input[type=checkbox]'
     );
-    const confirm = document.getElementById('confirm-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
 
     allInputs[0].setAttribute('class', 'form-control deepGreen readonly');
     allInputs[0].setAttribute('readonly', true);
@@ -457,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function () {
     allCheckbox.forEach((item) => {
       item.setAttribute('disabled', true);
     });
-    confirm.setAttribute('disabled', true);
+
   }
 
   function unLocked() {
@@ -469,9 +480,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const allCheckbox = document.querySelectorAll(
       '#bank-Form input[type=checkbox]'
     );
-    const confirm = document.getElementById('confirm-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
     const lockedBtn = document.getElementById('edit-btn');
-
+    const discardBtn = document.getElementById('edit-btn2');
     for (let i = 2; i < allInputs.length; i++) {
       allInputs[i].classList.toggle('readonly');
       allInputs[i].toggleAttribute('readonly');
@@ -488,19 +499,32 @@ document.addEventListener('DOMContentLoaded', function () {
       item.toggleAttribute('disabled');
     });
 
-    confirm.toggleAttribute('disabled');
+    // confirmBtn.classList.remove('invisible');
     lockedStat++;
     // 第一次點擊編輯
     if (lockedStat == 2) {
-      lockedBtn.innerText = '↻放棄編輯';
+      lockedBtn.classList.add('invisible');
+      discardBtn.classList.remove('invisible');
+      // if(confirmBtn.classList.contains('invisible')) {
+        confirmBtn.classList.remove('invisible');
+      // }  
     }
     // 點擊放棄編輯
     if (lockedStat >= 3) {
-      lockedBtn.innerText = '編輯';
-      lockedStat = 1;
-      initForm()
-      sendSearch()
+      confirmBtn.classList.add('invisible');
+      discardChange()
     }
+  }
+
+  function discardChange() {
+    const confirmBtn = document.getElementById('confirm-btn');
+    const lockedBtn = document.getElementById('edit-btn');
+    const discardBtn = document.getElementById('edit-btn2');
+    discardBtn.classList.add('invisible');
+    lockedBtn.classList.remove('invisible');
+    lockedStat = 1;
+    initForm();
+    sendSearch();
   }
 
   /***  檢查是否未填       start ***/
@@ -510,12 +534,9 @@ document.addEventListener('DOMContentLoaded', function () {
       MessageTexts += 'id 未填請檢查 <br />';
     if (_.isEmpty(document.getElementById('name').value))
       MessageTexts += 'name 未填請檢查 <br />';
-    if (
-      _.isEmpty(
-        document.querySelectorAll('#plans input[type="checkbox"]:checked')
-      )
-    )
+    if (_.isEmpty(document.querySelectorAll('#plans input[type="checkbox"]:checked')))
       MessageTexts += '適用無息分期 未填請檢查 <br />';
+
     // 二. 刷卡滿額禮
     if (document.querySelectorAll('#gift input')[0].checked == true) {
       if (checkGiftInputs() === false)

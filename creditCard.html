@@ -73,8 +73,8 @@
                             <option value="default" selected>Open this select menu</option>
                         </select>
                         <button id="select-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5">查詢</button>
-                        <button id="edit-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5">編輯</button>
-                        <button id="confirm-btn" type="submit" class="btn btn-info col-md-1 m-3">儲存</button>
+                        <button id="edit-btn" type="button" class="btn btn-info col-md-1 m-3 mr-5 invisible">編輯</button>
+                        <!-- <button id="confirm-btn" type="submit" class="btn btn-info col-md-1 m-3 invisible">儲存</button> -->
                     </div>
 
                     <!-- render table -->
@@ -343,7 +343,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="d-flex justify-content-end">
+                                <button id="edit-btn2" type="button" class="btn btn-info col-md-1 m-3 mr-5 invisible">放棄編輯</button>
+                                <button id="confirm-btn" type="submit" class="btn btn-info col-md-2 m-3 invisible">儲存</button>
+                            </div>
+                            
                 </form>
 
                 <!-- <div class="tr row">
