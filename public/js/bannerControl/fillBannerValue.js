@@ -37,19 +37,19 @@ export function fillBannerValue(data) {
         const InputTemplate = `
             <h3>橫幅圖片</h3>
             <div class="tr row">
-                <label class="col-md-2 ml-2">bankName</label>
+                <label class="col-md-2 ml-2">銀行名稱</label>
                 <input class="col-md-9" type="text" value="">
             </div>
             <div class="tr row">
-                <label class="col-md-2 ml-2">text</label>
+                <label class="col-md-2 ml-2">內容</label>
                 <input class="col-md-9" type="text"  value="">
             </div>
             <div class="tr row">
-                <label class="col-md-2 ml-2">link</label>
+                <label class="col-md-2 ml-2">活動連結</label>
                 <input class="col-md-9" type="text"  value="">
             </div>
             <div class="tr row">
-                <label class="col-md-2 ml-2">imgUrl</label>
+                <label class="col-md-2 ml-2">圖片連結</label>
                 <input class="col-md-9" type="text"  value="">
             </div>
             <div class="row">
@@ -66,7 +66,7 @@ export function fillBannerValue(data) {
         createBanner.innerHTML = InputTemplate;
 
         deleteBtn.setAttribute('class', 'remove btn btn-danger');
-        deleteBtn.innerText = "一";
+        deleteBtn.innerText = "—";
         deleteBtn.addEventListener('click', function () {
             createBanner.remove();
             bannerOrder();
@@ -78,7 +78,6 @@ export function fillBannerValue(data) {
         } else if(param === 'new') {
             document.getElementById('bannerContainer').prepend(createBanner);
         }
-
         // setDraggable(createBanner)
         //  start -------------------------------------
   

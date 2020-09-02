@@ -125,7 +125,7 @@ export function searchEditComfirm(data) {
     createGift.innerHTML = GiftTemplate;
 
     deleteBtn.setAttribute('class', 'remove btn btn-danger');
-    deleteBtn.innerText = '一';
+    deleteBtn.innerText = '—';
     deleteBtn.addEventListener('click', function () {
       createGift.remove();
     });
@@ -178,7 +178,7 @@ export function searchEditComfirm(data) {
             <div class="invalid-feedback">
                 請輸入 活動URL
             </div>
-            <label class="col-md-3">圖片</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <label style="padding-left: 15px;">圖片<span class="remarks-label" style="padding-left: 15px;">( 圖片尺寸1920 x 600 )</span></label><input type="text" class="col-md-10 form-control deepGreen" required>
             <label class="remarks-label">備註: 請輸入銀行專頁內此活動的BN網址</label>
             <div class="invalid-feedback">
                 請輸入 圖片
@@ -193,7 +193,7 @@ export function searchEditComfirm(data) {
     createPromoCard.innerHTML = PromoTemplate;
 
     deleteBtn.setAttribute('class', 'remove btn btn-danger');
-    deleteBtn.innerText = '一';
+    deleteBtn.innerText = '—';
     deleteBtn.addEventListener('click', function () {
       createPromoCard.remove();
     });
@@ -255,7 +255,7 @@ export function searchEditComfirm(data) {
       addInput.required = true;
 
       addDelBtn.setAttribute('class', 'btn btn-danger');
-      addDelBtn.innerText = '一';
+      addDelBtn.innerText = '—';
       addDelBtn.addEventListener('click', function () {
         addInput.remove();
         addDelBtn.remove();
@@ -290,7 +290,7 @@ export function searchEditComfirm(data) {
       addInput.required = true;
 
       addDelBtn.setAttribute('class', 'btn btn-danger');
-      addDelBtn.innerText = '一';
+      addDelBtn.innerText = '⏤';
       addDelBtn.addEventListener('click', function () {
         addInput.remove();
         addDelBtn.remove();

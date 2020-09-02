@@ -23,7 +23,7 @@ export function fillPlanValue(data) {
       addInput.setAttribute('class', 'detail col-md-11');
 
       addDelBtn.setAttribute('class', 'btn btn-danger');
-      addDelBtn.innerText = '一';
+      addDelBtn.innerText = '—';
       addDelBtn.addEventListener('click', function () {
         this.previousSibling.remove();
         this.remove();
@@ -41,7 +41,7 @@ export function fillPlanValue(data) {
 
       let detailDelBtn = document.createElement('button');
       detailDelBtn.setAttribute('class', 'btn btn-danger');
-      detailDelBtn.innerText = '一';
+      detailDelBtn.innerText = '—';
       detailDelBtn.addEventListener('click', function () {
         announceTemplate.remove();
         detailDelBtn.remove();

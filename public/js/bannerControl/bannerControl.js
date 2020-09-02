@@ -120,10 +120,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const addPlanBtn = document.getElementById('addPlanBtn');
         const addBannerBtn = document.getElementById('addBannerBtn');
         const comfirmBtn = document.getElementById('comfirm')
+        const allDangerBtn = document.querySelectorAll('.btn-danger')
+        const allBannerDrag = document.querySelectorAll('#bannerContainer .banner.box')   
 
         allInputs.forEach(item => {
             item.classList.toggle('readonly')
             item.toggleAttribute("readonly");
+        })
+
+        allDangerBtn.forEach(item => {
+            item.toggleAttribute('disabled')
+        })
+
+        
+        allBannerDrag.forEach(item => {
+             (item.getAttribute('draggable') === "true" ) ?  
+             item.setAttribute('draggable', false) : 
+             item.setAttribute('draggable', true)
         })
 
         lockedStat++;
