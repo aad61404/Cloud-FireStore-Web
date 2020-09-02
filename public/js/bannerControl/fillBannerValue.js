@@ -51,7 +51,11 @@ export function fillBannerValue(data) {
             <div class="tr row">
                 <label class="col-md-2 ml-2">imgUrl</label>
                 <input class="col-md-9" type="text"  value="">
-            </div> 
+            </div>
+            <div class="row">
+                <label class="col-md-2 ml-2"></label>
+                <label class="ml-3" style="color: orange;">註: 圖片尺寸1920 x 600</label>
+            </div>
         `;
         const createBanner = document.createElement('div');
         const deleteBtn = document.createElement('button');
@@ -65,6 +69,7 @@ export function fillBannerValue(data) {
         deleteBtn.innerText = "一";
         deleteBtn.addEventListener('click', function () {
             createBanner.remove();
+            bannerOrder();
         })
         createBanner.prepend(deleteBtn);
 

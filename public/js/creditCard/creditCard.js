@@ -32,13 +32,17 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('newbank-btn').addEventListener('click', function () {
     sendNewBank(); // 新增銀行
   });
-  document.getElementById('select-btn').addEventListener('click', function () {
-    sendSearch(); // 送出查詢
-  });
+  document
+    .getElementById('custom-select')
+    .addEventListener('change', function () {
+      if (document.getElementById('custom-select').value !== 'default') {
+        sendSearch(); // 送出查詢
+      }
+    });
   document.getElementById('edit-btn').addEventListener('click', function () {
     unLocked(); // 開放編輯
   });
-  document.getElementById('edit-btn2').addEventListener('click', function () {
+  document.getElementById('discard-btn').addEventListener('click', function () {
     discardChange(); // 放棄編輯
   });
   document.getElementById('confirm-btn').addEventListener('click', function () {
@@ -54,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
   /***  Search Bar  (V) ****/
   let lockedStat = 1; // 按鈕狀態
   let MessageTexts = ''; // 錯誤提示儲存 空間
+
+  const confirmBtn = document.getElementById('confirm-btn');
+  const editBtn = document.getElementById('edit-btn');
+  const discardBtn = document.getElementById('discard-btn');
+  const idLabel = document.getElementById('idLabel');
 
   /*** Cookie 與 Selector 操作 邏輯  ***/
   /*** 有allBankName 在cookie -> 印出 ， 若cookie 沒有 allBankName -> queryBankName (撈資料) 再印出  ***/
@@ -148,21 +157,26 @@ document.addEventListener('DOMContentLoaded', function () {
     showDisplay();
     initForm();
     // 新增銀行 radio預設
-    const confirmBtn = document.getElementById('confirm-btn');
-    const bankRadio = document.querySelectorAll('#bankIsShow input[type="radio"]');
-    const allRadio = document.querySelectorAll('#bank-Form input[type="radio"]');
-    const lockedBtn = document.getElementById('edit-btn');
-    const discardBtn = document.getElementById('edit-btn2');
+
+    const bankRadio = document.querySelectorAll(
+      '#bankIsShow input[type="radio"]'
+    );
+    const allRadio = document.querySelectorAll(
+      '#bank-Form input[type="radio"]'
+    );
 
     bankRadio[0].checked = true; // 信用卡優惠專區 true
     allRadio[3].checked = true; // 刷卡滿額禮 false
     allRadio[5].checked = true; // 卡友優惠專案 false
     allRadio[7].checked = true; // 紅利折扣 false
-    
-    // BTN 消失 
-    lockedBtn.classList.add('invisible');
+
+    // BTN 消失
+    editBtn.classList.add('invisible');
     confirmBtn.classList.remove('invisible');
-    discardBtn.classList.add('invisible');
+    discardBtn.classList.remove('invisible');
+    // label .d-none
+    idLabel.classList.remove('d-none');
+
     // select 設為預設
     document.getElementById('custom-select').value = 'default';
   }
@@ -170,7 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // 送出查詢
   function sendSearch() {
     const selectValue = document.getElementById('custom-select').value;
-    const docRef = firebase.firestore().collection('CreditCards').doc(selectValue);
+    const docRef = firebase
+      .firestore()
+      .collection('CreditCards')
+      .doc(selectValue);
 
     docRef
       .get()
@@ -192,14 +209,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function showEditBtn() {
-    const confirmBtn = document.getElementById('confirm-btn');
-    const lockedBtn = document.getElementById('edit-btn');
-    const discardBtn = document.getElementById('edit-btn2');
-
+    // btn hidden
     confirmBtn.classList.add('invisible');
-    lockedBtn.classList.remove('invisible');
+    editBtn.classList.remove('invisible');
     discardBtn.classList.add('invisible');
-
+    // label .d-none
+    idLabel.classList.add('d-none');
     lockedStat = 1;
   }
 
@@ -209,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ID = document.getElementById('id').value; // ID: mega
     const bankRef = db.collection('CreditCards').doc(ID);
     const idIsReadOnly = document.getElementById('id').readOnly;
-    const confirmBtn = document.getElementById('confirm-btn');
+
     if (checkAllDataIsEmpty() == null) return;
 
     const dataBa = {
@@ -445,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allCheckbox = document.querySelectorAll(
       '#bank-Form input[type=checkbox]'
     );
-    const confirmBtn = document.getElementById('confirm-btn');
+    // const confirmBtn = document.getElementById('confirm-btn');
 
     allInputs[0].setAttribute('class', 'form-control deepGreen readonly');
     allInputs[0].setAttribute('readonly', true);
@@ -468,7 +483,6 @@ document.addEventListener('DOMContentLoaded', function () {
     allCheckbox.forEach((item) => {
       item.setAttribute('disabled', true);
     });
-
   }
 
   function unLocked() {
@@ -480,9 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allCheckbox = document.querySelectorAll(
       '#bank-Form input[type=checkbox]'
     );
-    const confirmBtn = document.getElementById('confirm-btn');
-    const lockedBtn = document.getElementById('edit-btn');
-    const discardBtn = document.getElementById('edit-btn2');
+
     for (let i = 2; i < allInputs.length; i++) {
       allInputs[i].classList.toggle('readonly');
       allInputs[i].toggleAttribute('readonly');
@@ -503,28 +515,38 @@ document.addEventListener('DOMContentLoaded', function () {
     lockedStat++;
     // 第一次點擊編輯
     if (lockedStat == 2) {
-      lockedBtn.classList.add('invisible');
+      editBtn.classList.add('invisible');
       discardBtn.classList.remove('invisible');
       // if(confirmBtn.classList.contains('invisible')) {
-        confirmBtn.classList.remove('invisible');
-      // }  
+      confirmBtn.classList.remove('invisible');
+      // }
     }
     // 點擊放棄編輯
     if (lockedStat >= 3) {
       confirmBtn.classList.add('invisible');
-      discardChange()
+      discardChange();
     }
   }
 
   function discardChange() {
-    const confirmBtn = document.getElementById('confirm-btn');
-    const lockedBtn = document.getElementById('edit-btn');
-    const discardBtn = document.getElementById('edit-btn2');
-    discardBtn.classList.add('invisible');
-    lockedBtn.classList.remove('invisible');
-    lockedStat = 1;
-    initForm();
-    sendSearch();
+    // 新增銀行後 取消
+    if (document.getElementById('id').readOnly === false) {
+      discardBtn.classList.add('invisible');
+      lockedStat = 1;
+      initForm();
+      const tbl = document.getElementById('bank-Form');
+      const editBtn = document.getElementById('edit-btn');
+      tbl.classList.remove('show');
+      tbl.classList.add('hidden');
+      editBtn.classList.add('invisible');
+    } else {
+      // 查詢銀行後 取消
+      discardBtn.classList.add('invisible');
+      editBtn.classList.remove('invisible');
+      lockedStat = 1;
+      initForm();
+      sendSearch();
+    }
   }
 
   /***  檢查是否未填       start ***/
@@ -534,7 +556,11 @@ document.addEventListener('DOMContentLoaded', function () {
       MessageTexts += 'id 未填請檢查 <br />';
     if (_.isEmpty(document.getElementById('name').value))
       MessageTexts += 'name 未填請檢查 <br />';
-    if (_.isEmpty(document.querySelectorAll('#plans input[type="checkbox"]:checked')))
+    if (
+      _.isEmpty(
+        document.querySelectorAll('#plans input[type="checkbox"]:checked')
+      )
+    )
       MessageTexts += '適用無息分期 未填請檢查 <br />';
 
     // 二. 刷卡滿額禮
@@ -625,4 +651,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /***  檢查是否未填 end ***/
 });
-

@@ -179,6 +179,7 @@ export function searchEditComfirm(data) {
                 請輸入 活動URL
             </div>
             <label class="col-md-3">圖片</label><input type="text" class="col-md-10 form-control deepGreen" required>
+            <label class="remarks-label">備註: 請輸入銀行專頁內此活動的BN網址</label>
             <div class="invalid-feedback">
                 請輸入 圖片
             </div>

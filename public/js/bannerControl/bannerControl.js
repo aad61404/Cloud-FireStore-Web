@@ -83,19 +83,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function checkBannerTextsValue() {
         let bannerTextsBox = [];
         const allBanner= document.querySelectorAll('#bannerContainer [class*="banner"]');
-        allBanner.forEach(function(bannerDiv) {
-            const inputs = bannerDiv.querySelectorAll('input')
+        for (let index = 0; index < allBanner.length; index++) {
+            const inputs = allBanner[index].querySelectorAll('input')
             const emptyObject = {};
             emptyObject.bankName = inputs[0].value
             emptyObject.text = inputs[1].value
             emptyObject.link = inputs[2].value
             emptyObject.imgUrl = inputs[3].value
-            if( _.isEmpty(inputs[0].value) || _.isEmpty(inputs[1].value) || _.isEmpty(inputs[2].value) || _.isEmpty(inputs[3].value) ) { 
+            if( _.isEmpty(inputs[0].value) || _.isEmpty(inputs[1].value) || _.isEmpty(inputs[2].value) || _.isEmpty(inputs[3].value) ) {
                 return bannerTextsBox = false;
             } else {
-                return bannerTextsBox.push(emptyObject)
+                bannerTextsBox.push(emptyObject)
             }
-        })
+        }
         return bannerTextsBox;
     }
 

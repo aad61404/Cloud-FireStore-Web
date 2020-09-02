@@ -291,3 +291,8 @@
   .liLocked {
     pointer-events: none;
   }
+
+  .remarks-label {
+    color: #ff4000; 
+    font-weight: normal;
+  }
